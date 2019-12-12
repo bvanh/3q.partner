@@ -1,33 +1,51 @@
 import React from "react";
 import { Layout, Menu, Icon } from "antd";
+import getToken from "./component/options/refreshToken";
 import Home from "./component/home";
 import Charts from "./component/charts";
 import History from "./component/history";
 import Infor from "./component/data-user";
-import LoginForm from './component/login';
+import LoginForm from "./component/login";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 const { Header, Footer, Sider } = Layout;
 export default class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isLogin:false
+      isLogin: false,
+      userToken: null
     };
   }
-  logOut=()=>{
+  logOut = () => {
     this.setState({
-      isLogin:false
+      isLogin: false
+    });
+  };
+  componentDidMount() {
+    getToken();
+    setInterval(getToken, 3300000);
+    let userToken = localStorage.getItem("userToken");
+    if (userToken.refreshToken !== "") {
+      this.setState({
+        isLogin: true,
+        userToken: userToken
+      });
+    }
+  }
+  logIn=()=>{
+    this.setState({
+      isLogin:true
     })
   }
   render() {
-    const {isLogin}=this.state;
-    if(isLogin==false){
+    const { isLogin } = this.state;
+    if (isLogin === false) {
       return (
         <Router>
-          <Route path="/" component={LoginForm} />
+          <Route path="/" render={() => <LoginForm logIn={this.logIn} />} />
         </Router>
-      )
-    };
+      );
+    }
     return (
       <Layout style={{ minHeight: "100vh" }}>
         <Router>
@@ -49,7 +67,7 @@ export default class App extends React.Component {
                 </Link>
               </Menu.Item>
               <Menu.Item key="3">
-                <Link to="/history">
+                <Link to="/charges/list?currentPage=1&pageSize=10&search=&type=1&fromDate=2019-10-1&toDate=2019-12-30">
                   <span>
                     <Icon type="schedule" />
                     History
@@ -63,9 +81,9 @@ export default class App extends React.Component {
                   <span>Users</span>
                 </Link>
               </Menu.Item>
-              <Menu.Item key="5"onClick={this.logOut}>
-                  <Icon type="idcard" theme="filled" />
-                  <span>Login</span>
+              <Menu.Item key="5" onClick={this.logOut}>
+                <Icon type="idcard" theme="filled" />
+                <span>Login</span>
               </Menu.Item>
             </Menu>
           </Sider>
@@ -74,7 +92,12 @@ export default class App extends React.Component {
             <Route exact path="/" component={Home} />
             <Route path="/charts" component={Charts} />
 
-            <Route exact path="/history" component={History} />
+            <Route
+              path="/charges"
+              render={props => (
+                <History {...props} userToken={this.state.userToken} />
+              )}
+            />
             <Route exact path="/inforusers" component={Infor} />
             {/* <Route path="/products/:id" component={Edit}/> */}
             <Footer style={{ textAlign: "center" }}>

@@ -1,35 +1,42 @@
 import React from "react";
-import { Bar, Pie,Line } from "react-chartjs-2";
+import { Bar, Line } from "react-chartjs-2";
 import { Col, Row } from "antd";
 class Charts extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       chartData: {
-        labels: [
-          "January",
-          "February",
-          "March",
-          "April",
-          "May",
-          "June",
-          "July",
-          'August',
-          'Septemper',
-          'October',
-          'November',
-          'December'
-
-        ],
+        labels: ["10/12", "11/12", "12/12", "13/12", "14/12"],
         datasets: [
           {
-            label: "My First dataset",
-            backgroundColor: "rgba(255,99,132,0.2)",
-            borderColor: "rgba(255,99,132,1)",
-            borderWidth: 1,
+            label: "Web",
+            fill: false,
+            backgroundColor: "rgba(75,192,192,0.4)",
+            borderColor: "rgba(75,192,192,0.4)",
+            borderWidth: 2,
             hoverBackgroundColor: "rgba(255,99,132,0.4)",
             hoverBorderColor: "rgba(255,99,132,1)",
-            data: [65, 59, 80, 81, 56, 55, 40]
+            data: [1, 2, 3, 4, 5]
+          },
+          {
+            label: "Apk",
+            fill: false,
+            backgroundColor: "#ffce56",
+            borderColor: "#ffce56",
+            borderWidth: 2,
+            hoverBackgroundColor: "rgba(255,99,132,0.4)",
+            hoverBorderColor: "rgba(255,99,132,1)",
+            data: [0,0,0,1,0]
+          },
+          {
+            label: "Total",
+            fill: false,
+            backgroundColor: "rgba(255,99,132,0.2)",
+            borderColor: "rgba(255,99,132,0.2)",
+            borderWidth: 2,
+            hoverBackgroundColor: "rgba(255,99,132,0.4)",
+            hoverBorderColor: "rgba(255,99,132,1)",
+            data: [4,7,3,4,5]
           }
         ]
       }

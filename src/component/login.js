@@ -1,35 +1,40 @@
 import React from "react";
 import fetch from "isomorphic-unfetch";
+import { url } from "./api";
 
 import { Form, Icon, Input, Button } from "antd";
 
 class NormalLoginForm extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
   handleSubmit = e => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        fetch("http://171.244.141.231:9001/auth/login/", {
+        fetch(url + "/auth/login", {
           headers: {
             "Content-Type": "application/x-www-form-urlencoded"
           },
           method: "POST",
           body: `partnerName=${values.username}&password=${values.password}`
         })
-          .then(function(response) {
-            let res = response.json();
-            // return res;
-            console.log(res);
-          })
+          .then(response => response.json())
+          .then(result =>
+            localStorage.setItem("userToken", JSON.stringify(result))
+          )
+          .then(this.props.logIn())
           .catch(function(error) {
             console.log("Request failed", error);
           });
-        // console.log("Received values of form: ", values);
       }
     });
   };
 
   render() {
     const { getFieldDecorator } = this.props.form;
+    // const { validateStatus, help } = this.state;
     return (
       <Form onSubmit={this.handleSubmit} className="login-form">
         <Form.Item>
@@ -42,15 +47,12 @@ class NormalLoginForm extends React.Component {
             />
           )}
         </Form.Item>
-        <Form.Item>
+        <Form.Item
+        // validateStatus={validateStatus}
+        // help={help}
+        >
           {getFieldDecorator("password", {
-            rules: [
-              { required: true, message: "Please input your Password!" },
-              {
-                pattern: "^(?=.{8,})",
-                message: "Password must be 8 characters or longer !"
-              }
-            ]
+            rules: [{ required: true, message: "Please input your Password!" }]
           })(
             <Input.Password
               prefix={<Icon type="lock" style={{ color: "rgba(0,0,0,.25)" }} />}
