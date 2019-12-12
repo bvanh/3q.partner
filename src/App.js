@@ -87,7 +87,7 @@ export default class App extends React.Component {
               </Menu.Item>
               <Menu.Item key="5" onClick={this.logOut}>
                 <Icon type="idcard" theme="filled" />
-                <span>Login</span>
+                <span>Logout</span>
               </Menu.Item>
             </Menu>
           </Sider>
