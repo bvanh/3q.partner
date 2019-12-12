@@ -1,162 +1,150 @@
 import React from "react";
-import { Table, Input, Button, Icon } from "antd";
-import Highlighter from "react-highlight-words";
-
-const data = [
-  {
-    key: "1",
-    name: "John Brown",
-    date: 1,
-    address: "New York No. 1 Lake Park",
-    value: 100000
-  },
-  {
-    key: "2",
-    name: "Joe Black",
-    date: 1,
-    address: "London No. 1 Lake Park",
-    value: 100000
-  },
-  {
-    key: "3",
-    name: "Jim Green",
-    date: 1,
-    address: "Sidney No. 1 Lake Park",
-    value: 100000
-  },
-  {
-    key: "4",
-    name: "Jim Red",
-    date: 1,
-    address: "London No. 2 Lake Park",
-    value: 100000
-  }
-];
-
+import { Table, Input } from "antd";
+import Type from "./options/type";
+import fetch from "isomorphic-unfetch";
+import { url } from "./api";
+const { Search } = Input;
 class History extends React.Component {
-  state = {
-    searchText: "",
-    searchedColumn: ""
-  };
-
-  getColumnSearchProps = dataIndex => ({
-    filterDropdown: ({
-      setSelectedKeys,
-      selectedKeys,
-      confirm,
-      clearFilters
-    }) => (
-      <div style={{ padding: 8 }}>
-        <Input
-          ref={node => {
-            this.searchInput = node;
-          }}
-          placeholder={`Search ${dataIndex}`}
-          value={selectedKeys[0]}
-          onChange={e =>
-            setSelectedKeys(e.target.value ? [e.target.value] : [])
-          }
-          onPressEnter={() =>
-            this.handleSearch(selectedKeys, confirm, dataIndex)
-          }
-          style={{ width: 188, marginBottom: 8, display: "block" }}
-        />
-        <Button
-          type="primary"
-          onClick={() => this.handleSearch(selectedKeys, confirm, dataIndex)}
-          icon="search"
-          size="small"
-          style={{ width: 90, marginRight: 8 }}
-        >
-          Search
-        </Button>
-        <Button
-          onClick={() => this.handleReset(clearFilters)}
-          size="small"
-          style={{ width: 90 }}
-        >
-          Reset
-        </Button>
-      </div>
-    ),
-    filterIcon: filtered => (
-      <Icon type="search" style={{ color: filtered ? "#1890ff" : undefined }} />
-    ),
-    onFilter: (value, record) =>
-      record[dataIndex]
-        .toString()
-        .toLowerCase()
-        .includes(value.toLowerCase()),
-    onFilterDropdownVisibleChange: visible => {
-      if (visible) {
-        setTimeout(() => this.searchInput.select());
-      }
-    },
-    render: text =>
-      this.state.searchedColumn === dataIndex ? (
-        <Highlighter
-          highlightStyle={{ backgroundColor: "#ffc069", padding: 0 }}
-          searchWords={[this.state.searchText]}
-          autoEscape
-          textToHighlight={text.toString()}
-        />
-      ) : (
-        text
+  constructor(props) {
+    super(props);
+    this.state = {
+      data: null,
+      currentPage: 1,
+      pageSize: 10,
+      userToken: JSON.parse(this.props.userToken),
+      type: 1,
+      search: "",
+      startTime: "2019-10-1",
+      endTime: "2019-12-30"
+    };
+  }
+  getData = (pathName, pathSearch) => {
+    let userAccessToken = localStorage.getItem("user");
+    fetch(url + pathName + pathSearch, {
+      headers: {
+        Authorization: `Bearer ${JSON.parse(userAccessToken).accessToken}`,
+        "Content-Type": "application/x-www-form-urlencoded"
+      },
+      method: "GET"
+    })
+      .then(response => response.json())
+      .then(result =>
+        this.setState({
+          data: result.rows
+        })
       )
-  });
-
-  handleSearch = (selectedKeys, confirm, dataIndex) => {
-    confirm();
-    this.setState({
-      searchText: selectedKeys[0],
-      searchedColumn: dataIndex
+      .catch(function(error) {
+        console.log("Request failed", error);
+      });
+  };
+  componentDidMount() {
+    console.log(this.props.location);
+    this.getData(this.props.location.pathname, this.props.location.search);
+  }
+  handleMenuClick = async e => {
+    const { type, startTime, endTime, search } = this.state;
+    await this.setState({
+      type: Number(e.key)
     });
+    await this.props.history.replace(
+      `/charges/list?currentPage=1&pageSize=10&search=${search}&type=${type}&fromDate=${startTime}&toDate=${endTime}`
+    );
+    this.getData(this.props.location.pathname, this.props.location.search);
+    console.log(e);
   };
-
-  handleReset = clearFilters => {
-    clearFilters();
-    this.setState({ searchText: "" });
+  filterDate = async (startDate, endDate, value) => {
+    await this.setState({
+      startTime: startDate,
+      endTime: endDate,
+      search: value
+    });
+    const { type, startTime, endTime, search } = this.state;
+    await this.props.history.replace(
+      `/charges/list?currentPage=1&pageSize=10&search=${search}&type=${type}&fromDate=${startTime}&toDate=${endTime}`
+    );
+    this.getData(
+      this.props.location.pathname,
+      this.props.location.search
+    );
   };
-
+  // filterPartnerId=(value)=>{
+  //   const {type, startTime, endTime, search } = this.state;
+  //   this.setState({
+  //     search:value
+  //   });
+  //   await this.props.history.replace(
+  //     `/charges/list?currentPage=1&pageSize=10&search=${search}&type=${type}&fromDate=${startTime}&toDate=${endTime}`
+  //   );
+  //   await this.getData(
+  //     this.props.location.pathname,
+  //     this.props.location.search
+  //   );
+  // }
   render() {
     const columns = [
       {
-        title: "Name",
-        dataIndex: "name",
-        key: "name",
-        width: "30%",
-        ...this.getColumnSearchProps("name")
+        title: "PartnerChargeId",
+        dataIndex: "partnerChargeId",
+        key: "partnerChargeId",
+        width: "25%"
       },
       {
-        title: "Date",
-        dataIndex: "date",
-        key: "date",
-        width: "20%",
-        ...this.getColumnSearchProps("date")
+        title: "ProductId",
+        dataIndex: "productId",
+        key: "productId",
+        width: "20%"
       },
       {
-        title: "Address",
-        dataIndex: "address",
-        key: "address",
-        width: "30%",
-        ...this.getColumnSearchProps("address")
+        title: "UserId",
+        dataIndex: "userId",
+        key: "userId",
+        width: "20%"
       },
+      {
+        title: "Coin",
+        dataIndex: "coin",
+        key: "coin",
+        width: "5%"
+      },
+      ,
       {
         title: "Value",
-        dataIndex: "value",
-        key: "value",
+        dataIndex: "vnd",
+        key: "vnd",
+        width: "10%",
+        render: price => <span>{price.toLocaleString()} đ</span>
+      },
+      {
+        title: "CreateAt",
+        dataIndex: "createAt",
+        key: "createAt",
         width: "20%"
-        // ...this.getColumnSearchProps('value'),
       }
     ];
-     let total=0;
-     for(let i=0;i<data.length;i++){
-         total+=data[i].value;
-     }
+    // let total = 0;
+    // for (let i = 0; i < data.length; i++) {
+    //   total += data[i].value;
+    // }
+    const { data, startTime, endTime } = this.state;
     return (
       <>
-        <span>Total: {total} </span>
-        <Table columns={columns} dataSource={data} />
+        {/* <span>Total: {total} </span> */}
+        <div className="btn-check">
+          <Type
+            handleMenuClick={this.handleMenuClick}
+            filterDate={this.filterDate}
+          />
+          <Search
+            placeholder="Search..."
+            onSearch={value=>this.filterDate(startTime,endTime,value)}
+            enterButton
+          />
+        </div>
+        <Table
+          columns={columns}
+          dataSource={data}
+          rowKey={record => record.partnerChargeId}
+        />
       </>
     );
   }
