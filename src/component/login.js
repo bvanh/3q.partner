@@ -62,7 +62,7 @@ class NormalLoginForm extends React.Component {
           )}
         </Form.Item>
         <Form.Item className="btn-submit">
-          <a className="login-form-forgot" href="" style={{ width: "50%" }}>
+          <a className="login-form-forgot" style={{ width: "50%" }}>
             Forgot password
           </a>
           <Button

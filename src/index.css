@@ -21,8 +21,32 @@ code {
 .ant-input-group-wrapper {
   width: 30% !important;
 }
-.btn-check{
-  padding:.5rem;
+.btn-check {
+  padding: 0.5rem;
   display: flex;
-  justify-content: flex-end;
+  justify-content: flex-start;
+}
+.ant-table-pagination.ant-pagination {
+  float: none !important;
+  margin: 1rem 0 !important;
+  text-align: center !important;
+}
+.ant-pagination {
+  margin: 1rem !important;
+  text-align: center;
+}
+.listDetail {
+  background-color: white;
+}
+.ant-descriptions-title {
+  margin: 0;
+  background-color: #fafafa;
+  padding: 1rem;
+}
+.submit-mes{
+  height: 1.5rem;
+  color:rgb(219, 121, 121);
+}
+.ant-form-item{
+  margin:0 !important;
 }

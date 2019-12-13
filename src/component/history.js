@@ -1,7 +1,8 @@
 import React from "react";
-import { Table, Input } from "antd";
+import { Table, Input, Pagination } from "antd";
 import Type from "./options/type";
 import fetch from "isomorphic-unfetch";
+import { Link } from "react-router-dom";
 import { url } from "./api";
 const { Search } = Input;
 class History extends React.Component {
@@ -9,6 +10,7 @@ class History extends React.Component {
     super(props);
     this.state = {
       data: null,
+      totalItem: null,
       currentPage: 1,
       pageSize: 10,
       userToken: JSON.parse(this.props.userToken),
@@ -30,7 +32,8 @@ class History extends React.Component {
       .then(response => response.json())
       .then(result =>
         this.setState({
-          data: result.rows
+          data: result.rows,
+          totalItem: result.count
         })
       )
       .catch(function(error) {
@@ -38,7 +41,6 @@ class History extends React.Component {
       });
   };
   componentDidMount() {
-    console.log(this.props.location);
     this.getData(this.props.location.pathname, this.props.location.search);
   }
   handleMenuClick = async e => {
@@ -58,35 +60,35 @@ class History extends React.Component {
       endTime: endDate,
       search: value
     });
-    const { type, startTime, endTime, search } = this.state;
+    const { type, startTime, endTime, search, currentPage } = this.state;
     await this.props.history.replace(
-      `/charges/list?currentPage=1&pageSize=10&search=${search}&type=${type}&fromDate=${startTime}&toDate=${endTime}`
+      `/charges/list?currentPage=${currentPage}&pageSize=10&search=${search}&type=${type}&fromDate=${startTime}&toDate=${endTime}`
     );
-    this.getData(
-      this.props.location.pathname,
-      this.props.location.search
-    );
+    this.getData(this.props.location.pathname, this.props.location.search);
   };
-  // filterPartnerId=(value)=>{
-  //   const {type, startTime, endTime, search } = this.state;
-  //   this.setState({
-  //     search:value
-  //   });
-  //   await this.props.history.replace(
-  //     `/charges/list?currentPage=1&pageSize=10&search=${search}&type=${type}&fromDate=${startTime}&toDate=${endTime}`
-  //   );
-  //   await this.getData(
-  //     this.props.location.pathname,
-  //     this.props.location.search
-  //   );
-  // }
+  goPage = async page => {
+    await this.setState({
+      currentPage: page
+    });
+    const { type, startTime, endTime, search, currentPage } = this.state;
+    await this.props.history.replace(
+      `/charges/list?currentPage=${currentPage}&pageSize=10&search=${search}&type=${type}&fromDate=${startTime}&toDate=${endTime}`
+    );
+    this.getData(this.props.location.pathname, this.props.location.search);
+  };
   render() {
     const columns = [
       {
         title: "PartnerChargeId",
         dataIndex: "partnerChargeId",
         key: "partnerChargeId",
-        width: "25%"
+        width: "25%",
+        // render:<Link to >``</Link>
+        render: ChargeId => (
+          <Link to={"/charges/detail" + "?chargeId=" + ChargeId}>
+            {ChargeId}
+          </Link>
+        )
       },
       {
         title: "ProductId",
@@ -116,16 +118,12 @@ class History extends React.Component {
       },
       {
         title: "CreateAt",
-        dataIndex: "createAt",
+        dataIndex: "createdAt",
         key: "createAt",
         width: "20%"
       }
     ];
-    // let total = 0;
-    // for (let i = 0; i < data.length; i++) {
-    //   total += data[i].value;
-    // }
-    const { data, startTime, endTime } = this.state;
+    const { data, startTime, endTime, totalItem } = this.state;
     return (
       <>
         {/* <span>Total: {total} </span> */}
@@ -136,7 +134,7 @@ class History extends React.Component {
           />
           <Search
             placeholder="Search..."
-            onSearch={value=>this.filterDate(startTime,endTime,value)}
+            onSearch={value => this.filterDate(startTime, endTime, value)}
             enterButton
           />
         </div>
@@ -144,6 +142,14 @@ class History extends React.Component {
           columns={columns}
           dataSource={data}
           rowKey={record => record.partnerChargeId}
+          pagination={false}
+        />
+        <Pagination
+          // onShowSizeChange={onShowSizeChange}
+          defaultCurrent={1}
+          total={totalItem}
+          size="small"
+          onChange={this.goPage}
         />
       </>
     );

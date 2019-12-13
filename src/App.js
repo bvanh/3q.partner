@@ -4,8 +4,9 @@ import getToken from "./component/options/refreshToken";
 import Home from "./component/home";
 import Charts from "./component/charts";
 import History from "./component/history";
-import Infor from "./component/data-user";
+import ChangePass from "./component/data-user";
 import LoginForm from "./component/login";
+import Detail from "./component/detail";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 const { Header, Footer, Sider } = Layout;
 export default class App extends React.Component {
@@ -13,7 +14,9 @@ export default class App extends React.Component {
     super(props);
     this.state = {
       isLogin: false,
-      userToken: null
+      userToken: null,
+      xAxis: null,
+      yAxis: null
     };
   }
   logOut = () => {
@@ -63,7 +66,7 @@ export default class App extends React.Component {
                 </Link>
               </Menu.Item>
               <Menu.Item key="2">
-                <Link to="/charts">
+                <Link to="/stats/revenue/date?type=0&fromDate=2019-10-01&toDate=2019-10-25">
                   <span>
                     <Icon type="area-chart" />
                     Charts
@@ -79,14 +82,14 @@ export default class App extends React.Component {
                 </Link>
               </Menu.Item>
               <Menu.Item key="4">
-                <Link to="/inforusers">
-                  <Icon type="idcard" theme="filled" />
+                <Link to="/partner/password/update">
+                  <Icon type="key" />
 
-                  <span>Users</span>
+                  <span>ChangePassword</span>
                 </Link>
               </Menu.Item>
               <Menu.Item key="5" onClick={this.logOut}>
-                <Icon type="idcard" theme="filled" />
+                <Icon type="backward" theme="filled" />
                 <span>Logout</span>
               </Menu.Item>
             </Menu>
@@ -94,16 +97,18 @@ export default class App extends React.Component {
           <Layout>
             <Header style={{ background: "#fff", padding: 0 }}></Header>
             <Route exact path="/" component={Home} />
-            <Route path="/charts" component={Charts} />
+            <Route path="/stats" render={props => <Charts {...props} />} />
 
             <Route
-              path="/charges"
+              exact
+              path="/charges/list"
               render={props => (
                 <History {...props} userToken={this.state.userToken} />
               )}
             />
-            <Route exact path="/inforusers" component={Infor} />
+            <Route path="/partner" render={props => <ChangePass {...props} />} />
             {/* <Route path="/products/:id" component={Edit}/> */}
+            <Route exact path="/charges/detail" component={Detail} />
             <Footer style={{ textAlign: "center" }}>
               Client_Partner_App ©2019
             </Footer>
