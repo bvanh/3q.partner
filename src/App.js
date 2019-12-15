@@ -4,8 +4,10 @@ import getToken from "./component/options/refreshToken";
 import Home from "./component/home";
 import Charts from "./component/charts";
 import History from "./component/history";
-import Infor from "./component/data-user";
+import ChangePass from "./component/changepassword";
 import LoginForm from "./component/login";
+import Detail from "./component/detail";
+import API from "./api/apiAll";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 const { Header, Footer, Sider } = Layout;
 export default class App extends React.Component {
@@ -16,11 +18,6 @@ export default class App extends React.Component {
       userToken: null
     };
   }
-  logOut = () => {
-    this.setState({
-      isLogin: false
-    });
-  };
   componentDidMount() {
     if (getToken() === false) {
       this.setState({
@@ -36,9 +33,12 @@ export default class App extends React.Component {
       });
     }
   }
-  logIn = () => {
+  logInOut = elm => {
+    if (elm === 'deleteToken') {
+      localStorage.removeItem("userToken");
+    }
     this.setState({
-      isLogin: true
+      isLogin: !this.state.isLogin
     });
   };
   render() {
@@ -46,7 +46,10 @@ export default class App extends React.Component {
     if (isLogin === false) {
       return (
         <Router>
-          <Route path="/" render={() => <LoginForm logIn={this.logIn} />} />
+          <Route
+            path="/"
+            render={() => <LoginForm logInOut={this.logInOut} />}
+          />
         </Router>
       );
     }
@@ -54,7 +57,6 @@ export default class App extends React.Component {
       <Layout style={{ minHeight: "100vh" }}>
         <Router>
           <Sider breakpoint="md" collapsedWidth="0">
-            <div className="logo">Admin</div>
             <Menu theme="dark" defaultSelectedKeys={["1"]} mode="inline">
               <Menu.Item key="1">
                 <Link to="/">
@@ -63,7 +65,13 @@ export default class App extends React.Component {
                 </Link>
               </Menu.Item>
               <Menu.Item key="2">
-                <Link to="/stats/revenue/date?type=0&fromDate=2019-10-01&toDate=2019-10-25">
+                <Link
+                  to={
+                    API.CHARTS_PATHNAME +
+                    API.CHARTS_PATHSEARCH_TYPE +
+                    API.CHARTS_PATHSEARCH_DATE
+                  }
+                >
                   <span>
                     <Icon type="area-chart" />
                     Charts
@@ -71,7 +79,9 @@ export default class App extends React.Component {
                 </Link>
               </Menu.Item>
               <Menu.Item key="3">
-                <Link to="/charges/list?currentPage=1&pageSize=10&search=&type=1&fromDate=2019-10-1&toDate=2019-12-30">
+                <Link
+                  to={API.HISTORY_PATHNAME + API.HISTORY_PATHSEARCH_DEFAULT}
+                >
                   <span>
                     <Icon type="schedule" />
                     History
@@ -79,31 +89,46 @@ export default class App extends React.Component {
                 </Link>
               </Menu.Item>
               <Menu.Item key="4">
-                <Link to="/inforusers">
-                  <Icon type="idcard" theme="filled" />
+                <Link to={API.CHANGEPASSWORD_PATHNAME}>
+                  <Icon type="key" />
 
-                  <span>Users</span>
+                  <span>ChangePassword</span>
                 </Link>
               </Menu.Item>
-              <Menu.Item key="5" onClick={this.logOut}>
-                <Icon type="idcard" theme="filled" />
-                <span>Logout</span>
+              <Menu.Item key="5" onClick={()=>this.logInOut('deleteToken')}>
+                <Link to="/">
+                  <Icon type="backward" theme="filled" />
+                  <span>Logout</span>
+                </Link>
               </Menu.Item>
             </Menu>
           </Sider>
           <Layout>
             <Header style={{ background: "#fff", padding: 0 }}></Header>
             <Route exact path="/" component={Home} />
-            <Route path="/stats" render={props => <Charts {...props} />} />
+            <Route
+              exact
+              path={API.CHARTS_PATHNAME}
+              render={props => <Charts {...props} />}
+            />
 
             <Route
-              path="/charges"
+              path={API.HISTORY_PATHNAME}
               render={props => (
                 <History {...props} userToken={this.state.userToken} />
               )}
             />
-            <Route exact path="/inforusers" component={Infor} />
+            <Route
+              exact
+              path={API.CHANGEPASSWORD_PATHNAME}
+              render={props => <ChangePass {...props} />}
+            />
             {/* <Route path="/products/:id" component={Edit}/> */}
+            <Route
+              exact
+              path={API.HISTORY_DETAIL_PATHNAME}
+              component={Detail}
+            />
             <Footer style={{ textAlign: "center" }}>
               Client_Partner_App ©2019
             </Footer>

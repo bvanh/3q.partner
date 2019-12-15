@@ -22,7 +22,7 @@ function Type(props) {
   return (
     <>
       <DateRange filterDate={props.filterDate} />
-      <Dropdown overlay={optionType}>
+      <Dropdown overlay={optionType}className='btn-checktype'>
         <Button>
           Type <Icon type="down" />
         </Button>

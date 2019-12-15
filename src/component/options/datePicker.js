@@ -41,7 +41,7 @@ export default class DateRange extends React.Component {
   render() {
     const { startValue, endValue, endOpen } = this.state;
     return (
-      <div>
+      <div className='btn-checkdate'>
         <DatePicker
           disabledDate={this.disabledDate}
           showTime

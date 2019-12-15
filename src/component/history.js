@@ -1,14 +1,16 @@
 import React from "react";
-import { Table, Input } from "antd";
+import { Table, Input, Pagination } from "antd";
 import Type from "./options/type";
 import fetch from "isomorphic-unfetch";
-import { url } from "./api";
+import { Link } from "react-router-dom";
+import API from "../api/apiAll";
 const { Search } = Input;
 class History extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       data: null,
+      totalItem: null,
       currentPage: 1,
       pageSize: 10,
       userToken: JSON.parse(this.props.userToken),
@@ -18,9 +20,9 @@ class History extends React.Component {
       endTime: "2019-12-30"
     };
   }
-  getData = (pathName, pathSearch) => {
+  getData = pathSearch => {
     let userAccessToken = localStorage.getItem("user");
-    fetch(url + pathName + pathSearch, {
+    fetch(API.ROOT_URL + API.HISTORY_PATHNAME + pathSearch, {
       headers: {
         Authorization: `Bearer ${JSON.parse(userAccessToken).accessToken}`,
         "Content-Type": "application/x-www-form-urlencoded"
@@ -30,7 +32,8 @@ class History extends React.Component {
       .then(response => response.json())
       .then(result =>
         this.setState({
-          data: result.rows
+          data: result.rows,
+          totalItem: result.count
         })
       )
       .catch(function(error) {
@@ -38,8 +41,7 @@ class History extends React.Component {
       });
   };
   componentDidMount() {
-    console.log(this.props.location);
-    this.getData(this.props.location.pathname, this.props.location.search);
+    this.getData(this.props.location.search);
   }
   handleMenuClick = async e => {
     const { type, startTime, endTime, search } = this.state;
@@ -47,46 +49,45 @@ class History extends React.Component {
       type: Number(e.key)
     });
     await this.props.history.replace(
-      `/charges/list?currentPage=1&pageSize=10&search=${search}&type=${type}&fromDate=${startTime}&toDate=${endTime}`
+      `${API.HISTORY_PATHNAME}?currentPage=1&pageSize=10&search=${search}&type=${type}&fromDate=${startTime}&toDate=${endTime}`
     );
-    this.getData(this.props.location.pathname, this.props.location.search);
-    console.log(e);
+    this.getData(this.props.location.search);
   };
-  filterDate = async (startDate, endDate, value) => {
+  filterDateAndText = async (startDate, endDate, value) => {
     await this.setState({
       startTime: startDate,
       endTime: endDate,
       search: value
     });
-    const { type, startTime, endTime, search } = this.state;
+    const { type, startTime, endTime, search, currentPage } = this.state;
     await this.props.history.replace(
-      `/charges/list?currentPage=1&pageSize=10&search=${search}&type=${type}&fromDate=${startTime}&toDate=${endTime}`
+      `${API.HISTORY_PATHNAME}?currentPage=${currentPage}&pageSize=10&search=${search}&type=${type}&fromDate=${startTime}&toDate=${endTime}`
     );
-    this.getData(
-      this.props.location.pathname,
-      this.props.location.search
-    );
+    this.getData(this.props.location.search);
   };
-  // filterPartnerId=(value)=>{
-  //   const {type, startTime, endTime, search } = this.state;
-  //   this.setState({
-  //     search:value
-  //   });
-  //   await this.props.history.replace(
-  //     `/charges/list?currentPage=1&pageSize=10&search=${search}&type=${type}&fromDate=${startTime}&toDate=${endTime}`
-  //   );
-  //   await this.getData(
-  //     this.props.location.pathname,
-  //     this.props.location.search
-  //   );
-  // }
+  goPage = async page => {
+    await this.setState({
+      currentPage: page
+    });
+    const { type, startTime, endTime, search, currentPage } = this.state;
+    await this.props.history.replace(
+      `${API.HISTORY_PATHNAME}?currentPage=${currentPage}&pageSize=10&search=${search}&type=${type}&fromDate=${startTime}&toDate=${endTime}`
+    );
+    this.getData(this.props.location.search);
+  };
   render() {
     const columns = [
       {
         title: "PartnerChargeId",
         dataIndex: "partnerChargeId",
         key: "partnerChargeId",
-        width: "25%"
+        width: "25%",
+        // render:<Link to >``</Link>
+        render: ChargeId => (
+          <Link to={API.HISTORY_DETAIL_PATHNAME + "?chargeId=" + ChargeId}>
+            {ChargeId}
+          </Link>
+        )
       },
       {
         title: "ProductId",
@@ -116,16 +117,12 @@ class History extends React.Component {
       },
       {
         title: "CreateAt",
-        dataIndex: "createAt",
+        dataIndex: "createdAt",
         key: "createAt",
         width: "20%"
       }
     ];
-    // let total = 0;
-    // for (let i = 0; i < data.length; i++) {
-    //   total += data[i].value;
-    // }
-    const { data, startTime, endTime } = this.state;
+    const { data, startTime, endTime, totalItem } = this.state;
     return (
       <>
         {/* <span>Total: {total} </span> */}
@@ -136,7 +133,7 @@ class History extends React.Component {
           />
           <Search
             placeholder="Search..."
-            onSearch={value=>this.filterDate(startTime,endTime,value)}
+            onSearch={value => this.filterDateAndText(startTime, endTime, value)}
             enterButton
           />
         </div>
@@ -144,6 +141,13 @@ class History extends React.Component {
           columns={columns}
           dataSource={data}
           rowKey={record => record.partnerChargeId}
+          pagination={false}
+        />
+        <Pagination
+          defaultCurrent={1}
+          total={totalItem}
+          size="small"
+          onChange={this.goPage}
         />
       </>
     );

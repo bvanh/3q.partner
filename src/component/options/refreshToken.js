@@ -1,12 +1,12 @@
 import fetch from "isomorphic-unfetch";
-import { url } from "../api";
+import API from "../../api/apiAll";
 
 const getToken = () => {
   let userToken = localStorage.getItem("userToken");
   if (userToken === null) {
     return false;
   } else
-    fetch(url + `/auth/renew/token/access`, {
+    fetch(API.ROOT_URL + API.REFRESHTOKEN_PATHNAME, {
       headers: {
         "Content-Type": "application/x-www-form-urlencoded"
       },

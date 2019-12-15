@@ -1,6 +1,6 @@
 import React from "react";
 import fetch from "isomorphic-unfetch";
-import { url } from "./api";
+import API from "../api/apiAll";
 
 import { Form, Icon, Input, Button } from "antd";
 
@@ -13,7 +13,7 @@ class NormalLoginForm extends React.Component {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        fetch(url + "/auth/login", {
+        fetch(API.ROOT_URL + API.LOGIN_PATHNAME, {
           headers: {
             "Content-Type": "application/x-www-form-urlencoded"
           },
@@ -24,7 +24,7 @@ class NormalLoginForm extends React.Component {
           .then(result =>
             localStorage.setItem("userToken", JSON.stringify(result))
           )
-          .then(this.props.logIn())
+          .then(this.props.logInOut())
           .catch(function(error) {
             console.log("Request failed", error);
           });
@@ -62,7 +62,7 @@ class NormalLoginForm extends React.Component {
           )}
         </Form.Item>
         <Form.Item className="btn-submit">
-          <a className="login-form-forgot" href="" style={{ width: "50%" }}>
+          <a className="login-form-forgot" style={{ width: "50%" }}>
             Forgot password
           </a>
           <Button
