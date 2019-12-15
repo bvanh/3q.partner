@@ -26,7 +26,7 @@ class Charts extends React.Component {
             borderWidth: 2,
             hoverBackgroundColor: "rgba(255,99,132,0.4)",
             hoverBorderColor: "rgba(255,99,132,1)",
-            data: [0,0,0,1,0]
+            data: [0, 0, 0, 1, 0]
           },
           {
             label: "Total",
@@ -36,10 +36,61 @@ class Charts extends React.Component {
             borderWidth: 2,
             hoverBackgroundColor: "rgba(255,99,132,0.4)",
             hoverBorderColor: "rgba(255,99,132,1)",
-            data: [4,7,3,4,5]
+            data: [4, 7, 3, 4, 5]
+          }
+        ]
+      },
+      chartData2: {
+        labels: [],
+        datasets: [
+          {
+            label: "Web",
+            fill: false,
+            backgroundColor: "rgba(75,192,192,0.4)",
+            borderColor: "rgba(75,192,192,0.4)",
+            borderWidth: 2,
+            hoverBackgroundColor: "rgba(255,99,132,0.4)",
+            hoverBorderColor: "rgba(255,99,132,1)",
+            data: [1, 2, 3, 4, 5]
+          },
+          {
+            label: "Apk",
+            fill: false,
+            backgroundColor: "#ffce56",
+            borderColor: "#ffce56",
+            borderWidth: 2,
+            hoverBackgroundColor: "rgba(255,99,132,0.4)",
+            hoverBorderColor: "rgba(255,99,132,1)",
+            data: [0, 0, 0, 1, 0]
+          },
+          {
+            label: "Total",
+            fill: false,
+            backgroundColor: "rgba(255,99,132,0.2)",
+            borderColor: "rgba(255,99,132,0.2)",
+            borderWidth: 2,
+            hoverBackgroundColor: "rgba(255,99,132,0.4)",
+            hoverBorderColor: "rgba(255,99,132,1)",
+            data: [4, 7, 3, 4, 5]
           }
         ]
       }
+    };
+    getDataChart = (pathName, pathSearch) => {
+      let userAccessToken = localStorage.getItem("user");
+      let newChartData = this.state.chartData2;
+      fetch(url + pathName + pathSearch, {
+        headers: {
+          Authorization: `Bearer ${JSON.parse(userAccessToken).accessToken}`,
+          "Content-Type": "application/x-www-form-urlencoded"
+        },
+        method: "GET"
+      })
+        .then(response => response.json())
+        .then(result => console.log((newChartData.labels = result.xAxis)))
+        .catch(function(error) {
+          console.log("Request failed", error);
+        });
     };
   }
   render() {

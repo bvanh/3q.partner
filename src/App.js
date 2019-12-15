@@ -63,7 +63,7 @@ export default class App extends React.Component {
                 </Link>
               </Menu.Item>
               <Menu.Item key="2">
-                <Link to="/charts">
+                <Link to="/stats/revenue/date?type=0&fromDate=2019-10-01&toDate=2019-10-25">
                   <span>
                     <Icon type="area-chart" />
                     Charts
@@ -94,7 +94,7 @@ export default class App extends React.Component {
           <Layout>
             <Header style={{ background: "#fff", padding: 0 }}></Header>
             <Route exact path="/" component={Home} />
-            <Route path="/charts" component={Charts} />
+            <Route path="/stats" render={props => <Charts {...props} />} />
 
             <Route
               path="/charges"
