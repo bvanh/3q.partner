@@ -1,6 +1,8 @@
 import React from "react";
 import fetch from "isomorphic-unfetch";
 import API from "../api/apiAll";
+import "../static/style-login.css";
+import logoclappigames from "../static/img/logoclappigames.jpg";
 
 import { Form, Icon, Input, Button } from "antd";
 
@@ -22,7 +24,12 @@ class NormalLoginForm extends React.Component {
         })
           .then(response => response.json())
           .then(result =>
-            localStorage.setItem("userToken", JSON.stringify(result))
+            localStorage.setItem(
+              "userToken",
+              JSON.stringify(result),
+              "user",
+              JSON.stringify(result.accessToken)
+            )
           )
           .then(this.props.logInOut())
           .catch(function(error) {
@@ -34,49 +41,46 @@ class NormalLoginForm extends React.Component {
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    // const { validateStatus, help } = this.state;
     return (
-      <Form onSubmit={this.handleSubmit} className="login-form">
-        <Form.Item>
-          {getFieldDecorator("username", {
-            rules: [{ required: true, message: "Please input your username!" }]
-          })(
-            <Input
-              prefix={<Icon type="user" style={{ color: "rgba(0,0,0,.25)" }} />}
-              placeholder="Username"
-            />
-          )}
-        </Form.Item>
-        <Form.Item
-        // validateStatus={validateStatus}
-        // help={help}
-        >
-          {getFieldDecorator("password", {
-            rules: [{ required: true, message: "Please input your Password!" }]
-          })(
-            <Input.Password
-              prefix={<Icon type="lock" style={{ color: "rgba(0,0,0,.25)" }} />}
-              type="password"
-              placeholder="Password"
-            />
-          )}
-        </Form.Item>
-        <Form.Item className="btn-submit">
-          <a className="login-form-forgot" style={{ width: "50%" }}>
-            Forgot password
-          </a>
-          <Button
-            type="primary"
-            htmlType="submit"
-            className="login-form-button"
-            style={{ float: "right" }}
-          >
-            Log in
-          </Button>
-          <br />
-          Or <a href="">register now!</a>
-        </Form.Item>
-      </Form>
+      <div className="login-form">
+        <img
+          src={logoclappigames}
+          alt="logo_clappigames"
+          className="logo"
+        ></img>
+        <Form onSubmit={this.handleSubmit} className="login-form">
+          <span className="login_text">LOGIN</span>
+          <div className="input_form">
+            <Form.Item label="Username">
+              {getFieldDecorator("username", {
+                rules: [
+                  { required: true, message: "Please input your Username!" }
+                ]
+              })(<Input placeholder="Username" />)}
+            </Form.Item>
+            <Form.Item label="Password">
+              {getFieldDecorator("password", {
+                rules: [
+                  { required: true, message: "Please input your Password!" }
+                ]
+              })(<Input type="password" placeholder="Password" />)}
+            </Form.Item>
+            <Form.Item className="btn-submit">
+              <Button
+                type="primary"
+                htmlType="submit"
+                className="login-form-button"
+              >
+                Log in
+              </Button>
+              <br />
+              <a className="login-form-forgot" style={{ width: "50%" }}>
+                Forgot password ?
+              </a>
+            </Form.Item>
+          </div>
+        </Form>
+      </div>
     );
   }
 }

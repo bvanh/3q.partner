@@ -17,6 +17,6 @@ const getToken = () => {
       .then(result => localStorage.setItem("user", JSON.stringify(result)))
       .catch(function(error) {
         console.log("Request failed", error);
-      });
+      }); 
 };
 export default getToken;

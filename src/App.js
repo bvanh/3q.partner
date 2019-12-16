@@ -1,5 +1,5 @@
 import React from "react";
-import { Layout, Menu, Icon } from "antd";
+import { Layout, Menu, Icon, Avatar, Dropdown } from "antd";
 import getToken from "./component/options/refreshToken";
 import Home from "./component/home";
 import Charts from "./component/charts";
@@ -8,8 +8,20 @@ import ChangePass from "./component/changepassword";
 import LoginForm from "./component/login";
 import Detail from "./component/detail";
 import API from "./api/apiAll";
+import logoclappigames from "./static/img/logoForPages.jpg";
+import logo3qzombie from "./static/img/Logo-3q-Zombie.jpg";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
-const { Header, Footer, Sider } = Layout;
+const { Header, Footer } = Layout;
+const menu = (
+  <Menu>
+    <Menu.Item>
+    <Icon type="key" />Đổi mật khẩu
+    </Menu.Item>
+    <Menu.Item>
+    <Icon type="export" />Đăng xuất
+    </Menu.Item>
+  </Menu>
+);
 export default class App extends React.Component {
   constructor(props) {
     super(props);
@@ -34,7 +46,7 @@ export default class App extends React.Component {
     }
   }
   logInOut = elm => {
-    if (elm === 'deleteToken') {
+    if (elm === "deleteToken") {
       localStorage.removeItem("userToken");
     }
     this.setState({
@@ -54,10 +66,31 @@ export default class App extends React.Component {
       );
     }
     return (
-      <Layout style={{ minHeight: "100vh" }}>
+      <Layout className="layout" style={{ minHeight: "100vh" }}>
         <Router>
-          <Sider breakpoint="md" collapsedWidth="0">
-            <Menu theme="dark" defaultSelectedKeys={["1"]} mode="inline">
+          <Header>
+            <div className="header1">
+              <img
+                src={logoclappigames}
+                alt="logo_clappigames"
+                className="logoForPages"
+              ></img>
+              <div className="user_logout">
+                <Avatar icon="user" />
+                <Dropdown overlay={menu}>
+                  <a className="ant-dropdown-link" href="#">
+                    ABCD <Icon type="caret-down" />
+                  </a>
+                  
+                </Dropdown>
+              </div>
+            </div>
+            {/* <Menu
+              // theme="dark"
+              mode="horizontal"
+              defaultSelectedKeys={["2"]}
+              style={{ lineHeight: "64px" }}
+            >
               <Menu.Item key="1">
                 <Link to="/">
                   <Icon type="home" theme="filled" />
@@ -95,16 +128,30 @@ export default class App extends React.Component {
                   <span>ChangePassword</span>
                 </Link>
               </Menu.Item>
-              <Menu.Item key="5" onClick={()=>this.logInOut('deleteToken')}>
+              <Menu.Item key="5" onClick={() => this.logInOut("deleteToken")}>
                 <Link to="/">
                   <Icon type="backward" theme="filled" />
                   <span>Logout</span>
                 </Link>
               </Menu.Item>
-            </Menu>
-          </Sider>
+            </Menu> */}
+          </Header>
           <Layout>
-            <Header style={{ background: "#fff", padding: 0 }}></Header>
+            <Header className="header2">
+              <div className="header2_content">
+                <div id='logo_title'>
+                <img
+                  src={logo3qzombie}
+                  alt="logo_clappigames"
+                  // className="logoForPages"
+                ></img>
+                <span className="header2_title">3Q Zombie</span>
+                </div>
+                <span id='header2_title'>Tổng hợp doanh thu C.coin</span>
+              </div>
+              <br />
+              
+            </Header>
             <Route exact path="/" component={Home} />
             <Route
               exact

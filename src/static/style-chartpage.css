@@ -1,0 +1,61 @@
+.main_content {
+  width: 75%;
+  margin: 0 auto;
+}
+#chart-frame {
+  background-color: white !important;
+  border: 1px solid #d2d3d4;
+  padding: 1.5rem;
+}
+.sum {
+  display: flex;
+  align-items: center;
+}
+.ant-col-16 {
+  height: 569px;
+}
+.ant-col-8 {
+  padding-left: 1rem;
+  box-sizing: border-box;
+}
+.card {
+  background: linear-gradient(180deg, #0085ff 0%, rgba(0, 133, 255, 0.81) 100%);
+  border-radius: 3px;
+  color: white;
+  padding: 1.5rem;
+  height: 569px;
+}
+.card_title > p {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: normal;
+  font-size: 1.3rem;
+  line-height: 1.5rem;
+  margin-bottom: 1rem;
+}
+.card_title {
+  border-bottom: 1px dashed white;
+}
+#value {
+  font-weight: 500;
+  font-size: 2.5rem;
+  line-height: 3rem;
+}
+.card_content {
+  padding: 1rem 0;
+}
+.card_footer,.chart-frame_footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  left: 0;
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  height: 3rem;
+  align-items: center;
+  padding-left: 1.8rem;
+}
+.card_footer>a{
+    color: white;
+}

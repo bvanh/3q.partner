@@ -1,0 +1,56 @@
+.ant-form {
+  height: 426px;
+  margin: 1.3rem auto !important;
+  border: 1px solid #f0f0f0;
+  text-align: center;
+  box-sizing: border-box;
+}
+.logo {
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+}
+.login_text {
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 21px;
+  color: black;
+}
+.ant-row {
+  text-align: left;
+}
+.input_form {
+  padding-top: 1rem;
+}
+.ant-input {
+  padding-left: 30px;
+  height: 2.5rem;
+  border-radius: 0;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+}
+.login-form-button {
+  width: 100%;
+  border-radius: 0;
+  margin-top: 1.5rem;
+  height: 2.5rem;
+}
+@media only screen and (max-width: 600px) {
+  .ant-form {
+    width: 90% !important;
+    padding: 1rem 2rem;
+  }
+}
+@media only screen and (min-width: 600px) {
+  .ant-form {
+    width: 50% !important;
+    padding: 1rem 2rem;
+  }
+}
+@media only screen and (min-width: 1020px) {
+  .ant-form {
+    width: 30% !important;
+    padding: 1rem 5rem;
+  }
+}

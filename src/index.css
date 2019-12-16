@@ -1,19 +1,58 @@
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  font-family: -apple-system, BlinkMacSystemFont, "Roboto", sans-serif;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Roboto";
 }
-.ant-form {
-  width: 300px !important;
-  margin: 10rem auto !important;
+.header1 {
+  display: flex;
+  justify-content: space-between;
+  background-color: white;
+  align-items: center;
+}
+.ant-layout-header {
+  background-color: white !important;
+  line-height: 1rem !important;
+}
+.user_logout {
+}
+.header2_content {
+  display: flex;
+  flex-direction: column;
+}
+#logo_title {
+  display: flex;
+  align-items: flex-start;
+}
+/* style={{ background: "#f0f2f5", padding: 0 ,width:"85%",textAlign:'left',margin:'0 auto'}} */
+.header2 {
+  background-color: #f0f2f5 !important;
+  width: 75%;
+  margin: 1rem auto;
+  text-align: left;
+  display: flex;
+  align-items: flex-end;
+  padding: 1rem;
+}
+.header2_title {
+  font-weight: 900;
+  font-size: 30px;
+  line-height: 35px;
+  color: #34489e;
+  font-family: "Roboto";
+  font-style: normal;
+  padding-left: .5rem;
+}
+#header2_title {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 300;
+  font-size: 16px;
+  line-height: 19px;
+  color:black;
+  padding-top: .5rem;
 }
 .ant-table-tbody {
   background-color: white;
