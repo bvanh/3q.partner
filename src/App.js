@@ -1,5 +1,5 @@
 import React from "react";
-import { Layout, Menu, Icon, Avatar, Dropdown } from "antd";
+import { Layout, Menu, Icon, Avatar, Dropdown, Button } from "antd";
 import getToken from "./component/options/refreshToken";
 import Home from "./component/home";
 import Charts from "./component/charts";
@@ -15,10 +15,12 @@ const { Header, Footer } = Layout;
 const menu = (
   <Menu>
     <Menu.Item>
-    <Icon type="key" />Đổi mật khẩu
+      <Icon type="key" />
+      Đổi mật khẩu
     </Menu.Item>
     <Menu.Item>
-    <Icon type="export" />Đăng xuất
+      <Icon type="export" />
+      Đăng xuất
     </Menu.Item>
   </Menu>
 );
@@ -46,11 +48,11 @@ export default class App extends React.Component {
     }
   }
   logInOut = elm => {
-    if (elm === "deleteToken") {
+    if (elm === false) {
       localStorage.removeItem("userToken");
     }
     this.setState({
-      isLogin: !this.state.isLogin
+      isLogin: elm
     });
   };
   render() {
@@ -77,11 +79,13 @@ export default class App extends React.Component {
               ></img>
               <div className="user_logout">
                 <Avatar icon="user" />
-                <Dropdown overlay={menu}>
-                  <a className="ant-dropdown-link" href="#">
+                <Dropdown overlay={menu} placement="bottomRight">
+                  <span
+                    className="ant-dropdown-link"
+                    style={{ padding: "0 1rem 0 .5rem" }}
+                  >
                     ABCD <Icon type="caret-down" />
-                  </a>
-                  
+                  </span>
                 </Dropdown>
               </div>
             </div>
@@ -128,7 +132,7 @@ export default class App extends React.Component {
                   <span>ChangePassword</span>
                 </Link>
               </Menu.Item>
-              <Menu.Item key="5" onClick={() => this.logInOut("deleteToken")}>
+              <Menu.Item key="5" onClick={() => this.logInOut(false)}>
                 <Link to="/">
                   <Icon type="backward" theme="filled" />
                   <span>Logout</span>
@@ -139,18 +143,17 @@ export default class App extends React.Component {
           <Layout>
             <Header className="header2">
               <div className="header2_content">
-                <div id='logo_title'>
-                <img
-                  src={logo3qzombie}
-                  alt="logo_clappigames"
-                  // className="logoForPages"
-                ></img>
-                <span className="header2_title">3Q Zombie</span>
+                <div id="logo_title">
+                  <img
+                    src={logo3qzombie}
+                    alt="logo_clappigames"
+                    // className="logoForPages"
+                  ></img>
+                  <span className="header2_title">3Q Zombie</span>
                 </div>
-                <span id='header2_title'>Tổng hợp doanh thu C.coin</span>
+                <span id="header2_title">Tổng hợp doanh thu C.coin</span>
               </div>
               <br />
-              
             </Header>
             <Route exact path="/" component={Home} />
             <Route
