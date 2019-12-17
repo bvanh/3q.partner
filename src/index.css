@@ -63,9 +63,9 @@ code {
 .ant-table-tbody {
   background-color: white;
 }
-.ant-input-group-wrapper {
+/* .ant-input-group-wrapper {
   width: 30% !important;
-}
+} */
 .btn-check {
   padding: 0.5rem;
   display: flex;
