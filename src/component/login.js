@@ -26,7 +26,8 @@ class NormalLoginForm extends React.Component {
         })
           .then(response => {
             if (response.ok === false) {
-              this.errorAlert(response.status, response.statusText);
+              this.errorAlert(response.status, JSON.stringify(response));
+              console.log(response)
             } else {
               response.json().then(result => {
                 localStorage.setItem(
@@ -58,14 +59,14 @@ class NormalLoginForm extends React.Component {
         <Form onSubmit={this.handleSubmit} className="login-form">
           <span className="login_text">LOGIN</span>
           <div className="input_form">
-            <Form.Item label="Username">
+            <Form.Item label="Username" className='ant-input-login'>
               {getFieldDecorator("username", {
                 rules: [
                   { required: true, message: "Please input your Username!" }
                 ]
               })(<Input placeholder="Username" />)}
             </Form.Item>
-            <Form.Item label="Password">
+            <Form.Item label="Password"className='ant-input-login'>
               {getFieldDecorator("password", {
                 rules: [
                   { required: true, message: "Please input your Password!" }

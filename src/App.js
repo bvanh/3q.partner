@@ -1,8 +1,7 @@
 import React from "react";
-import { Layout, Menu, Icon, Avatar, Dropdown, Button } from "antd";
+import { Layout, Menu, Icon, Avatar, Dropdown} from "antd";
 import getToken from "./component/options/refreshToken";
-import Home from "./component/home";
-import Charts from "./component/charts";
+import Charts from "./component/home";
 import History from "./component/history";
 import ChangePass from "./component/changepassword";
 import LoginForm from "./component/login";
@@ -12,18 +11,6 @@ import logoclappigames from "./static/img/logoForPages.jpg";
 import logo3qzombie from "./static/img/Logo-3q-Zombie.jpg";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 const { Header, Footer } = Layout;
-const menu = (
-  <Menu>
-    <Menu.Item>
-      <Icon type="key" />
-      Đổi mật khẩu
-    </Menu.Item>
-    <Menu.Item>
-      <Icon type="export" />
-      Đăng xuất
-    </Menu.Item>
-  </Menu>
-);
 export default class App extends React.Component {
   constructor(props) {
     super(props);
@@ -32,6 +19,20 @@ export default class App extends React.Component {
       userToken: null
     };
   }
+  menu = (
+    <Menu>
+      <Menu.Item>
+        <Icon type="key" />
+        Đổi mật khẩu
+      </Menu.Item>
+      <Menu.Item onClick={() => this.logInOut(false)}>
+        <Link to="/">
+          <Icon type="export" style={{padding:'0 .5rem 0 0'}} />
+          Đăng xuất
+        </Link>
+      </Menu.Item>
+    </Menu>
+  );
   componentDidMount() {
     if (getToken() === false) {
       this.setState({
@@ -77,17 +78,21 @@ export default class App extends React.Component {
                 alt="logo_clappigames"
                 className="logoForPages"
               ></img>
-              <div className="user_logout">
-                <Avatar icon="user" />
-                <Dropdown overlay={menu} placement="bottomRight">
+              <Dropdown overlay={this.menu} placement="bottomRight">
+                <div className="user_logout">
+                  <Avatar icon="user" />
                   <span
                     className="ant-dropdown-link"
-                    style={{ padding: "0 1rem 0 .5rem" }}
+                    style={{ padding: "0 0 0 .5rem" }}
                   >
-                    ABCD <Icon type="caret-down" />
+                    ABCD{" "}
+                    <Icon
+                      type="caret-down"
+                      style={{ padding: "0 0 0 1.5rem" }}
+                    />
                   </span>
-                </Dropdown>
-              </div>
+                </div>
+              </Dropdown>
             </div>
             {/* <Menu
               // theme="dark"
@@ -144,24 +149,14 @@ export default class App extends React.Component {
             <Header className="header2">
               <div className="header2_content">
                 <div id="logo_title">
-                  <img
-                    src={logo3qzombie}
-                    alt="logo_clappigames"
-                    // className="logoForPages"
-                  ></img>
+                  <img src={logo3qzombie} alt="logo_clappigames"></img>
                   <span className="header2_title">3Q Zombie</span>
                 </div>
                 <span id="header2_title">Tổng hợp doanh thu C.coin</span>
               </div>
               <br />
             </Header>
-            <Route exact path="/" component={Home} />
-            <Route
-              exact
-              path={API.CHARTS_PATHNAME}
-              render={props => <Charts {...props} />}
-            />
-
+            <Route exact path="/" component={Charts} />
             <Route
               path={API.HISTORY_PATHNAME}
               render={props => (

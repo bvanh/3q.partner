@@ -1,8 +1,9 @@
 import React from "react";
-import { Table, Input, Pagination } from "antd";
+import { Table, Input, Pagination, Button } from "antd";
 import Type from "./options/type";
 import fetch from "isomorphic-unfetch";
 import { Link } from "react-router-dom";
+import "../static/style-history.css";
 import API from "../api/apiAll";
 const { Search } = Input;
 class History extends React.Component {
@@ -102,40 +103,58 @@ class History extends React.Component {
         width: "20%"
       },
       {
-        title: "Coin",
+        title: "CreateAt",
+        dataIndex: "createdAt",
+        key: "createAt",
+        width: "15%"
+      },
+      {
+        title: "C.coin",
         dataIndex: "coin",
         key: "coin",
-        width: "5%"
+        width: "10%"
       },
       ,
       {
-        title: "Value",
+        title: "VNĐ",
         dataIndex: "vnd",
         key: "vnd",
         width: "10%",
         render: price => <span>{price.toLocaleString()} đ</span>
-      },
-      {
-        title: "CreateAt",
-        dataIndex: "createdAt",
-        key: "createAt",
-        width: "20%"
       }
     ];
     const { data, startTime, endTime, totalItem } = this.state;
     return (
-      <>
+      <div className="history_container">
         {/* <span>Total: {total} </span> */}
         <div className="btn-check">
+          <Search
+            className="input_search"
+            placeholder="Search..."
+            onSearch={value =>
+              this.filterDateAndText(startTime, endTime, value)
+            }
+          />
           <Type
             handleMenuClick={this.handleMenuClick}
             filterDate={this.filterDate}
           />
-          <Search
-            placeholder="Search..."
-            onSearch={value => this.filterDateAndText(startTime, endTime, value)}
-            enterButton
-          />
+          <Button id="btn_search">SEARCH</Button>
+        </div>
+        <div className="table_sum">
+          <div>
+            <span style={{ padding: "0 2rem 0 0" }}>
+              Tổng doanh thu:{" "}
+              <span style={{ fontSize: "1.1rem", color: "#0085ff" }}>
+                1234567 VNĐ
+              </span>
+            </span>
+            <span>
+              Lượt giao dịch:{" "}
+              <span style={{ fontSize: "1.1rem", color: "#0085ff" }}>123</span>
+            </span>
+          </div>
+          <Button icon="file-excel">Export Excel</Button>
         </div>
         <Table
           columns={columns}
@@ -149,7 +168,10 @@ class History extends React.Component {
           size="small"
           onChange={this.goPage}
         />
-      </>
+        <Button type="primary" icon="caret-left">
+          <Link to="/" style={{color:'white'}}>Back</Link>
+        </Button>
+      </div>
     );
   }
 }

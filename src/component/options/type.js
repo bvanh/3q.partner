@@ -7,26 +7,26 @@ function Type(props) {
     <Menu onClick={props.handleMenuClick}>
       <Menu.Item key="1">
         <Icon type="caret-right" />
-        Partner_charge_id
+        Partner_charge_ID
       </Menu.Item>
       <Menu.Item key="2">
         <Icon type="caret-right" />
-        User_id
+        User_ID
       </Menu.Item>
       <Menu.Item key="3">
         <Icon type="caret-right" />
-        Product_id
+        Product_ID
       </Menu.Item>
     </Menu>
   );
   return (
     <>
-      <DateRange filterDate={props.filterDate} />
-      <Dropdown overlay={optionType}className='btn-checktype'>
-        <Button>
+      <Dropdown overlay={optionType}>
+        <Button className="btn-checktype">
           Type <Icon type="down" />
         </Button>
       </Dropdown>
+      <DateRange filterDate={props.filterDate} />
     </>
   );
 }
