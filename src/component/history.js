@@ -77,6 +77,15 @@ class History extends React.Component {
     this.getData(this.props.location.search);
   };
   render() {
+    const rowSelection = {
+      onChange: (selectedRowKeys, selectedRows) => {
+        console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+      },
+      getCheckboxProps: record => ({
+        disabled: record.name === 'Disabled User', // Column configuration not to be checked
+        name: record.name,
+      }),
+    };
     const columns = [
       {
         title: "PartnerChargeId",
@@ -157,6 +166,7 @@ class History extends React.Component {
           <Button icon="file-excel">Export Excel</Button>
         </div>
         <Table
+        rowSelection={rowSelection}
           columns={columns}
           dataSource={data}
           rowKey={record => record.partnerChargeId}

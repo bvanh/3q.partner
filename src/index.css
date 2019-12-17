@@ -7,6 +7,9 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Roboto" !important;
 }
+input:focus{
+  outline: none !important;
+}
 .header1 {
   display: flex;
   justify-content: space-between;

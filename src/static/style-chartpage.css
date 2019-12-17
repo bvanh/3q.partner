@@ -92,17 +92,35 @@
   > svg {
   color: white;
 }
-.ant-select-focused{
+.ant-select-focused {
   outline: none !important;
   color: red;
 }
-.modal_datepicker{
+.modal_datepicker {
   position: absolute;
-  bottom:10rem;
+  bottom: 19rem;
   left: 0;
-  background-color: red;
   z-index: 9999;
 }
-.ant-calendar-picker-container>.ant-calendar{
-  width: 350px;
+.ant-calendar-picker-container {
+  top: 390px !important;
+}
+.ant-calendar-picker-container > .ant-calendar {
+  width: 365px !important;
+}
+.ant-calendar-today-btn {
+  display: none !important;
+}
+.ant-calendar-footer-extra {
+  text-align: right !important;
+}
+.input_date_chart>input{
+  padding-right:.75rem !important;
+}
+.input_date_chart > div>.ant-calendar-picker-input {
+  border-radius: 0 !important;
+}
+.datepicker_footer{
+  display: flex;
+  justify-content: space-between;
 }

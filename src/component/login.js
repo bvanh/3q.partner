@@ -64,7 +64,7 @@ class NormalLoginForm extends React.Component {
                 rules: [
                   { required: true, message: "Please input your Username!" }
                 ]
-              })(<Input placeholder="Username" />)}
+              })(<Input placeholder="Username" className='ant-input-login'/>)}
             </Form.Item>
             <Form.Item label="Password"className='ant-input-login'>
               {getFieldDecorator("password", {
