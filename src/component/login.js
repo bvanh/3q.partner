@@ -4,13 +4,15 @@ import API from "../api/apiAll";
 import "../static/style-login.css";
 import logoclappigames from "../static/img/logoclappigames.jpg";
 
-import { Form, Icon, Input, Button } from "antd";
+import { Form, Input, Button, Modal } from "antd";
 
 class NormalLoginForm extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
+  errorAlert = (errorStatus, errorMessage) => {
+    Modal.error({
+      title: "SOMETHING WENT WRONG",
+      content: `${errorStatus}: ${errorMessage}`
+    });
+  };
   handleSubmit = e => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
@@ -22,18 +24,23 @@ class NormalLoginForm extends React.Component {
           method: "POST",
           body: `partnerName=${values.username}&password=${values.password}`
         })
-          .then(response => response.json())
-          .then(result =>
-            localStorage.setItem(
-              "userToken",
-              JSON.stringify(result),
-              "user",
-              JSON.stringify(result.accessToken)
-            )
-          )
-          .then(this.props.logInOut())
+          .then(response => {
+            if (response.ok === false) {
+              this.errorAlert(response.status, response.statusText);
+            } else {
+              response.json().then(result => {
+                localStorage.setItem(
+                  "userToken",
+                  JSON.stringify(result),
+                  "user",
+                  JSON.stringify(result.accessToken)
+                );
+                this.props.logInOut(response.ok);
+              });
+            }
+          })
           .catch(function(error) {
-            console.log("Request failed", error);
+            this.errorAlert("Request failed", error);
           });
       }
     });

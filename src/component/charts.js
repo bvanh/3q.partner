@@ -8,7 +8,7 @@ const data = {
   datasets: [
     {
       data: [300, 50],
-      backgroundColor: ["#FFD54F","#FCAF18"],
+      backgroundColor: ["#FFD54F", "#FCAF18"],
       hoverBackgroundColor: ["#FFD54F", "#FCAF18"]
     }
   ]
@@ -21,11 +21,11 @@ const menu = (
 );
 const legendOpts = {
   display: true,
-  position: 'top',
+  position: "top",
   fullWidth: true,
-  padding:"0px",
-  responsive:false,
-  maintainAspectRatio:false,   
+  padding: "0px",
+  responsive: false,
+  maintainAspectRatio: false
 };
 class Charts extends React.Component {
   constructor(props) {
@@ -118,19 +118,28 @@ class Charts extends React.Component {
                 <span>12345</span>
               </div>
             </div>
-            <Line data={this.chartVndData} width={100} height={50} />
+            <div className="line_chart">
+              <Line
+                data={this.chartVndData}
+                width={100}
+                height={50}
+                options={{
+                  maintainAspectRatio: false
+                }}
+              />
+            </div>
             <div className="chart-frame_footer">
-                <Dropdown overlay={menu} trigger={["click"]}>
-                  <a className="ant-dropdown-link" href="#">
-                    7 ngày qua <Icon type="caret-down" />
-                  </a>
-                </Dropdown>
-                <Dropdown overlay={menu} trigger={["click"]}>
-                  <a className="ant-dropdown-link" href="#">
-                    CHI TIẾT GIAO DỊCH <Icon type="caret-right" />
-                  </a>
-                </Dropdown>
-              </div>
+              <Dropdown overlay={menu} trigger={["click"]}>
+                <a className="ant-dropdown-link" href="#">
+                  7 ngày qua <Icon type="caret-down" />
+                </a>
+              </Dropdown>
+              <Dropdown overlay={menu} trigger={["click"]}>
+                <a className="ant-dropdown-link" href="#">
+                  CHI TIẾT GIAO DỊCH <Icon type="caret-right" />
+                </a>
+              </Dropdown>
+            </div>
           </Col>
           <Col span={8}>
             <div className="card">
@@ -141,7 +150,15 @@ class Charts extends React.Component {
               </div>
               <div className="card_content">
                 <p>NGUỒN</p>
-                <Pie data={data} width={100} height={75} legend={legendOpts} />
+                <Pie
+                  data={data}
+                  width={100}
+                  height={75}
+                  legend={legendOpts}
+                  // options={{
+                  //   maintainAspectRatio: false
+                  // }}
+                />
               </div>
               <div className="card_footer">
                 <Dropdown overlay={menu} trigger={["click"]}>
