@@ -3,6 +3,7 @@ import { Table, Input, Pagination, Button } from "antd";
 import Type from "./options/type";
 import fetch from "isomorphic-unfetch";
 import { Link } from "react-router-dom";
+import { getDataPieChart } from "./services/homeService";
 import "../static/style-history.css";
 import API from "../api/apiAll";
 const { Search } = Input;
@@ -11,7 +12,9 @@ class History extends React.Component {
     super(props);
     this.state = {
       data: null,
-      dataPayload: null,
+      totalRevenue: 0,
+      totalRevenueWEB: 0,
+      totalRevenueAPK:0,
       totalItem: null,
       currentPage: 1,
       pageSize: 10,
@@ -23,10 +26,10 @@ class History extends React.Component {
     };
   }
   getData = pathSearch => {
-    let userAccessToken = localStorage.getItem("user");
+    let userAccessToken = localStorage.getItem("userAccessToken");
     fetch(API.ROOT_URL + API.HISTORY_PATHNAME + pathSearch, {
       headers: {
-        Authorization: `Bearer ${JSON.parse(userAccessToken).accessToken}`,
+        Authorization: `Bearer ${JSON.parse(userAccessToken)}`,
         "Content-Type": "application/x-www-form-urlencoded"
       },
       method: "GET"
@@ -43,7 +46,9 @@ class History extends React.Component {
       });
   };
   componentDidMount() {
+    const { startTime, endTime } = this.state;
     this.getData(this.props.location.search);
+    getDataPieChart(this, '2019-10-17', "2019-10-25");
   }
   handleMenuClick = async e => {
     const { type, startTime, endTime, search } = this.state;
@@ -144,7 +149,7 @@ class History extends React.Component {
         render: price => <span>{price.toLocaleString()} đ</span>
       }
     ];
-    const { data, startTime, endTime, totalItem } = this.state;
+    const { data, startTime, endTime, totalItem, totalRevenue } = this.state;
     return (
       <div className="history_container">
         {/* <span>Total: {total} </span> */}
@@ -165,9 +170,9 @@ class History extends React.Component {
         <div className="table_sum">
           <div>
             <span style={{ padding: "0 2rem 0 0" }}>
-              Tổng doanh thu:{" "}
-              <span style={{ fontSize: "1.1rem", color: "#0085ff" }}>
-                1234567 VNĐ
+              Tổng doanh thu:
+              <span style={{ fontSize: "1.1rem", color: "#0085ff",paddingLeft:'.5rem' }}>
+              {totalRevenue.toLocaleString()} VNĐ
               </span>
             </span>
             <span>

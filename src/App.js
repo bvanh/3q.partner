@@ -51,6 +51,7 @@ export default class App extends React.Component {
   logInOut = elm => {
     if (elm === false) {
       localStorage.removeItem("userToken");
+      localStorage.removeItem("user");
     }
     this.setState({
       isLogin: elm

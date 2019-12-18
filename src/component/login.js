@@ -23,25 +23,25 @@ class NormalLoginForm extends React.Component {
             "Content-Type": "application/x-www-form-urlencoded"
           },
           method: "POST",
-          body: `partnerName=${values.username}&password=${values.password}`,                    
-        }).then(response => {
+          body: `partnerName=${values.username}&password=${values.password}`
+        })
+          .then(response => {
             resStatus = response.status;
-            return response.json();          
-        }).then (result => {
-          if(resStatus != 200) this.errorAlert(result.status, result.message);
-          else {
-            localStorage.setItem(
-              "userToken",
-              JSON.stringify(result),
-              "user",
-              JSON.stringify(result.accessToken)
-            );
-            this.props.logInOut(true);                
-            // console.log(result + "|" +resStatus);
-          }
-        }).catch(error => {
-          this.errorAlert("Request failed", error);            
-        });
+            return response.json();
+          })
+          .then(result => {
+            if (resStatus != 200)
+              this.errorAlert(result.status, result.message);
+            else {
+              localStorage.setItem("userToken", JSON.stringify(result));
+              localStorage.setItem("userAccessToken", JSON.stringify(result.accessToken));
+              this.props.logInOut(true);
+              // console.log(result + "|" +resStatus);
+            }
+          })
+          .catch(error => {
+            this.errorAlert("Request failed", error);
+          });
       }
     });
   };
@@ -58,14 +58,14 @@ class NormalLoginForm extends React.Component {
         <Form onSubmit={this.handleSubmit} className="login-form">
           <span className="login_text">LOGIN</span>
           <div className="input_form">
-            <Form.Item label="Username" className='ant-input-login'>
+            <Form.Item label="Username" className="ant-input-login">
               {getFieldDecorator("username", {
                 rules: [
                   { required: true, message: "Please input your Username!" }
                 ]
-              })(<Input placeholder="Username" className='ant-input-login'/>)}
+              })(<Input placeholder="Username" className="ant-input-login" />)}
             </Form.Item>
-            <Form.Item label="Password"className='ant-input-login'>
+            <Form.Item label="Password" className="ant-input-login">
               {getFieldDecorator("password", {
                 rules: [
                   { required: true, message: "Please input your Password!" }
