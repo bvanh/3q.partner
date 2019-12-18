@@ -1,28 +1,21 @@
 import React, { Component } from "react";
 import moment from "moment";
-import {
-  Col,
-  Row,
-  Menu,
-  Dropdown,
-  Icon,
-  Select,
-  DatePicker,
-  Modal,
-  Input
-} from "antd";
+import { Link } from "react-router-dom";
+import API from "../../api/apiAll";
+import { Icon, DatePicker, Input, Select } from "antd";
+const { Option } = Select;
 
-class DatePickerForChart extends Component {
-  state = {
-    startValue: null,
-    endValue: null,
-    endOpen: false,
-    startOpen: true
-  };
+class DatePickerForChart extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      startValue: null,
+      endValue: null
+    };
+  }
   disabledDate = current => {
     const { startValue } = this.state;
     return (
-      // current > moment().endOf("day") &&
       (current &&
         current <
           moment(startValue)
@@ -31,14 +24,6 @@ class DatePickerForChart extends Component {
       current > moment().endOf("day")
     );
   };
-  // disabledStartDate = startValue => {
-  //   const { endValue } = this.state;
-  //   if (!startValue || !endValue) {
-  //     return false;
-  //   }
-  //   return startValue.valueOf() > endValue.valueOf();
-  // };
-
   endDate = () => {
     const { endValue } = this.state;
     if (endValue === null) {
@@ -61,67 +46,99 @@ class DatePickerForChart extends Component {
     }
   };
 
-  onStartChange = (value, elm) => {
+  onStartChange = value => {
     this.onChange("startValue", value);
-    console.log(elm, "onstartchange");
   };
-
-  onEndChange = value => {
-    this.onChange("endValue", value);
-    console.log(value);
+  clearInputDate = () => {
+    this.setState({
+      startValue: null,
+      endValue: null
+    });
   };
-
-  handleStartOpenChange = open => {
-    if (!open) {
-      this.setState({ endOpen: true });
-    }
+  handleChange = elm => {
+    console.log(elm);
   };
-
-  handleEndOpenChange = open => {
-    this.setState({ endOpen: open });
+  demo = e => {
+    console.log(e);
   };
   render() {
-    const { startValue, endValue, endOpen, startOpen } = this.state;
+    const {
+      startValue,
+      startOpen,
+      endValue,
+      indexModalDatePicker
+    } = this.state;
+    const fromDateValue = moment(startValue).format("YYYY-MM-DD");
+    const toDateValue = moment(endValue).format("YYYY-MM-DD");
+    const { valueDateToday, valueDate7DayAgo, valueDate30DayAgo } = this.props;
     return (
-      <div className="modal_datepicker">
-        <DatePicker
-          allowClear={false}
-          disabledDate={this.disabledDate}
-          format="YYYY-MM-DD"
-          value={startValue}
-          placeholder="Start"
-          onChange={e => this.onStartChange(e, "startTime")}
-          className="input_date_chart"
-          open={startOpen}
-          renderExtraFooter={() => (
-            <div className='datepicker_footer'>
-              <span>CLEAR</span> CANCEL <span>OK</span>
-            </div>
-          )}
-        />
-        <Input
-        open={startOpen}
-          value={this.endDate()}
-      
-          placeholder="EndDate"
-          suffix={<Icon type="calendar" style={{ color: "#9e9e9e" }} />}
-          style={{ width: "50%" }}
-          className="input_date_chart"
-        />
-        {/* <DatePicker
-          // disabledDate={this.disabledEndDate}
-          //   showTime
-          format="YYYY-MM-DD HH:mm:ss"
-          value={endValue}
-          placeholder="End"
-          //   onChange={e=>this.onStartChange(e,'endTime')}
-          //   open={endOpen}
-          //   onOpenChange={this.handleEndOpenChange}
-          className="input_date_chart"
-        /> */}
-      </div>
+      <>
+        <Select defaultValue="2" style={{ width: 120 }}>
+          <Option
+            value="2"
+            onClick={() =>
+              this.props.getLineData(valueDate7DayAgo, valueDateToday)
+            }
+          >
+            7 Ngày qua
+          </Option>
+          <Option
+            value="3"
+            onClick={() =>
+            this.props.getLineData(valueDateToday, valueDateToday)
+            }
+          >
+            Hôm nay
+          </Option>
+          <Option
+            value="4"
+            onClick={() =>
+              this.props.getLineData(valueDate30DayAgo, valueDateToday)
+            }
+          >
+            Một tháng qua
+          </Option>
+          <Option value="5" onClick={this.props.showModalPicker}>
+            Tùy chọn
+          </Option>
+        </Select>
+        <Link to={API.HISTORY_PATHNAME + API.HISTORY_PATHSEARCH_DEFAULT}>
+          CHI TIẾT GIAO DỊCH <Icon type="caret-right" />
+        </Link>
+        <div className={this.props.indexModalDatePicker}>
+          <DatePicker
+            allowClear={false}
+            disabledDate={this.disabledDate}
+            format="YYYY-MM-DD"
+            value={startValue}
+            placeholder="Start"
+            onChange={e => this.onStartChange(e, "startTime")}
+            className="input_date_chart"
+            open={this.props.startOpen}
+            renderExtraFooter={() => (
+              <div className="datepicker_footer">
+                <span onClick={this.clearInputDate}>CLEAR</span>
+                <span onClick={this.props.hideModalPicker}>CANCEL</span>
+                <span
+                  onClick={() =>
+                    this.props.getLineData(fromDateValue, toDateValue)
+                  }
+                >
+                  APPLY   
+                </span>
+              </div>
+            )}
+          />
+          <Input
+            open={startOpen}
+            value={this.endDate()}
+            placeholder="EndDate"
+            suffix={<Icon type="calendar" style={{ color: "#9e9e9e" }} />}
+            className="input_date_chart"
+          />
+        </div>
+      </>
     );
   }
 }
-
 export default DatePickerForChart;

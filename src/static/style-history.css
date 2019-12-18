@@ -3,7 +3,7 @@
   margin: 0 auto;
 }
 .btn-check {
-  background: #0085ff;
+  background: #FFE9A4;;
   border-radius: 3px;
   display: flex;
   align-items: center;
@@ -30,10 +30,10 @@
 #btn_search {
   width: 14%;
   margin-left: 1%;
-  background: #ffd54f;
+  background: #0085FF;
   border-radius: 3px;
   height: 2.5rem;
-  color: black;
+  color: white;
 }
 .btn-checkdate{
     width: 29%;

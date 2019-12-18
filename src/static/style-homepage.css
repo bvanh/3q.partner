@@ -25,6 +25,8 @@
   color: white;
   padding: 1.5rem;
   height: 569px;
+  /* display: flex;
+  align-items: center; */
 }
 .card_title > p {
   font-family: "Roboto";
@@ -101,10 +103,11 @@
   bottom: 19rem;
   left: 0;
   z-index: 9999;
+  width: 365px;
 }
-.ant-calendar-picker-container {
+/* .ant-calendar-picker-container {
   top: 390px !important;
-}
+} */
 .ant-calendar-picker-container > .ant-calendar {
   width: 365px !important;
 }
@@ -114,13 +117,50 @@
 .ant-calendar-footer-extra {
   text-align: right !important;
 }
-.input_date_chart>input{
-  padding-right:.75rem !important;
-}
-.input_date_chart > div>.ant-calendar-picker-input {
+.input_date_chart > input {
+  padding-right: 0.75rem !important;
   border-radius: 0 !important;
+  border-top: 0;
+  border-right: 0;
+  height: 2.2rem;
 }
-.datepicker_footer{
+.input_date_chart > div > .ant-calendar-picker-input {
+  border-radius: 0 !important;
+  border-top: 0;
+  border-right: 0;
+  border-left: 0;
+  height: 2.2rem;
+}
+.datepicker_footer {
   display: flex;
   justify-content: space-between;
+}
+.input_date_chart {
+  width: 50%;
+}
+.datepicker_footer > span {
+  cursor: pointer;
+}
+.datepicker_footer > span:hover {
+  color: #0085ff;
+}
+.modal_datepicker_hide {
+  display: none;
+}
+.tag-pie_chart {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+#tag_pie_chart1 {
+  width: 0.5rem;
+  height: 0.5rem;
+  background-color: #fcaf18;
+  margin-right: 0.2rem;
+}
+#tag_pie_chart2 {
+  width: 0.5rem;
+  height: 0.5rem;
+  background-color: #ffd54f;
+  margin-right: 0.2rem;
 }

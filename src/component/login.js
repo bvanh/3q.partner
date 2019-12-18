@@ -15,6 +15,7 @@ class NormalLoginForm extends React.Component {
   };
   handleSubmit = e => {
     e.preventDefault();
+    let resStatus = 0;
     this.props.form.validateFields((err, values) => {
       if (!err) {
         fetch(API.ROOT_URL + API.LOGIN_PATHNAME, {
@@ -22,27 +23,25 @@ class NormalLoginForm extends React.Component {
             "Content-Type": "application/x-www-form-urlencoded"
           },
           method: "POST",
-          body: `partnerName=${values.username}&password=${values.password}`
-        })
-          .then(response => {
-            if (response.ok === false) {
-              this.errorAlert(response.status, JSON.stringify(response));
-              console.log(response)
-            } else {
-              response.json().then(result => {
-                localStorage.setItem(
-                  "userToken",
-                  JSON.stringify(result),
-                  "user",
-                  JSON.stringify(result.accessToken)
-                );
-                this.props.logInOut(response.ok);
-              });
-            }
-          })
-          .catch(function(error) {
-            this.errorAlert("Request failed", error);
-          });
+          body: `partnerName=${values.username}&password=${values.password}`,                    
+        }).then(response => {
+            resStatus = response.status;
+            return response.json();          
+        }).then (result => {
+          if(resStatus != 200) this.errorAlert(result.status, result.message);
+          else {
+            localStorage.setItem(
+              "userToken",
+              JSON.stringify(result),
+              "user",
+              JSON.stringify(result.accessToken)
+            );
+            this.props.logInOut(true);                
+            // console.log(result + "|" +resStatus);
+          }
+        }).catch(error => {
+          this.errorAlert("Request failed", error);            
+        });
       }
     });
   };

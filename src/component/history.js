@@ -11,6 +11,7 @@ class History extends React.Component {
     super(props);
     this.state = {
       data: null,
+      dataPayload: null,
       totalItem: null,
       currentPage: 1,
       pageSize: 10,
@@ -79,12 +80,16 @@ class History extends React.Component {
   render() {
     const rowSelection = {
       onChange: (selectedRowKeys, selectedRows) => {
-        console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+        console.log(
+          `selectedRowKeys: ${selectedRowKeys}`,
+          "selectedRows: ",
+          selectedRows
+        );
       },
       getCheckboxProps: record => ({
-        disabled: record.name === 'Disabled User', // Column configuration not to be checked
-        name: record.name,
-      }),
+        disabled: record.name === "Disabled User", // Column configuration not to be checked
+        name: record.name
+      })
     };
     const columns = [
       {
@@ -100,35 +105,42 @@ class History extends React.Component {
         )
       },
       {
-        title: "ProductId",
-        dataIndex: "productId",
-        key: "productId",
-        width: "20%"
-      },
-      {
-        title: "UserId",
+        title: "UserID",
         dataIndex: "userId",
         key: "userId",
         width: "20%"
       },
       {
-        title: "CreateAt",
+        title: "Time",
         dataIndex: "createdAt",
         key: "createAt",
-        width: "15%"
+        width: "13%"
+      },
+      {
+        title: "Username",
+        dataIndex: "payload",
+        key: "productId",
+        width: "13%",
+        render: index => JSON.parse(index).gameUserName
+      },
+      {
+        title: "Source",
+        dataIndex: "os",
+        key: "os",
+        width: "10%"
       },
       {
         title: "C.coin",
         dataIndex: "coin",
         key: "coin",
-        width: "10%"
+        width: "7%"
       },
       ,
       {
         title: "VNĐ",
         dataIndex: "vnd",
         key: "vnd",
-        width: "10%",
+        width: "12%",
         render: price => <span>{price.toLocaleString()} đ</span>
       }
     ];
@@ -166,11 +178,12 @@ class History extends React.Component {
           <Button icon="file-excel">Export Excel</Button>
         </div>
         <Table
-        rowSelection={rowSelection}
+          rowSelection={rowSelection}
           columns={columns}
           dataSource={data}
           rowKey={record => record.partnerChargeId}
           pagination={false}
+          bordered
         />
         <Pagination
           defaultCurrent={1}
@@ -179,7 +192,9 @@ class History extends React.Component {
           onChange={this.goPage}
         />
         <Button type="primary" icon="caret-left">
-          <Link to="/" style={{color:'white'}}>Back</Link>
+          <Link to="/" style={{ color: "white" }}>
+            Back
+          </Link>
         </Button>
       </div>
     );
