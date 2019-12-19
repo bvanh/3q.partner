@@ -3,9 +3,10 @@ import { Pie, Line } from "react-chartjs-2";
 import "chartjs-plugin-labels";
 import { Col, Row, Icon, Select } from "antd";
 import { Link } from "react-router-dom";
-import DatePickerForChart from "./options/datePickerForChart";
+import LineChart from "./options/lineChart";
 import moment from "moment";
-import getPieData2 from './services/homepageService'
+import { getDataPieChart } from "./services/homeService";
+import { demo } from "./services/homeService";
 import "../static/style-homepage.css";
 import API from "../api/apiAll";
 const { Option } = Select;
@@ -17,14 +18,7 @@ const legendOpts = {
   responsive: false,
   maintainAspectRatio: false
 };
-const styles = {
-  container: {
-    padding: 10,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "#43a1c9"
-  }
-};
+// const demo = getPieData;
 class Charts extends React.Component {
   constructor(props) {
     super(props);
@@ -51,89 +45,9 @@ class Charts extends React.Component {
     };
     return data;
   };
-  chartLineData = () => {
-    const data = {
-      labels: this.state.vndChartxAxis,
-      datasets: [
-        {
-          label: "Total",
-          fill: false,
-          backgroundColor: "rgba(75,192,192,0.4)",
-          borderColor: "rgba(75,192,192,0.4)",
-          borderWidth: 2,
-          hoverBackgroundColor: "rgba(255,99,132,0.4)",
-          hoverBorderColor: "rgba(255,99,132,1)",
-          data: this.state.vndChartyAxisTotal
-        }
-      ]
-    };
-    return data;
-  };
-  getPieData = (fromDateValue, toDateValue) => {
-    let userAccessToken = localStorage.getItem("user");
-    fetch(
-      API.ROOT_URL +
-        API.CHARTS_PATHNAME +
-        API.CHARTS_PATHSEARCH_TYPE +
-        `&fromDate=${fromDateValue}&toDate=${toDateValue}`,
-      {
-        headers: {
-          Authorization: `Bearer ${JSON.parse(userAccessToken).accessToken}`,
-          "Content-Type": "application/x-www-form-urlencoded"
-        },
-        method: "GET"
-      }
-    )
-      .then(response => response.json())
-      .then(result =>
-        this.setState({
-          totalRevenueWEB: result.yAxis.WEB.reduce((x, y) => x + y),
-          totalRevenueAPK: result.yAxis.APK.reduce((x, y) => x + y),
-          totalRevenue: result.yAxis.TOTAL.reduce((x, y) => x + y)
-        })
-      )
-      .catch(function(error) {
-        console.log("Request failed", error);
-      });
-  };
-  getLineData = (fromDateValue, toDateValue) => {
-    let userAccessToken = localStorage.getItem("user");
-    fetch(
-      API.ROOT_URL +
-        API.CHARTS_PATHNAME +
-        API.CHARTS_PATHSEARCH_TYPE +
-        `&fromDate=${fromDateValue}&toDate=${toDateValue}`,
-      {
-        headers: {
-          Authorization: `Bearer ${JSON.parse(userAccessToken).accessToken}`,
-          "Content-Type": "application/x-www-form-urlencoded"
-        },
-        method: "GET"
-      }
-    )
-      .then(response => response.json())
-      .then(result =>
-        this.setState({
-          vndChartxAxis: result.xAxis,
-          vndChartyAxisTotal: result.yAxis.TOTAL
-        })
-      )
-      .catch(function(error) {
-        console.log("Request failed", error);
-      });
-    this.hideModalPicker();
-  };
   componentDidMount() {
-    this.getLineData("2019-10-17", "2019-10-25");
-    this.getPieData("2019-10-17", "2019-10-25");
-    console.log(getPieData2("2019-10-17", "2019-10-25"))
+    getDataPieChart(this, "2019-10-17", "2019-10-25");
   }
-  // function handleChange(value) {
-  //   console.log(`selected ${value}`);
-  // }
-  // hideModalPicker = elm => {
-  //   console.log(elm);
-  // };
   showModalPicker = () => {
     this.setState({
       indexModalDatePicker: "modal_datepicker",
@@ -161,40 +75,11 @@ class Charts extends React.Component {
       <>
         <Row className="main_content">
           <Col span={16} id="chart-frame">
-            <div className="sum">
-              <div>
-                <span>Số người mua</span>
-                <br />
-                <span className="chart_title_value">12345K</span>
-              </div>
-              <div style={{ margin: "0 4rem" }}>
-                <span>Lượt giao dịch</span>
-                <br />
-                <span className="chart_title_value">12345K</span>
-              </div>
-            </div>
-            <div className="line_chart">
-              <Line
-                data={this.chartLineData}
-                width={100}
-                height={50}
-                options={{
-                  maintainAspectRatio: false
-                }}
-              />
-            </div>
-            <div className="chart-frame_footer">
-              <DatePickerForChart
-                getLineData={this.getLineData}
-                startOpen={startOpen}
-                indexModalDatePicker={indexModalDatePicker}
-                hideModalPicker={this.hideModalPicker}
-                showModalPicker={this.showModalPicker}
-                valueDateToday={valueDateToday}
-                valueDate7DayAgo={valueDate7DayAgo}
-                valueDate30DayAgo={valueDate30DayAgo}
-              />
-            </div>
+            <LineChart
+              valueDateToday={valueDateToday}
+              valueDate7DayAgo={valueDate7DayAgo}
+              valueDate30DayAgo={valueDate30DayAgo}
+            />
           </Col>
           <Col span={8}>
             <div className="card">
@@ -238,7 +123,7 @@ class Charts extends React.Component {
                   <Option
                     value="1"
                     onClick={() =>
-                      this.getPieData(valueDate7DayAgo, valueDate30DayAgo)
+                      getDataPieChart(this, valueDate7DayAgo, valueDateToday)
                     }
                   >
                     7 Ngày qua{" "}
@@ -246,7 +131,7 @@ class Charts extends React.Component {
                   <Option
                     value="2"
                     onClick={() =>
-                      this.getPieData(valueDateToday, valueDateToday)
+                      getDataPieChart(this, valueDateToday, valueDateToday)
                     }
                   >
                     Hôm nay
@@ -254,7 +139,7 @@ class Charts extends React.Component {
                   <Option
                     value="3"
                     onClick={() =>
-                      this.getPieData(valueDate30DayAgo, valueDate30DayAgo)
+                      getDataPieChart(this, valueDate30DayAgo, valueDateToday)
                     }
                   >
                     Một tháng qua

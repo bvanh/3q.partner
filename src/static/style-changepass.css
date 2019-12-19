@@ -1,0 +1,18 @@
+.changepass_header{
+    text-align: left;
+}
+#change_password{
+    text-align: center;
+}
+.changepassword-form>.ant-form-item{
+    margin-bottom:.5rem !important;
+}
+.btn_changepass{
+    margin-top:1rem !important;
+}
+#btn_backhome{
+   background:white;
+   color:#0085ff;
+   border: 1px solid #0085ff;
+   margin-bottom: 5px;
+}

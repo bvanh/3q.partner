@@ -14,7 +14,7 @@ const getToken = () => {
       body: `refreshToken=${JSON.parse(userToken).refreshToken}`
     })
       .then(response => response.json())
-      .then(result => localStorage.setItem("user", JSON.stringify(result)))
+      .then(result => localStorage.setItem("userAccessToken", JSON.stringify(result.accessToken)))
       .catch(function(error) {
         console.log("Request failed", error);
       }); 

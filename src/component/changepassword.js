@@ -1,16 +1,18 @@
 import React, { useState } from "react";
 import API from "../api/apiAll";
 import fetch from "isomorphic-unfetch";
-import { Form, Icon, Input, Button } from "antd";
+import "../static/style-changepass.css";
+import { Form, Input, Button, Avatar } from "antd";
+import { Link } from "react-router-dom";
 function ChangePass(props) {
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [message, setMessage] = useState("");
   const handleSubmit = () => {
-    let userAccessToken = localStorage.getItem("user");
+    let userAccessToken = localStorage.getItem("userAccessToken");
     fetch(API.ROOT_URL + API.CHANGEPASSWORD_PATHNAME, {
       headers: {
-        Authorization: `Bearer ${JSON.parse(userAccessToken).accessToken}`,
+        Authorization: `Bearer ${JSON.parse(userAccessToken)}`,
         "Content-Type": "application/x-www-form-urlencoded"
       },
       method: "POST",
@@ -29,35 +31,53 @@ function ChangePass(props) {
     } else setNewPassword(e.target.value);
   };
   return (
-    <div>
-      <div style={{ padding: 24, background: "#fff", height: "90vh" }}>
-        <Form className="login-form">
-          <Form.Item label="OldPassword">
-            <Input
-              prefix={<Icon type="key" style={{ color: "rgba(0,0,0,.25)" }} />}
-              placeholder="OldPassword"
-              name="oldPassword"
-              onChange={e => getTextPassword(e)}
-            />
-          </Form.Item>
-          <Form.Item label="NewPassword">
-            <Input
-              prefix={<Icon type="key" style={{ color: "rgba(0,0,0,.25)" }} />}
-              placeholder="NewPassword"
-              name="newPassword"
-              onChange={e => getTextPassword(e)}
-            />
-          </Form.Item>
-          <p className="submit-mes">{message}</p>
-          <Button
-            type="primary"
-            className="login-form-button submit-pw"
-            onClick={handleSubmit}
-          >
-            Submit
-          </Button>
-        </Form>
-      </div>
+    <div style={{ padding: 24, background: "#fff" }} id="change_password">
+      <Form className="changepassword-form">
+        <div className="changepass_header">
+          <h2>Change Password</h2>
+          <p>
+            In order to <b>protect your account</b>, make sure your password:
+          </p>
+          <ul>
+            <li>Is longer than 6 characters</li>
+            <li>
+              Does not match or significantly contain your username, e.g. do not
+              use “username123”
+            </li>
+          </ul>
+        </div>
+        <Form.Item label="Old Password:">
+          <Input.Password
+            name="oldPassword"
+            onChange={e => getTextPassword(e)}
+          />
+        </Form.Item>
+        <Form.Item label="New Password:">
+          <Input.Password
+            name="newPassword"
+            onChange={e => getTextPassword(e)}
+          />
+        </Form.Item>
+        <Form.Item label="Re-enter Your New Password:">
+          <Input.Password
+            name="newPassword"
+            onChange={e => getTextPassword(e)}
+          />
+        </Form.Item>
+        <p className="submit-mes">{message}</p>
+        <Button
+          type="primary"
+          className="login-form-button btn_changepass"
+          onClick={handleSubmit}
+        >
+          Change Password
+        </Button>
+      </Form>
+      <Link to="/">
+        <Avatar size="large" icon="home" id="btn_backhome" />
+        <br />
+      </Link>
+      <span>Back to Home</span>
     </div>
   );
 }

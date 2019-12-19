@@ -1,18 +1,32 @@
 import React from "react";
-import { Table, Input, Pagination, Button } from "antd";
+import { Table, Input, Pagination, Button, Menu, Dropdown, Icon } from "antd";
 import Type from "./options/type";
 import fetch from "isomorphic-unfetch";
 import { Link } from "react-router-dom";
+import ReactExport from "react-export-excel";
+import { getDataPieChart } from "./services/homeService";
 import "../static/style-history.css";
 import API from "../api/apiAll";
-const { Search } = Input;
+const ExcelFile = ReactExport.ExcelFile;
+const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
+const ExcelColumn = ReactExport.ExcelFile.ExcelColumn;
+const menu = (
+  <Menu>
+    <Menu.Item>1st menu item</Menu.Item>
+    <Menu.Item>2nd menu item</Menu.Item>
+  </Menu>
+);
 class History extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: null,
-      dataPayload: null,
-      totalItem: null,
+      data: [],
+      dataExport: [],
+      totalRevenue: 0,
+      totalRevenueWEB: 0,
+      totalRevenueAPK: 0,
+      username: null,
+      totalItem: 0,
       currentPage: 1,
       pageSize: 10,
       userToken: JSON.parse(this.props.userToken),
@@ -23,10 +37,10 @@ class History extends React.Component {
     };
   }
   getData = pathSearch => {
-    let userAccessToken = localStorage.getItem("user");
+    let userAccessToken = localStorage.getItem("userAccessToken");
     fetch(API.ROOT_URL + API.HISTORY_PATHNAME + pathSearch, {
       headers: {
-        Authorization: `Bearer ${JSON.parse(userAccessToken).accessToken}`,
+        Authorization: `Bearer ${JSON.parse(userAccessToken)}`,
         "Content-Type": "application/x-www-form-urlencoded"
       },
       method: "GET"
@@ -35,38 +49,19 @@ class History extends React.Component {
       .then(result =>
         this.setState({
           data: result.rows,
+          dataExport: result.rows,
           totalItem: result.count
         })
       )
-      .catch(function(error) {
+      .catch(function (error) {
         console.log("Request failed", error);
       });
   };
   componentDidMount() {
+    const { startTime, endTime } = this.state;
     this.getData(this.props.location.search);
+    getDataPieChart(this, startTime, endTime);
   }
-  handleMenuClick = async e => {
-    const { type, startTime, endTime, search } = this.state;
-    await this.setState({
-      type: Number(e.key)
-    });
-    await this.props.history.replace(
-      `${API.HISTORY_PATHNAME}?currentPage=1&pageSize=10&search=${search}&type=${type}&fromDate=${startTime}&toDate=${endTime}`
-    );
-    this.getData(this.props.location.search);
-  };
-  filterDateAndText = async (startDate, endDate, value) => {
-    await this.setState({
-      startTime: startDate,
-      endTime: endDate,
-      search: value
-    });
-    const { type, startTime, endTime, search, currentPage } = this.state;
-    await this.props.history.replace(
-      `${API.HISTORY_PATHNAME}?currentPage=${currentPage}&pageSize=10&search=${search}&type=${type}&fromDate=${startTime}&toDate=${endTime}`
-    );
-    this.getData(this.props.location.search);
-  };
   goPage = async page => {
     await this.setState({
       currentPage: page
@@ -77,32 +72,44 @@ class History extends React.Component {
     );
     this.getData(this.props.location.search);
   };
+  addTypeData = val => {
+    this.setState({
+      type: val
+    });
+  };
+  addDateData = (startDate, endDate) => {
+    this.setState({
+      startTime: startDate,
+      endTime: endDate
+    });
+  };
+  addTextSearch = e => {
+    this.setState({
+      search: e.target.value
+    });
+  };
+  searchData = async () => {
+    const { type, startTime, endTime, search, currentPage } = this.state;
+    await this.props.history.replace(
+      `${API.HISTORY_PATHNAME}?currentPage=${currentPage}&pageSize=10&search=${search}&type=${type}&fromDate=${startTime}&toDate=${endTime}`
+    );
+    this.getData(this.props.location.search);
+    console.log(this.props.location.search);
+  };
   render() {
     const rowSelection = {
       onChange: (selectedRowKeys, selectedRows) => {
-        console.log(
-          `selectedRowKeys: ${selectedRowKeys}`,
-          "selectedRows: ",
-          selectedRows
-        );
-      },
-      getCheckboxProps: record => ({
-        disabled: record.name === "Disabled User", // Column configuration not to be checked
-        name: record.name
-      })
+        this.setState({
+          dataExport: selectedRows
+        });
+      }
     };
     const columns = [
       {
         title: "PartnerChargeId",
         dataIndex: "partnerChargeId",
         key: "partnerChargeId",
-        width: "25%",
-        // render:<Link to >``</Link>
-        render: ChargeId => (
-          <Link to={API.HISTORY_DETAIL_PATHNAME + "?chargeId=" + ChargeId}>
-            {ChargeId}
-          </Link>
-        )
+        width: "25%"
       },
       {
         title: "UserID",
@@ -144,38 +151,73 @@ class History extends React.Component {
         render: price => <span>{price.toLocaleString()} đ</span>
       }
     ];
-    const { data, startTime, endTime, totalItem } = this.state;
+    const {
+      data,
+      startTime,
+      endTime,
+      totalItem,
+      totalRevenue,
+      dataExport
+    } = this.state;
     return (
       <div className="history_container">
-        {/* <span>Total: {total} </span> */}
         <div className="btn-check">
-          <Search
+          <Input
             className="input_search"
-            placeholder="Search..."
-            onSearch={value =>
-              this.filterDateAndText(startTime, endTime, value)
-            }
+            placeholder="Search by products, name, etc..."
+            onChange={this.addTextSearch}
           />
-          <Type
-            handleMenuClick={this.handleMenuClick}
-            filterDate={this.filterDate}
-          />
-          <Button id="btn_search">SEARCH</Button>
+          <Type addTypeData={this.addTypeData} addDateData={this.addDateData} />
+          <Button id="btn_search" onClick={this.searchData}>
+            SEARCH
+          </Button>
         </div>
+        <ExcelFile
+          element={
+            <Button icon="file-excel" type="primary" id="btn_export_excel">
+              Export Excel
+            </Button>
+          }
+          filename="Partner_3Q_Data"
+        >
+          <ExcelSheet data={dataExport} name="Partner_3Q">
+            <ExcelColumn label="PartnerChargeId" value="partnerChargeId" />
+            <ExcelColumn label="UserID" value="userId" />
+            <ExcelColumn label="Time" value="createdAt" />
+            <ExcelColumn
+              label="Username"
+              value={col => JSON.parse(col.payload).gameUserName}
+            />
+            <ExcelColumn label="Source" value="os" />
+            <ExcelColumn label="C.coin" value="coin" />
+            <ExcelColumn label="Vnđ" value="vnd" />
+          </ExcelSheet>
+        </ExcelFile>
         <div className="table_sum">
-          <div>
-            <span style={{ padding: "0 2rem 0 0" }}>
-              Tổng doanh thu:{" "}
-              <span style={{ fontSize: "1.1rem", color: "#0085ff" }}>
-                1234567 VNĐ
-              </span>
+          <span style={{ padding: "0 2rem 0 0" }}>
+            Tổng doanh thu:
+            <span
+              style={{
+                fontSize: "1.1rem",
+                color: "#0085ff",
+                paddingLeft: ".5rem"
+              }}
+            >
+              {totalRevenue.toLocaleString()} VNĐ
             </span>
-            <span>
-              Lượt giao dịch:{" "}
-              <span style={{ fontSize: "1.1rem", color: "#0085ff" }}>123</span>
+          </span>
+          <span>
+            <span style={{ fontSize: "1.1rem", color: "#0085ff", padding: '.3rem' }}>
+              {totalItem}
+            </span>{" "}
+            of
+            <span style={{ fontSize: "1.1rem", color: "#0085ff", padding: '.3rem' }}>
+              {totalItem}
             </span>
-          </div>
-          <Button icon="file-excel">Export Excel</Button>
+            Perchase  <Dropdown overlay={menu}placement="bottomRight">
+               <Icon type="more" />
+            </Dropdown>
+          </span>
         </div>
         <Table
           rowSelection={rowSelection}

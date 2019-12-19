@@ -1,32 +1,22 @@
 import React from "react";
 import DateRange from "./datePicker";
-import { Button, Icon, Dropdown, Menu } from "antd";
+import { Select } from "antd";
 
+const { Option } = Select;
 function Type(props) {
-  const optionType = (
-    <Menu onClick={props.handleMenuClick}>
-      <Menu.Item key="1">
-        <Icon type="caret-right" />
-        Partner_charge_ID
-      </Menu.Item>
-      <Menu.Item key="2">
-        <Icon type="caret-right" />
-        User_ID
-      </Menu.Item>
-      <Menu.Item key="3">
-        <Icon type="caret-right" />
-        Product_ID
-      </Menu.Item>
-    </Menu>
-  );
   return (
     <>
-      <Dropdown overlay={optionType}>
-        <Button className="btn-checktype">
-          Type <Icon type="down" />
-        </Button>
-      </Dropdown>
-      <DateRange filterDate={props.filterDate} />
+      <Select
+        defaultValue="0"
+        onChange={props.addTypeData}
+        className="btn-checktype"
+      >
+        <Option value="0"> All</Option>
+        <Option value="1"> Partner_charge_ID</Option>
+        <Option value="2">User_ID</Option>
+        <Option value="3">Product_ID</Option>
+      </Select>
+      <DateRange addDateData={props.addDateData} />
     </>
   );
 }

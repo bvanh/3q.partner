@@ -1,5 +1,5 @@
 .ant-form {
-  height: 426px;
+  /* height: 426px; */
   margin: 1.3rem auto !important;
   border: 1px solid #f0f0f0;
   text-align: center;
@@ -48,7 +48,7 @@
     padding: 1rem 2rem;
   }
 }
-@media only screen and (min-width: 1020px) {
+@media only screen and (min-width: 1200px) {
   .ant-form {
     width: 30% !important;
     padding: 1rem 4rem;
