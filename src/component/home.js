@@ -5,7 +5,7 @@ import { Col, Row, Icon, Select } from "antd";
 import { Link } from "react-router-dom";
 import DatePickerForChart from "./options/datePickerForChart";
 import moment from "moment";
-import getPieData2 from "./services/homepageService";
+import getPieData2 from './services/homepageService'
 import "../static/style-homepage.css";
 import API from "../api/apiAll";
 const { Option } = Select;
@@ -126,8 +126,7 @@ class Charts extends React.Component {
   componentDidMount() {
     this.getLineData("2019-10-17", "2019-10-25");
     this.getPieData("2019-10-17", "2019-10-25");
-    let a = getPieData2("2019-10-17", "2019-10-25");
-    console.log(a);
+    console.log(getPieData2("2019-10-17", "2019-10-25"))
   }
   // function handleChange(value) {
   //   console.log(`selected ${value}`);

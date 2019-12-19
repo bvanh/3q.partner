@@ -21,5 +21,6 @@ const getPieData2 = (fromDateValue, toDateValue) => {
     .catch(function(error) {
       console.log("Request failed", error);
     });
+    return data
 };
 export default getPieData2;
