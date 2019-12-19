@@ -81,7 +81,7 @@ input:focus{
 }
 .ant-pagination {
   margin: 1rem !important;
-  text-align: center;
+  text-align: right;
 }
 .listDetail {
   background-color: white;

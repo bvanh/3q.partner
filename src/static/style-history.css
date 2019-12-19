@@ -81,3 +81,15 @@
   float: right;
   border-radius: 3px;
 }
+.add_pageRange{
+  width: 10rem;
+}
+.add_pageRange>.ant-dropdown-menu{
+  padding: .5rem 0 0 .8rem;
+}
+.add_pageRange>.ant-dropdown-menu>li:hover{
+  color:#0085ff;
+}
+.ant-dropdown-trigger{
+  cursor: pointer;
+}

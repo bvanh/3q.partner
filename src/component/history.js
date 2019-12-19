@@ -7,15 +7,11 @@ import ReactExport from "react-export-excel";
 import { getDataPieChart } from "./services/homeService";
 import "../static/style-history.css";
 import API from "../api/apiAll";
+import moreitem from "../static/img/more_item.png";
 const ExcelFile = ReactExport.ExcelFile;
 const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
 const ExcelColumn = ReactExport.ExcelFile.ExcelColumn;
-const menu = (
-  <Menu>
-    <Menu.Item>1st menu item</Menu.Item>
-    <Menu.Item>2nd menu item</Menu.Item>
-  </Menu>
-);
+
 class History extends React.Component {
   constructor(props) {
     super(props);
@@ -53,7 +49,7 @@ class History extends React.Component {
           totalItem: result.count
         })
       )
-      .catch(function (error) {
+      .catch(function(error) {
         console.log("Request failed", error);
       });
   };
@@ -95,6 +91,31 @@ class History extends React.Component {
     );
     this.getData(this.props.location.search);
     console.log(this.props.location.search);
+  };
+  menu = (
+    <Menu onClick={key => this.changePageSize(key)}>
+      <b>Show up to</b>
+      <Menu.Item key="10">10 Perchase</Menu.Item>
+      <Menu.Item key="25">25 Perchase</Menu.Item>
+      <Menu.Item key="50">50 Perchase</Menu.Item>
+    </Menu>
+  );
+  changePageSize = async val => {
+    await this.setState({
+      pageSize: Number(val.key)
+    });
+    const {
+      type,
+      startTime,
+      endTime,
+      search,
+      currentPage,
+      pageSize
+    } = this.state;
+    await this.props.history.replace(
+      `${API.HISTORY_PATHNAME}?currentPage=${currentPage}&pageSize=${pageSize}&search=${search}&type=${type}&fromDate=${startTime}&toDate=${endTime}`
+    );
+    this.getData(this.props.location.search);
   };
   render() {
     const rowSelection = {
@@ -157,7 +178,8 @@ class History extends React.Component {
       endTime,
       totalItem,
       totalRevenue,
-      dataExport
+      dataExport,
+      pageSize
     } = this.state;
     return (
       <div className="history_container">
@@ -207,15 +229,28 @@ class History extends React.Component {
             </span>
           </span>
           <span>
-            <span style={{ fontSize: "1.1rem", color: "#0085ff", padding: '.3rem' }}>
-              {totalItem}
+            <span
+              style={{ fontSize: "1.1rem", color: "#0085ff", padding: ".3rem" }}
+            >
+              {pageSize}
             </span>{" "}
             of
-            <span style={{ fontSize: "1.1rem", color: "#0085ff", padding: '.3rem' }}>
+            <span
+              style={{ fontSize: "1.1rem", color: "#0085ff", padding: ".3rem" }}
+            >
               {totalItem}
             </span>
-            Perchase  <Dropdown overlay={menu}placement="bottomRight">
-               <Icon type="more" />
+            {/* Perchase{" "} */}
+            <Dropdown
+              overlay={this.menu}
+              placement="bottomRight"
+              trigger={["click"]}
+              overlayClassName="add_pageRange"
+            >
+              <span>
+                Perchase
+                <img src={moreitem} />
+              </span>
             </Dropdown>
           </span>
         </div>
@@ -231,6 +266,10 @@ class History extends React.Component {
           defaultCurrent={1}
           total={totalItem}
           size="small"
+          showTotal={(total, range) =>
+            `${range[0]}-${range[1]} of ${total} Perchase`
+          }
+          pageSize={pageSize}
           onChange={this.goPage}
         />
         <Button type="primary" icon="caret-left">
