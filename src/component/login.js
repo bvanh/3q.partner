@@ -1,10 +1,9 @@
 import React from "react";
-import fetch from "isomorphic-unfetch";
-import API from "../api/apiAll";
+import { saveTokenToLocal, saveTokenToState } from "./services/loginService";
 import "../static/style-login.css";
 import logoclappigames from "../static/img/logoclappigames.jpg";
 
-import { Form, Input, Button, Modal } from "antd";
+import { Form, Input, Button, Modal, Checkbox } from "antd";
 
 class NormalLoginForm extends React.Component {
   errorAlert = (errorStatus, errorMessage) => {
@@ -17,35 +16,12 @@ class NormalLoginForm extends React.Component {
     e.preventDefault();
     let resStatus = 0;
     this.props.form.validateFields((err, values) => {
-      if (!err) {
-        fetch(API.ROOT_URL + API.LOGIN_PATHNAME, {
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded"
-          },
-          method: "POST",
-          body: `partnerName=${values.username}&password=${values.password}`
-        })
-          .then(response => {
-            resStatus = response.status;
-            return response.json();
-          })
-          .then(result => {
-            if (resStatus != 200)
-              this.errorAlert(result.status, result.message);
-            else {
-              localStorage.setItem("userToken", JSON.stringify(result));
-              localStorage.setItem("userAccessToken", JSON.stringify(result.accessToken));
-              this.props.logInOut(true);
-              // console.log(result + "|" +resStatus);
-            }
-          })
-          .catch(error => {
-            this.errorAlert("Request failed", error);
-          });
-      }
-    });
+      if (!err && values.remember) {
+        saveTokenToLocal(this, values, resStatus);
+      } else if(!err && !values.remember)
+      saveTokenToState(this, values, resStatus);
+    }); 
   };
-
   render() {
     const { getFieldDecorator } = this.props.form;
     return (
@@ -80,10 +56,10 @@ class NormalLoginForm extends React.Component {
               >
                 Log in
               </Button>
-              <br />
-              <a className="login-form-forgot" style={{ width: "50%" }}>
-                Forgot password ?
-              </a>
+              {getFieldDecorator("remember", {
+                valuePropName: "checked",
+                initialValue: true
+              })(<Checkbox>Remember me</Checkbox>)}
             </Form.Item>
           </div>
         </Form>

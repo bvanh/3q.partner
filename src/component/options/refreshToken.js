@@ -1,8 +1,7 @@
 import fetch from "isomorphic-unfetch";
 import API from "../../api/apiAll";
 
-const getToken = () => {
-  let userToken = localStorage.getItem("userToken");
+const getToken = (thisObj, userToken, isSaveLogin) => {
   if (userToken === null) {
     return false;
   } else
@@ -14,9 +13,20 @@ const getToken = () => {
       body: `refreshToken=${JSON.parse(userToken).refreshToken}`
     })
       .then(response => response.json())
-      .then(result => localStorage.setItem("userAccessToken", JSON.stringify(result.accessToken)))
+      .then(result => {
+        if (isSaveLogin) {
+          localStorage.setItem(
+            "userAccessToken",
+            JSON.stringify(result.accessToken)
+          );
+        } else {
+          thisObj.setState({
+            accessToken: JSON.stringify(result.accessToken)
+          });
+        }
+      })
       .catch(function(error) {
         console.log("Request failed", error);
-      }); 
+      });
 };
 export default getToken;

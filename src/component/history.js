@@ -240,7 +240,6 @@ class History extends React.Component {
             >
               {totalItem}
             </span>
-            {/* Perchase{" "} */}
             <Dropdown
               overlay={this.menu}
               placement="bottomRight"

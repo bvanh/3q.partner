@@ -7,7 +7,6 @@ import ChangePass from "./component/changepassword";
 import LoginForm from "./component/login";
 import API from "./api/apiAll";
 import logoclappigames from "./static/img/logoForPages.jpg";
-import logo3qzombie from "./static/img/Logo-3q-Zombie.jpg";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 const { Header, Footer } = Layout;
 export default class App extends React.Component {
@@ -15,7 +14,11 @@ export default class App extends React.Component {
     super(props);
     this.state = {
       isLogin: false,
-      userToken: null,
+      accessToken: null,
+      userToken: localStorage.getItem("userToken"),
+      imageLogo: "",
+      pageName: "",
+      isSaveLogin:true,
       isChangePassword: false
     };
   }
@@ -35,38 +38,61 @@ export default class App extends React.Component {
       </Menu.Item>
     </Menu>
   );
+  runRefreshToken = setInterval(() => {
+    getToken(this,this.state.userToken,this.state.isSaveLogin);
+  }, 3300000);
   componentDidMount() {
-    if (getToken() === false) {
+    const { userToken } = this.state;
+    if (getToken(this,userToken,this.state.isSaveLogin) === false) {
       this.setState({
         isLogin: false
       });
       return;
-    } else setInterval(getToken, 3300000);
-    let userToken = localStorage.getItem("userToken");
-    if (userToken.refreshToken !== "") {
+    } else {
+      let imageLogo = localStorage.getItem("imageLogo");
+      let pageName = localStorage.getItem("fullname");
       this.setState({
         isLogin: true,
-        userToken: userToken
+        imageLogo: imageLogo,
+        pageName: pageName
+        // userToken: userToken
       });
     }
   }
   logInOut = elm => {
     if (elm === false) {
       localStorage.removeItem("userToken");
-      localStorage.removeItem("user");
     }
     this.setState({
       isLogin: elm
     });
   };
+  getTokenToState = val => {
+    this.setState({
+      userToken: val,
+      accessToken: val.accessToken
+    });
+  };
+  getImgAndName = val => {
+    this.setState({
+      pageName: val.fullName,
+      imageLogo: val.imageUrl
+    });
+  };
   render() {
-    const { isLogin } = this.state;
+    const { isLogin, imageLogo, pageName } = this.state;
     if (isLogin === false) {
       return (
         <Router>
           <Route
             path="/"
-            render={() => <LoginForm logInOut={this.logInOut} />}
+            render={() => (
+              <LoginForm
+                logInOut={this.logInOut}
+                getTokenToState={this.getTokenToState}
+                getImgAndName={this.getImgAndName}
+              />
+            )}
           />
         </Router>
       );
@@ -102,8 +128,12 @@ export default class App extends React.Component {
             <Header className="header2">
               <div className="header2_content">
                 <div id="logo_title">
-                  <img src={logo3qzombie} alt="logo_clappigames"></img>
-                  <span className="header2_title">3Q Zombie</span>
+                  <img
+                    src={imageLogo}
+                    alt="logo_clappigames"
+                    style={{ width: "2rem", height: "2rem" }}
+                  ></img>
+                  <span className="header2_title">{pageName}</span>
                 </div>
                 <span id="header2_title">Tổng hợp doanh thu C.coin</span>
               </div>

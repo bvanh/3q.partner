@@ -1,12 +1,11 @@
 import React from "react";
-import { Pie, Line } from "react-chartjs-2";
+import { Pie } from "react-chartjs-2";
 import "chartjs-plugin-labels";
 import { Col, Row, Icon, Select } from "antd";
 import { Link } from "react-router-dom";
 import LineChart from "./options/lineChart";
 import moment from "moment";
 import { getDataPieChart } from "./services/homeService";
-import { demo } from "./services/homeService";
 import "../static/style-homepage.css";
 import API from "../api/apiAll";
 const { Option } = Select;
@@ -18,7 +17,6 @@ const legendOpts = {
   responsive: false,
   maintainAspectRatio: false
 };
-// const demo = getPieData;
 class Charts extends React.Component {
   constructor(props) {
     super(props);

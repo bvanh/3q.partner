@@ -14,6 +14,8 @@ const API = {
   CHANGEPASSWORD_PATHNAME: "/partner/password/update",
   //   REFRESH TOKEN & LOGIN
   REFRESHTOKEN_PATHNAME: "/auth/renew/token/access",
-  LOGIN_PATHNAME: "/auth/login"
+  LOGIN_PATHNAME: "/auth/login",
+  // 
+  PARTNER_INFO:'/partner/info'
 };
 export default API;
