@@ -1,7 +1,7 @@
 import React from "react";
 import moment from "moment";
 import { Line } from "react-chartjs-2";
-import { getDataLineChart } from "../services/homeService";
+import { getDataLineChart, getTotalPerchase } from "../services/homeService";
 import { Link } from "react-router-dom";
 import API from "../../api/apiAll";
 import { Icon, DatePicker, Input, Select } from "antd";
@@ -12,7 +12,7 @@ class LineChart extends React.Component {
     super(props);
     this.state = {
       startValue: null,
-      endValue: null,
+      endValue: null
     };
   }
   disabledDate = current => {
@@ -69,6 +69,26 @@ class LineChart extends React.Component {
           hoverBackgroundColor: "rgba(255,99,132,0.4)",
           hoverBorderColor: "rgba(255,99,132,1)",
           data: this.state.vndChartyAxisTotal
+        },
+        {
+          label: "WEB",
+          fill: false,
+          backgroundColor: "#ff7b00",
+          borderColor: "#ff7b00",
+          borderWidth: 2,
+          hoverBackgroundColor: "rgba(255,99,132,0.4)",
+          hoverBorderColor: "rgba(255,99,132,1)",
+          data: this.state.vndChartyAxisWeb
+        },
+        {
+          label: "APK",
+          fill: false,
+          backgroundColor: "#d9ff00",
+          borderColor: "#d9ff00",
+          borderWidth: 2,
+          hoverBackgroundColor: "rgba(255,99,132,0.4)",
+          hoverBorderColor: "rgba(255,99,132,1)",
+          data: this.state.vndChartyAxisApk
         }
       ]
     };
@@ -89,14 +109,18 @@ class LineChart extends React.Component {
     });
   };
   componentDidMount() {
-    getDataLineChart(this, "2019-10-17", "2019-10-25");
+    const { valueDateToday, valueDate7DayAgo } = this.props;
+    getDataLineChart(this, valueDate7DayAgo, valueDateToday);
   }
   render() {
     const {
       startValue,
       startOpen,
       endValue,
-      indexModalDatePicker
+      indexModalDatePicker,
+      totalPerchase,
+      fromDate,
+      toDate
     } = this.state;
     const fromDateValue = moment(startValue).format("YYYY-MM-DD");
     const toDateValue = moment(endValue).format("YYYY-MM-DD");
@@ -112,7 +136,7 @@ class LineChart extends React.Component {
           <div style={{ margin: "0 4rem" }}>
             <span>Lượt giao dịch</span>
             <br />
-            <span className="chart_title_value">12345K</span>
+            <span className="chart_title_value">{totalPerchase}</span>
           </div>
         </div>
         <div className="line_chart">
@@ -155,7 +179,15 @@ class LineChart extends React.Component {
               Tùy chọn
             </Option>
           </Select>
-          <Link to={API.HISTORY_PATHNAME + API.HISTORY_PATHSEARCH_DEFAULT}>
+          <Link
+            to={{
+              pathname: API.HISTORY_PATHNAME,
+              search:
+                API.HISTORY_PATHSEARCH_NODATE +
+                `&fromDate=${fromDate}&toDate=${toDate}`,
+              state: { fromDate: fromDate, toDate: toDate }
+            }}
+          >
             CHI TIẾT GIAO DỊCH <Icon type="caret-right" />
           </Link>
           <div className={indexModalDatePicker}>

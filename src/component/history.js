@@ -1,12 +1,12 @@
 import React from "react";
 import { Table, Input, Pagination, Button, Menu, Dropdown, Icon } from "antd";
-import Type from "./options/type";
-import fetch from "isomorphic-unfetch";
+import TypeSearch from "./options/datePicker";
 import { Link } from "react-router-dom";
 import ReactExport from "react-export-excel";
 import { getDataPieChart } from "./services/homeService";
 import "../static/style-history.css";
 import API from "../api/apiAll";
+import { getData } from "./services/historyService";
 import moreitem from "../static/img/more_item.png";
 const ExcelFile = ReactExport.ExcelFile;
 const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
@@ -25,48 +25,27 @@ class History extends React.Component {
       totalItem: 0,
       currentPage: 1,
       pageSize: 10,
-      userToken: JSON.parse(this.props.userToken),
       type: 1,
       search: "",
-      startTime: "2019-10-1",
-      endTime: "2019-12-30"
+      fromDate: "2019-10-17",
+      toDate: "2019-10-25"
     };
   }
-  getData = pathSearch => {
-    let userAccessToken = localStorage.getItem("userAccessToken");
-    fetch(API.ROOT_URL + API.HISTORY_PATHNAME + pathSearch, {
-      headers: {
-        Authorization: `Bearer ${JSON.parse(userAccessToken)}`,
-        "Content-Type": "application/x-www-form-urlencoded"
-      },
-      method: "GET"
-    })
-      .then(response => response.json())
-      .then(result =>
-        this.setState({
-          data: result.rows,
-          dataExport: result.rows,
-          totalItem: result.count
-        })
-      )
-      .catch(function(error) {
-        console.log("Request failed", error);
-      });
-  };
   componentDidMount() {
-    const { startTime, endTime } = this.state;
-    this.getData(this.props.location.search);
-    getDataPieChart(this, startTime, endTime);
+    const { fromDate, toDate } = this.state;
+    const { state } = this.props.location;
+    getData(this, this.props.location.search);
+    getDataPieChart(this, state.fromDate, state.toDate);
   }
   goPage = async page => {
     await this.setState({
       currentPage: page
     });
-    const { type, startTime, endTime, search, currentPage } = this.state;
+    const { type, fromDate, toDate, search, currentPage } = this.state;
     await this.props.history.replace(
-      `${API.HISTORY_PATHNAME}?currentPage=${currentPage}&pageSize=10&search=${search}&type=${type}&fromDate=${startTime}&toDate=${endTime}`
+      `${API.HISTORY_PATHNAME}?currentPage=${currentPage}&pageSize=10&search=${search}&type=${type}&fromDate=${fromDate}&toDate=${toDate}`
     );
-    this.getData(this.props.location.search);
+    getData(this, this.props.location.search);
   };
   addTypeData = val => {
     this.setState({
@@ -75,8 +54,8 @@ class History extends React.Component {
   };
   addDateData = (startDate, endDate) => {
     this.setState({
-      startTime: startDate,
-      endTime: endDate
+      fromDate: startDate,
+      toDate: endDate
     });
   };
   addTextSearch = e => {
@@ -85,12 +64,12 @@ class History extends React.Component {
     });
   };
   searchData = async () => {
-    const { type, startTime, endTime, search, currentPage } = this.state;
+    const { type, fromDate, toDate, search, currentPage } = this.state;
     await this.props.history.replace(
-      `${API.HISTORY_PATHNAME}?currentPage=${currentPage}&pageSize=10&search=${search}&type=${type}&fromDate=${startTime}&toDate=${endTime}`
+      `${API.HISTORY_PATHNAME}?currentPage=${currentPage}&pageSize=10&search=${search}&type=${type}&fromDate=${fromDate}&toDate=${toDate}`
     );
-    this.getData(this.props.location.search);
-    console.log(this.props.location.search);
+    getData(this, this.props.location.search);
+    getDataPieChart(this, fromDate, toDate);
   };
   menu = (
     <Menu onClick={key => this.changePageSize(key)}>
@@ -106,16 +85,16 @@ class History extends React.Component {
     });
     const {
       type,
-      startTime,
-      endTime,
+      fromDate,
+      toDate,
       search,
       currentPage,
       pageSize
     } = this.state;
     await this.props.history.replace(
-      `${API.HISTORY_PATHNAME}?currentPage=${currentPage}&pageSize=${pageSize}&search=${search}&type=${type}&fromDate=${startTime}&toDate=${endTime}`
+      `${API.HISTORY_PATHNAME}?currentPage=${currentPage}&pageSize=${pageSize}&search=${search}&type=${type}&fromDate=${fromDate}&toDate=${toDate}`
     );
-    this.getData(this.props.location.search);
+    getData(this.props.location.search);
   };
   render() {
     const rowSelection = {
@@ -174,8 +153,8 @@ class History extends React.Component {
     ];
     const {
       data,
-      startTime,
-      endTime,
+      fromDate,
+      toDate,
       totalItem,
       totalRevenue,
       dataExport,
@@ -189,7 +168,7 @@ class History extends React.Component {
             placeholder="Search by products, name, etc..."
             onChange={this.addTextSearch}
           />
-          <Type addTypeData={this.addTypeData} addDateData={this.addDateData} />
+          <TypeSearch addTypeData={this.addTypeData} addDateData={this.addDateData} />
           <Button id="btn_search" onClick={this.searchData}>
             SEARCH
           </Button>
@@ -234,12 +213,7 @@ class History extends React.Component {
             >
               {pageSize}
             </span>{" "}
-            of
-            <span
-              style={{ fontSize: "1.1rem", color: "#0085ff", padding: ".3rem" }}
-            >
-              {totalItem}
-            </span>
+            Perchase/ Page
             <Dropdown
               overlay={this.menu}
               placement="bottomRight"
@@ -247,7 +221,7 @@ class History extends React.Component {
               overlayClassName="add_pageRange"
             >
               <span>
-                Perchase
+              
                 <img src={moreitem} />
               </span>
             </Dropdown>

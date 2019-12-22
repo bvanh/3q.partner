@@ -2,7 +2,6 @@ import React from "react";
 import { saveTokenToLocal, saveTokenToState } from "./services/loginService";
 import "../static/style-login.css";
 import logoclappigames from "../static/img/logoclappigames.jpg";
-
 import { Form, Input, Button, Modal, Checkbox } from "antd";
 
 class NormalLoginForm extends React.Component {
@@ -18,9 +17,9 @@ class NormalLoginForm extends React.Component {
     this.props.form.validateFields((err, values) => {
       if (!err && values.remember) {
         saveTokenToLocal(this, values, resStatus);
-      } else if(!err && !values.remember)
-      saveTokenToState(this, values, resStatus);
-    }); 
+      } else if (!err && !values.remember)
+        saveTokenToState(this, values, resStatus);
+    });
   };
   render() {
     const { getFieldDecorator } = this.props.form;

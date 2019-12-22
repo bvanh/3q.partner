@@ -84,6 +84,7 @@ function saveTokenToState(thisObj, value, resStatus) {
     .then(result => {
       if (resStatus !== 200) errorAlert(result.status, result.message);
       else {
+        localStorage.setItem("userAccessToken", JSON.stringify(result.accessToken));
         thisObj.props.getTokenToState(result);
         thisObj.props.logInOut(true);
       }

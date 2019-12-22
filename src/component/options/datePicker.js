@@ -1,7 +1,8 @@
 import React from "react";
 import moment from "moment";
-import { DatePicker } from "antd";
-export default class DateRange extends React.Component {
+import { DatePicker,Select } from "antd";
+const { Option } = Select;
+export default class TypeSearch extends React.Component {
   state = {
     startValue: null,
     endValue: null,
@@ -49,6 +50,17 @@ export default class DateRange extends React.Component {
   render() {
     const { startValue, endValue, endOpen } = this.state;
     return (
+      <>
+        <Select
+        defaultValue="0"
+        onChange={this.props.addTypeData}
+        className="btn-checktype"
+      >
+        <Option value="0"> All</Option>
+        <Option value="1"> Partner_charge_ID</Option>
+        <Option value="2">User_ID</Option>
+        <Option value="3">Product_ID</Option>
+      </Select>
       <div className="btn-checkdate">
         <DatePicker
           disabledDate={this.disabledDate}
@@ -75,6 +87,7 @@ export default class DateRange extends React.Component {
           className="input_date"
         />
       </div>
+      </>
     );
   }
 }

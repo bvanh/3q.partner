@@ -1,6 +1,6 @@
 import React from "react";
 import { Layout, Menu, Icon, Avatar, Dropdown } from "antd";
-import getToken from "./component/options/refreshToken";
+import getToken from "./utils/refreshToken";
 import Charts from "./component/home";
 import History from "./component/history";
 import ChangePass from "./component/changepassword";
@@ -14,11 +14,9 @@ export default class App extends React.Component {
     super(props);
     this.state = {
       isLogin: false,
-      accessToken: null,
       userToken: localStorage.getItem("userToken"),
       imageLogo: "",
       pageName: "",
-      isSaveLogin:true,
       isChangePassword: false
     };
   }
@@ -39,11 +37,11 @@ export default class App extends React.Component {
     </Menu>
   );
   runRefreshToken = setInterval(() => {
-    getToken(this,this.state.userToken,this.state.isSaveLogin);
+    getToken(this.state.userToken);
   }, 3300000);
   componentDidMount() {
     const { userToken } = this.state;
-    if (getToken(this,userToken,this.state.isSaveLogin) === false) {
+    if (getToken(userToken) === false) {
       this.setState({
         isLogin: false
       });
@@ -69,8 +67,7 @@ export default class App extends React.Component {
   };
   getTokenToState = val => {
     this.setState({
-      userToken: val,
-      accessToken: val.accessToken
+      userToken: val
     });
   };
   getImgAndName = val => {

@@ -19,6 +19,8 @@ function getDataPieChart(thisObj, fromDateValue, toDateValue) {
     .then(response => response.json())
     .then(result =>
       thisObj.setState({
+        fromDate: fromDateValue,
+        toDate: toDateValue,
         totalRevenueWEB: result.yAxis.WEB.reduce((x, y) => x + y),
         totalRevenueAPK: result.yAxis.APK.reduce((x, y) => x + y),
         totalRevenue: result.yAxis.TOTAL.reduce((x, y) => x + y)
@@ -48,13 +50,43 @@ function getDataLineChart(thisObj, fromDateValue, toDateValue) {
     .then(result =>
       thisObj.setState({
         vndChartxAxis: result.xAxis,
-        vndChartyAxisTotal: result.yAxis.TOTAL
+        vndChartyAxisTotal: result.yAxis.TOTAL,
+        vndChartyAxisWeb: result.yAxis.WEB,
+        vndChartyAxisApk: result.yAxis.APK,
+        fromDate:fromDateValue,
+        toDate:toDateValue,
       })
     )
     .catch(function(error) {
       console.log("Request failed", error);
     });
   thisObj.hideModalPicker();
+  getTotalPerchase(thisObj,fromDateValue,toDateValue)
 }
-
-export { getDataPieChart, getDataLineChart };
+// lấy tổng số lượng giao dịch
+function getTotalPerchase(thisObj, fromDate, toDate) {
+  let accessToken = localStorage.getItem("userAccessToken");
+  fetch(
+    API.ROOT_URL +
+      API.HISTORY_PATHNAME +
+      API.HISTORY_PATHSEARCH_NODATE +
+      `&fromDate=${fromDate}&toDate=${toDate}`,
+    {
+      headers: {
+        Authorization: `Bearer ${JSON.parse(accessToken)}`,
+        "Content-Type": "application/x-www-form-urlencoded"
+      },
+      method: "GET"
+    }
+  )
+    .then(response => response.json())
+    .then(result =>
+      thisObj.setState({
+        totalPerchase: result.count
+      })
+    )
+    .catch(function(error) {
+      console.log("Request failed", error);
+    });
+}
+export { getDataPieChart, getDataLineChart, getTotalPerchase };
