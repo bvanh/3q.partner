@@ -2,8 +2,8 @@
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Roboto", sans-serif !important;
+  background-color: #F8F9FA !important;
 }
-
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Roboto" !important;
 }
@@ -21,7 +21,6 @@ input:focus{
   line-height: 1rem !important;
 }
 .user_logout {
-  background: #fafafa;
   border-radius: 2px;
   padding: .5rem  !important;
   box-sizing: border-box;
@@ -94,18 +93,8 @@ input:focus{
 .submit-mes {
   height: 1.5rem;
   color: rgb(219, 121, 121);
+  padding-top: .5rem !important;
 }
 .ant-form-item {
   margin: 0 !important;
 }
-/* @media only screen and (max-width: 600px) {
-  .btn-check {
-    flex-direction: column;
-  }
-  .btn-checktype {
-    width: 35% !important;
-  }
-  .ant-input-group-wrapper {
-    width: 35% !important;
-  }
-} */

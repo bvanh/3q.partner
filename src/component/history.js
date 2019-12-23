@@ -8,6 +8,7 @@ import "../static/style-history.css";
 import API from "../api/apiAll";
 import { getData } from "./services/historyService";
 import moreitem from "../static/img/more_item.png";
+import Logo from "../static/img/Logo.png";
 const ExcelFile = ReactExport.ExcelFile;
 const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
 const ExcelColumn = ReactExport.ExcelFile.ExcelColumn;
@@ -74,9 +75,9 @@ class History extends React.Component {
   menu = (
     <Menu onClick={key => this.changePageSize(key)}>
       <b>Show up to</b>
-      <Menu.Item key="10">10 Perchase</Menu.Item>
-      <Menu.Item key="25">25 Perchase</Menu.Item>
-      <Menu.Item key="50">50 Perchase</Menu.Item>
+      <Menu.Item key="10">10 Purchase</Menu.Item>
+      <Menu.Item key="25">25 Purchase</Menu.Item>
+      <Menu.Item key="50">50 Purchase</Menu.Item>
     </Menu>
   );
   changePageSize = async val => {
@@ -162,13 +163,19 @@ class History extends React.Component {
     } = this.state;
     return (
       <div className="history_container">
+        <div style={{padding: '.5rem 0'}}>
+          <img
+            src={Logo}
+            alt="logo_clappigames"
+            // style={{ width: "2rem", height: "2rem" }}
+          ></img>
+        </div>
         <div className="btn-check">
-          <Input
-            className="input_search"
-            placeholder="Search by products, name, etc..."
-            onChange={this.addTextSearch}
+          <TypeSearch
+            addTypeData={this.addTypeData}
+            addDateData={this.addDateData}
+            addTextSearch={this.addTextSearch}
           />
-          <TypeSearch addTypeData={this.addTypeData} addDateData={this.addDateData} />
           <Button id="btn_search" onClick={this.searchData}>
             SEARCH
           </Button>
@@ -207,13 +214,13 @@ class History extends React.Component {
               {totalRevenue.toLocaleString()} VNĐ
             </span>
           </span>
-          <span>
+          <span id="items_page">
             <span
               style={{ fontSize: "1.1rem", color: "#0085ff", padding: ".3rem" }}
             >
               {pageSize}
             </span>{" "}
-            Perchase/ Page
+            Purchase/ Page
             <Dropdown
               overlay={this.menu}
               placement="bottomRight"
@@ -221,7 +228,6 @@ class History extends React.Component {
               overlayClassName="add_pageRange"
             >
               <span>
-              
                 <img src={moreitem} />
               </span>
             </Dropdown>
@@ -234,13 +240,14 @@ class History extends React.Component {
           rowKey={record => record.partnerChargeId}
           pagination={false}
           bordered
+          scroll={{ x: 800 }}
         />
         <Pagination
           defaultCurrent={1}
           total={totalItem}
           size="small"
           showTotal={(total, range) =>
-            `${range[0]}-${range[1]} of ${total} Perchase`
+            `${range[0]}-${range[1]} of ${total} Purchase`
           }
           pageSize={pageSize}
           onChange={this.goPage}

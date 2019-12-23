@@ -1,14 +1,28 @@
 .ant-form {
-  /* height: 426px; */
-  margin: 1.3rem auto !important;
+  /* height: 426px !important; */
+  margin-top: 10rem;
   border: 1px solid #f0f0f0;
   text-align: center;
   box-sizing: border-box;
+  padding: 1.5rem 2rem;
+  background-color: white;
+  box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.13);
+  border-radius: 2px;
+}
+#login_container{
+  width: 80%;
+  margin:3rem auto;
 }
 .logo {
   margin: 0 auto;
   display: flex;
   justify-content: center;
+}
+.logo_mobile {
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  display: none;
 }
 .login_text {
   font-weight: 500;
@@ -22,92 +36,27 @@
 .input_form {
   padding-top: 1rem;
 }
-/* .ant-input-login {
-  padding-left: 30px !important;
-  height: 2.5rem !important;
-  border-radius: 0 !important;
-  margin-bottom: 1rem !important;
-  display: flex !important;
-  align-items: center !important;
-} */
 .login-form-button {
   width: 100%;
   border-radius: 0;
   margin-top: 1.5rem;
   height: 2.5rem;
 }
-@media only screen and (max-width: 600px) {
+@media only screen and (min-width: 991px)and (max-width:1200px) {
   .ant-form {
-    width: 90% !important;
-    padding: 1rem 2rem;
+    margin-top: 5rem;
   }
 }
-@media only screen and (min-width: 600px) {
+@media only screen and (max-width: 991px) {
+  .logo {
+    display: none;
+  }
+  .logo_mobile{
+    display: block;
+  }
   .ant-form {
-    width: 50% !important;
-    padding: 1rem 2rem;
+    margin-top: 2rem;
   }
 }
-@media only screen and (min-width: 1200px) {
-  .ant-form {
-    width: 30% !important;
-    padding: 1rem 4rem;
-  }
-}
-/*  */
-/* .ant-form {
-  height: 426px;
-  margin: 1.3rem auto !important;
-  border: 1px solid #f0f0f0;
-  text-align: center;
-  box-sizing: border-box;
-}
-.logo {
-  margin: 0 auto;
-  display: flex;
-  justify-content: center;
-}
-.login_text {
-  font-weight: 500;
-  font-size: 18px;
-  line-height: 21px;
-  color: black;
-}
-.ant-row {
-  text-align: left;
-}
-.input_form {
-  padding-top: 1rem;
-}
-.ant-input {
-  padding-left: 30px;
-  height: 2.5rem;
-  border-radius: 0;
-  margin-bottom: 1rem;
-  display: flex;
-  align-items: center;
-}
-.login-form-button {
-  width: 100%;
-  border-radius: 0;
-  margin-top: 1.5rem;
-  height: 2.5rem;
-}
-@media only screen and (max-width: 600px) {
-  .ant-form {
-    width: 90% !important;
-    padding: 1rem 2rem;
-  }
-}
-@media only screen and (min-width: 600px) {
-  .ant-form {
-    width: 50% !important;
-    padding: 1rem 2rem;
-  }
-}
-@media only screen and (min-width: 1020px) {
-  .ant-form {
-    width: 30% !important;
-    padding: 1rem 5rem;
-  }
-} */
+
+

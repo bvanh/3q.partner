@@ -1,6 +1,6 @@
 import React from "react";
 import moment from "moment";
-import { DatePicker,Select } from "antd";
+import { DatePicker, Select,Input } from "antd";
 const { Option } = Select;
 export default class TypeSearch extends React.Component {
   state = {
@@ -51,42 +51,49 @@ export default class TypeSearch extends React.Component {
     const { startValue, endValue, endOpen } = this.state;
     return (
       <>
+      <div className='btn_checksearch'>
+        <Input
+          className="input_search"
+          placeholder="Search by products, name, etc..."
+          onChange={this.props.addTextSearch}
+        />
         <Select
-        defaultValue="0"
-        onChange={this.props.addTypeData}
-        className="btn-checktype"
-      >
-        <Option value="0"> All</Option>
-        <Option value="1"> Partner_charge_ID</Option>
-        <Option value="2">User_ID</Option>
-        <Option value="3">Product_ID</Option>
-      </Select>
-      <div className="btn-checkdate">
-        <DatePicker
-          disabledDate={this.disabledDate}
-          showTime
-          format="YYYY-MM-DD"
-          value={startValue}
-          placeholder="StartTime"
-          onChange={this.onStartChange}
-          onOpenChange={this.handleStartOpenChange}
-          className="input_date"
-        />
-        <span style={{padding:'.3rem'}}>To</span>
-        <DatePicker
-          disabledDate={this.disabledEndDate}
-          showTime
-          format="YYYY-MM-DD"
-          value={endValue}
-          placeholder="EndTime"
-          onChange={this.onEndChange}
-          open={endOpen}
-          onOpenChange={this.handleEndOpenChange}
-          onOk={this.filterDate}
-          separator={true}
-          className="input_date"
-        />
-      </div>
+          defaultValue="0"
+          onChange={this.props.addTypeData}
+          className="btn-checktype"
+        >
+          <Option value="0"> All</Option>
+          <Option value="1"> Partner_charge_ID</Option>
+          <Option value="2">User_ID</Option>
+          <Option value="3">Product_ID</Option>
+        </Select>
+        </div>
+        <div className="btn-checkdate">
+          <DatePicker
+            disabledDate={this.disabledDate}
+            showTime
+            format="YYYY-MM-DD"
+            value={startValue}
+            placeholder="StartTime"
+            onChange={this.onStartChange}
+            onOpenChange={this.handleStartOpenChange}
+            className="input_date"
+          />
+          <span style={{ padding: ".3rem" }} id='toDate'>To</span>
+          <DatePicker
+            disabledDate={this.disabledEndDate}
+            showTime
+            format="YYYY-MM-DD"
+            value={endValue}
+            placeholder="EndTime"
+            onChange={this.onEndChange}
+            open={endOpen}
+            onOpenChange={this.handleEndOpenChange}
+            onOk={this.filterDate}
+            separator={true}
+            className="input_date"
+          />
+        </div>
       </>
     );
   }

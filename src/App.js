@@ -24,6 +24,12 @@ export default class App extends React.Component {
     <Menu>
       <Menu.Item>
         <Link to={API.CHANGEPASSWORD_PATHNAME}>
+          <Icon type="read" style={{ paddingRight: ".5rem" }} />
+          <span>Introduction</span>
+        </Link>
+      </Menu.Item>
+      <Menu.Item>
+        <Link to={API.CHANGEPASSWORD_PATHNAME}>
           <Icon type="key" style={{ paddingRight: ".5rem" }} />
           <span>Change password</span>
         </Link>
@@ -31,7 +37,7 @@ export default class App extends React.Component {
       <Menu.Item onClick={() => this.logInOut(false)}>
         <Link to="/">
           <Icon type="export" style={{ paddingRight: ".5rem" }} />
-          Đăng xuất
+          Log out
         </Link>
       </Menu.Item>
     </Menu>
@@ -122,25 +128,13 @@ export default class App extends React.Component {
             </div>
           </Header>
           <Layout>
-            <Header className="header2">
-              <div className="header2_content">
-                <div id="logo_title">
-                  <img
-                    src={imageLogo}
-                    alt="logo_clappigames"
-                    style={{ width: "2rem", height: "2rem" }}
-                  ></img>
-                  <span className="header2_title">{pageName}</span>
-                </div>
-                <span id="header2_title">Tổng hợp doanh thu C.coin</span>
-              </div>
-              <br />
-            </Header>
-            <Route exact path="/" component={Charts} />
+            <Route exact path="/" render={() => (
+                <Charts imageLogo={imageLogo} />
+              )} />
             <Route
               path={API.HISTORY_PATHNAME}
               render={props => (
-                <History {...props} userToken={this.state.userToken} />
+                <History {...props} userToken={this.state.userToken}imageLogo={imageLogo} />
               )}
             />
             <Route

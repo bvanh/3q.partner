@@ -1,7 +1,7 @@
 import React from "react";
 import moment from "moment";
 import { Line } from "react-chartjs-2";
-import { getDataLineChart, getTotalPerchase } from "../services/homeService";
+import { getDataLineChart, getTotalPurchase } from "../services/homeService";
 import { Link } from "react-router-dom";
 import API from "../../api/apiAll";
 import { Icon, DatePicker, Input, Select } from "antd";
@@ -118,7 +118,7 @@ class LineChart extends React.Component {
       startOpen,
       endValue,
       indexModalDatePicker,
-      totalPerchase,
+      totalPurchase,
       fromDate,
       toDate
     } = this.state;
@@ -126,17 +126,26 @@ class LineChart extends React.Component {
     const toDateValue = moment(endValue).format("YYYY-MM-DD");
     const { valueDateToday, valueDate7DayAgo, valueDate30DayAgo } = this.props;
     return (
-      <>
+      <div id="chart-frame">
         <div className="sum">
           <div>
-            <span>Số người mua</span>
+          <div style={{paddingRight:'3rem'}}>
+            <span>Users Purchase</span>
             <br />
             <span className="chart_title_value">12345K</span>
           </div>
-          <div style={{ margin: "0 4rem" }}>
-            <span>Lượt giao dịch</span>
+          <div>
+            <span>Purchase</span>
             <br />
-            <span className="chart_title_value">{totalPerchase}</span>
+            <span className="chart_title_value">{totalPurchase}</span>
+          </div>
+          </div>
+          <div id="logo_title">
+            <img
+              src={this.props.imageLogo}
+              alt="logo_clappigames"
+              style={{ width: "2rem", height: "2rem" }}
+            ></img>
           </div>
         </div>
         <div className="line_chart">
@@ -157,7 +166,7 @@ class LineChart extends React.Component {
                 getDataLineChart(this, valueDate7DayAgo, valueDateToday)
               }
             >
-              7 Ngày qua
+              Last 7 days
             </Option>
             <Option
               value="3"
@@ -165,7 +174,7 @@ class LineChart extends React.Component {
                 getDataLineChart(this, valueDateToday, valueDateToday)
               }
             >
-              Hôm nay
+              Today
             </Option>
             <Option
               value="4"
@@ -173,10 +182,10 @@ class LineChart extends React.Component {
                 getDataLineChart(this, valueDate30DayAgo, valueDateToday)
               }
             >
-              Một tháng qua
+              Last 30 days
             </Option>
             <Option value="5" onClick={this.showModalPicker}>
-              Tùy chọn
+              Custom...
             </Option>
           </Select>
           <Link
@@ -188,7 +197,7 @@ class LineChart extends React.Component {
               state: { fromDate: fromDate, toDate: toDate }
             }}
           >
-            CHI TIẾT GIAO DỊCH <Icon type="caret-right" />
+            MORE INSIGHTS <Icon type="caret-right" />
           </Link>
           <div className={indexModalDatePicker}>
             <DatePicker
@@ -223,7 +232,7 @@ class LineChart extends React.Component {
             />
           </div>
         </div>
-      </>
+      </div>
     );
   }
 }

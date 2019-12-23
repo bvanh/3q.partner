@@ -1,7 +1,11 @@
 .changepass_header{
     text-align: left;
 }
-#change_password{
+.changepass_container{
+    width: 80%;
+  margin:3rem auto;
+}
+.changepassword-form{
     text-align: center;
 }
 .changepassword-form>.ant-form-item{
@@ -15,4 +19,7 @@
    color:#0085ff;
    border: 1px solid #0085ff;
    margin-bottom: 5px;
+}
+.changepassword-form>.ant-form{
+    margin:.5rem 0 !important;
 }

@@ -1,23 +1,42 @@
+.title_dashboard{
+  margin: 0.8rem 0;
+  background-color: #ffe9a4; 
+  padding: .7rem 5rem;
+  position: relative;
+}
+.title_dashboard_text > h2 {
+  font-weight: 500;
+  font-size: 26px;
+  line-height: 30px;
+  color: #dd9200;
+}
+#img_title{
+  position: absolute;
+  bottom: 10px;
+  right: 5rem;
+}
+.title_dashboard_text > p {
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 16px;
+  color: #212121;
+  margin-bottom: .5rem;
+}
 .main_content {
   width: 75%;
-  margin: 0 auto;
+  margin: 0 auto !important;
 }
 #chart-frame {
   background-color: white !important;
   border: 1px solid #d2d3d4;
   padding: 1.5rem;
   position: relative;
-}
-.sum {
-  display: flex;
-  align-items: center;
-}
-.ant-col-16 {
   height: 569px;
 }
-.ant-col-8 {
-  padding-left: 1rem;
-  box-sizing: border-box;
+.sum,.sum > div  {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 .card {
   background: linear-gradient(180deg, #0085ff 0%, rgba(0, 133, 255, 0.81) 100%);
@@ -25,8 +44,7 @@
   color: white;
   padding: 1.5rem;
   height: 569px;
-  /* display: flex;
-  align-items: center; */
+  position: relative;
 }
 .card_title > p {
   font-family: "Roboto";
@@ -38,14 +56,13 @@
 }
 .card_title {
   border-bottom: 1px dashed white;
+  padding-bottom: 1rem;
+  margin-bottom: 1rem;
 }
 #value {
   font-weight: 500;
   font-size: 2.5rem;
   line-height: 3rem;
-}
-.card_content {
-  padding: 1rem 0;
 }
 .card_footer,
 .chart-frame_footer {
@@ -58,7 +75,7 @@
   justify-content: space-between;
   height: 3rem;
   align-items: center;
-  padding-left: 1.8rem;
+  padding-left: 1rem;
 }
 .card_footer > a {
   color: white;
@@ -148,9 +165,13 @@
   display: none;
 }
 .tag-pie_chart {
+  padding-bottom: 0.5rem;
+}
+.tag-pie_chart,
+.tag-pie_chart > div {
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: space-between;
 }
 #tag_pie_chart1 {
   width: 0.5rem;
@@ -163,4 +184,28 @@
   height: 0.5rem;
   background-color: #ffd54f;
   margin-right: 0.2rem;
+}
+.card > .ant-row,
+.card > .ant-row > .ant-col {
+  position: static !important;
+}
+@media screen and (max-width: 992px) {
+  .card {
+    height: 516px;
+  }
+  .main_content {
+    width: 95%;
+  }
+  .ant-layout-header {
+    padding: 0 1rem;
+  }
+  .sum > div {
+    margin-right: 1rem;
+  }
+  #img_title{
+    display: none;
+  }
+  .title_dashboard{
+    padding: .7rem 1rem;
+  }
 }

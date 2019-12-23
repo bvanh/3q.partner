@@ -61,10 +61,10 @@ function getDataLineChart(thisObj, fromDateValue, toDateValue) {
       console.log("Request failed", error);
     });
   thisObj.hideModalPicker();
-  getTotalPerchase(thisObj,fromDateValue,toDateValue)
+  getTotalPurchase(thisObj,fromDateValue,toDateValue)
 }
 // lấy tổng số lượng giao dịch
-function getTotalPerchase(thisObj, fromDate, toDate) {
+function getTotalPurchase(thisObj, fromDate, toDate) {
   let accessToken = localStorage.getItem("userAccessToken");
   fetch(
     API.ROOT_URL +
@@ -82,11 +82,11 @@ function getTotalPerchase(thisObj, fromDate, toDate) {
     .then(response => response.json())
     .then(result =>
       thisObj.setState({
-        totalPerchase: result.count
+        totalPurchase: result.count
       })
     )
     .catch(function(error) {
       console.log("Request failed", error);
     });
 }
-export { getDataPieChart, getDataLineChart, getTotalPerchase };
+export { getDataPieChart, getDataLineChart, getTotalPurchase };

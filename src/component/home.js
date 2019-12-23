@@ -1,8 +1,9 @@
 import React from "react";
-import { Col, Row} from "antd";
+import { Col, Row } from "antd";
 import LineChart from "./options/lineChart";
 import PieChart from "./options/pieChart";
 import moment from "moment";
+import imgTitle from "../static/img/img_title.png";
 import { getDataPieChart } from "./services/homeService";
 import "../static/style-homepage.css";
 
@@ -57,15 +58,39 @@ class Charts extends React.Component {
       .format("YYYY-MM-DD");
     return (
       <>
-        <Row className="main_content">
-          <Col span={16} id="chart-frame">
+        <Row
+          className="main_content"
+          type="flex"
+          gutter={[16, 8]}
+          justify="space-around"
+        >
+          <Col span={24}>
+            <div className="title_dashboard">
+              <div className="title_dashboard_text">
+                <h2>Welcome back Clappigames dashboard!</h2>
+                <p>
+                  We support to follow C.coin revenue form Clappigame Platform!
+                </p>
+                <p>Keep it up!</p>
+              </div>
+              
+                <img
+                  src={imgTitle}
+                  alt="img_title"
+                  id='img_title'
+                  // style={{ width: "2rem", height: "2rem" }}
+                ></img>
+            </div>
+          </Col>
+          <Col xl={{ span: 16, order: 1 }} xs={{ span: 24, order: 2 }}>
             <LineChart
               valueDateToday={valueDateToday}
               valueDate7DayAgo={valueDate7DayAgo}
               valueDate30DayAgo={valueDate30DayAgo}
+              imageLogo={this.props.imageLogo}
             />
           </Col>
-          <Col span={8}>
+          <Col xl={{ span: 8, order: 2 }} xs={{ span: 24, order: 1 }}>
             <PieChart
               valueDateToday={valueDateToday}
               valueDate7DayAgo={valueDate7DayAgo}
