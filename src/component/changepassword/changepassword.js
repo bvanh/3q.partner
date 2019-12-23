@@ -1,8 +1,7 @@
 import React, { useState } from "react";
-import API from "../api/apiAll";
-import fetch from "isomorphic-unfetch";
-import imgChangepass from "../static/img/changepassword.svg";
-import "../static/style-changepass.css";
+import imgChangepass from "../../static/img/changepassword.svg";
+import changePassword from "../services/changepassService";
+import "../../static/style-changepass.css";
 import { Form, Input, Button, Avatar, Row, Col } from "antd";
 import { Link } from "react-router-dom";
 function ChangePass(props) {
@@ -10,26 +9,18 @@ function ChangePass(props) {
   const [newPassword, setNewPassword] = useState("");
   const [confirmNewPassword, setConfirmNewPassword] = useState("");
   const [message, setMessage] = useState("");
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     let userAccessToken = localStorage.getItem("userAccessToken");
     if (newPassword !== confirmNewPassword) {
       setMessage("Password Not Equal !Try Again");
       return;
     } else {
-      fetch(API.ROOT_URL + API.CHANGEPASSWORD_PATHNAME, {
-        headers: {
-          Authorization: `Bearer ${JSON.parse(userAccessToken)}`,
-          "Content-Type": "application/x-www-form-urlencoded"
-        },
-        method: "POST",
-        body: `oldPassword=${oldPassword}&newPassword=${newPassword}`
-      })
-        .then(response => response.json())
-        .then(result => setMessage(result.message))
-        .catch(function(error) {
-          console.log("Request failed", error);
-        });
-      console.log(oldPassword, newPassword);
+      const mes = await changePassword(
+        userAccessToken,
+        oldPassword,
+        newPassword
+      );
+      setMessage(mes.message);
     }
   };
   const getTextPassword = e => {
@@ -41,7 +32,7 @@ function ChangePass(props) {
   };
   return (
     <Row className="changepass_container">
-      <Col lg={{ span: 16, order: 1 }}>
+      <Col lg={{ span: 16, order: 1 }}className='changepassword_img'>
         <img
           src={imgChangepass}
           alt="logo_clappigames"

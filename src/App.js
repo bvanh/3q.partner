@@ -1,10 +1,10 @@
 import React from "react";
 import { Layout, Menu, Icon, Avatar, Dropdown } from "antd";
 import getToken from "./utils/refreshToken";
-import Charts from "./component/home";
-import History from "./component/history";
-import ChangePass from "./component/changepassword";
-import LoginForm from "./component/login";
+import Charts from "./component/home/home";
+import History from "./component/history/history";
+import ChangePass from "./component/changepassword/changepassword";
+import LoginForm from "./component/login/login";
 import API from "./api/apiAll";
 import logoclappigames from "./static/img/logoForPages.jpg";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
@@ -83,7 +83,7 @@ export default class App extends React.Component {
     });
   };
   render() {
-    const { isLogin, imageLogo, pageName } = this.state;
+    const { isLogin, imageLogo} = this.state;
     if (isLogin === false) {
       return (
         <Router>

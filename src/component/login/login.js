@@ -1,8 +1,8 @@
 import React from "react";
-import { saveTokenToLocal, saveTokenToState } from "./services/loginService";
-import "../static/style-login.css";
-import logoclappigames from "../static/img/logoclappigames.png";
-import imgLogin from "../static/img/Group 1.svg";
+import { saveTokenToLocal, saveTokenToState } from "../services/loginService";
+import "../../static/style-login.css";
+import logoclappigames from "../../static/img/logoclappigames.png";
+import imgLogin from "../../static/img/Group 1.svg";
 import { Form, Input, Button, Modal, Checkbox, Row, Col } from "antd";
 
 class NormalLoginForm extends React.Component {

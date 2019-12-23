@@ -3,8 +3,6 @@ const API = {
   ROOT_URL: "https://api.partner.clappigames.com",
   // API history page
   HISTORY_PATHNAME: "/charges/list",
-  HISTORY_PATHSEARCH_DEFAULT:
-    "?currentPage=1&pageSize=10&search=&type=1&fromDate=2019-10-1&toDate=2019-12-30",
   HISTORY_PATHSEARCH_NODATE: "?currentPage=1&pageSize=10&search=&type=1",
   // API charts page
   CHARTS_PATHNAME: "/stats/revenue/date",

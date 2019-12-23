@@ -1,11 +1,11 @@
 import React from "react";
 import { Col, Row } from "antd";
-import LineChart from "./options/lineChart";
-import PieChart from "./options/pieChart";
+import LineChart from "./lineChart";
+import PieChart from "./pieChart";
 import moment from "moment";
-import imgTitle from "../static/img/img_title.png";
-import { getDataPieChart } from "./services/homeService";
-import "../static/style-homepage.css";
+import imgTitle from "../../static/img/img_title.png";
+import { getDataPieChart } from "../services/homeService";
+import "../../static/style-homepage.css";
 
 class Charts extends React.Component {
   constructor(props) {
@@ -48,7 +48,7 @@ class Charts extends React.Component {
     });
   };
   render() {
-    const { startOpen, indexModalDatePicker, totalRevenue } = this.state;
+    // const { startOpen, indexModalDatePicker, totalRevenue } = this.state;
     const valueDateToday = moment().format("YYYY-MM-DD");
     const valueDate7DayAgo = moment()
       .subtract(7, "days")

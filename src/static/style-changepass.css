@@ -3,7 +3,7 @@
 }
 .changepass_container{
     width: 80%;
-  margin:3rem auto;
+    margin:3rem auto;
 }
 .changepassword-form{
     text-align: center;
@@ -22,4 +22,10 @@
 }
 .changepassword-form>.ant-form{
     margin:.5rem 0 !important;
+}
+@media screen and (max-width: 991px) {
+    .changepassword_img {
+      display:none;
+    }
+
 }

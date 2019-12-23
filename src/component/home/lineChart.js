@@ -1,7 +1,7 @@
 import React from "react";
 import moment from "moment";
 import { Line } from "react-chartjs-2";
-import { getDataLineChart, getTotalPurchase } from "../services/homeService";
+import { getDataLineChart} from "../services/homeService";
 import { Link } from "react-router-dom";
 import API from "../../api/apiAll";
 import { Icon, DatePicker, Input, Select } from "antd";
@@ -217,6 +217,7 @@ class LineChart extends React.Component {
                     onClick={() =>
                       getDataLineChart(this, fromDateValue, toDateValue)
                     }
+                    style={{color:'#0085ff'}}
                   >
                     APPLY
                   </span>

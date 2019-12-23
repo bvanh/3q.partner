@@ -1,14 +1,14 @@
 import React from "react";
-import { Table, Input, Pagination, Button, Menu, Dropdown, Icon } from "antd";
-import TypeSearch from "./options/datePicker";
+import { Table, Pagination, Button, Menu, Dropdown} from "antd";
+import TypeSearch from "./datePicker";
 import { Link } from "react-router-dom";
 import ReactExport from "react-export-excel";
-import { getDataPieChart } from "./services/homeService";
-import "../static/style-history.css";
-import API from "../api/apiAll";
-import { getData } from "./services/historyService";
-import moreitem from "../static/img/more_item.png";
-import Logo from "../static/img/Logo.png";
+import { getDataPieChart } from "../services/homeService";
+import "../../static/style-history.css";
+import API from "../../api/apiAll";
+import { getData } from "../services/historyService";
+import moreitem from "../../static/img/more_item.png";
+import Logo from "../../static/img/Logo.png";
 const ExcelFile = ReactExport.ExcelFile;
 const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
 const ExcelColumn = ReactExport.ExcelFile.ExcelColumn;
@@ -33,7 +33,6 @@ class History extends React.Component {
     };
   }
   componentDidMount() {
-    const { fromDate, toDate } = this.state;
     const { state } = this.props.location;
     getData(this, this.props.location.search);
     getDataPieChart(this, state.fromDate, state.toDate);
@@ -154,8 +153,6 @@ class History extends React.Component {
     ];
     const {
       data,
-      fromDate,
-      toDate,
       totalItem,
       totalRevenue,
       dataExport,
@@ -167,7 +164,6 @@ class History extends React.Component {
           <img
             src={Logo}
             alt="logo_clappigames"
-            // style={{ width: "2rem", height: "2rem" }}
           ></img>
         </div>
         <div className="btn-check">
