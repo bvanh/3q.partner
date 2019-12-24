@@ -4,7 +4,6 @@ import LineChart from "./lineChart";
 import PieChart from "./pieChart";
 import moment from "moment";
 import imgTitle from "../../static/img/img_title.png";
-import { getDataPieChart } from "../services/homeService";
 import "../../static/style-homepage.css";
 
 class Charts extends React.Component {
@@ -86,9 +85,7 @@ class Charts extends React.Component {
               valueDate7DayAgo={valueDate7DayAgo}
               valueDate30DayAgo={valueDate30DayAgo}
               imageLogo={this.props.imageLogo}
-              userToken={this.props.userToken}
-              currentTime={this.props.currentTime}
-              userAccessToken={this.props.userAccessToken}
+              logInOut={this.props.logInOut}
             />
           </Col>
           <Col xl={{ span: 8, order: 2 }} xs={{ span: 24, order: 1 }}>
@@ -96,9 +93,7 @@ class Charts extends React.Component {
               valueDateToday={valueDateToday}
               valueDate7DayAgo={valueDate7DayAgo}
               valueDate30DayAgo={valueDate30DayAgo}
-              userToken={this.props.userToken}
-              currentTime={this.props.currentTime}
-              userAccessToken={this.props.userAccessToken}
+              logInOut={this.props.logInOut}
             />
           </Col>
         </Row>

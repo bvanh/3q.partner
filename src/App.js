@@ -13,8 +13,7 @@ export default class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isLogin: false,
-      userToken: JSON.parse(localStorage.getItem("userToken")),
+      isLogin: "",
       imageLogo: "",
       pageName: "",
       isChangePassword: false
@@ -43,17 +42,13 @@ export default class App extends React.Component {
     </Menu>
   );
   componentDidMount() {
-    const { userToken } = this.state;
-    if (getToken(userToken) === false) {
-      this.setState({
-        isLogin: false
-      });
-      return;
+    const isLogin = localStorage.getItem("saveLogin");
+    if (isLogin === null || isLogin === "false") {
+      this.logInOut(false);
     } else {
       let imageLogo = localStorage.getItem("imageLogo");
       let pageName = localStorage.getItem("fullname");
       this.setState({
-        isLogin: true,
         imageLogo: imageLogo,
         pageName: pageName
       });
@@ -62,14 +57,10 @@ export default class App extends React.Component {
   logInOut = elm => {
     if (elm === false) {
       localStorage.removeItem("userToken");
+      localStorage.removeItem("saveLogin");
     }
     this.setState({
       isLogin: elm
-    });
-  };
-  getTokenToState = val => {
-    this.setState({
-      userToken: val
     });
   };
   getImgAndName = val => {
@@ -79,8 +70,8 @@ export default class App extends React.Component {
     });
   };
   render() {
-    const { isLogin, imageLogo, userToken } = this.state;
-    if (isLogin === false) {
+    const { isLogin, imageLogo } = this.state;
+    if (isLogin === false || isLogin === null) {
       return (
         <Router>
           <Route
@@ -88,7 +79,6 @@ export default class App extends React.Component {
             render={() => (
               <LoginForm
                 logInOut={this.logInOut}
-                getTokenToState={this.getTokenToState}
                 getImgAndName={this.getImgAndName}
               />
             )}
@@ -128,7 +118,7 @@ export default class App extends React.Component {
               exact
               path="/"
               render={() => (
-                <Charts imageLogo={imageLogo} userToken={userToken} />
+                <Charts imageLogo={imageLogo} logInOut={this.logInOut} />
               )}
             />
             <Route
@@ -136,15 +126,17 @@ export default class App extends React.Component {
               render={props => (
                 <History
                   {...props}
-                  userToken={userToken}
                   imageLogo={imageLogo}
+                  logInOut={this.logInOut}
                 />
               )}
             />
             <Route
               exact
               path={API.CHANGEPASSWORD_PATHNAME}
-              render={props => <ChangePass {...props} userToken={userToken} />}
+              render={props => (
+                <ChangePass {...props} logInOut={this.logInOut} />
+              )}
             />
             {/* <Route path="/products/:id" component={Edit}/> */}
             <Footer style={{ textAlign: "center" }}>

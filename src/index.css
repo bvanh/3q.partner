@@ -98,3 +98,6 @@ input:focus{
 .ant-form-item {
   margin: 0 !important;
 }
+.ant-modal-wrap{
+  z-index: 9999 !important;
+}

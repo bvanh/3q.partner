@@ -34,10 +34,10 @@ class History extends React.Component {
     };
   }
   componentDidMount() {
-    const { state } = this.props.location;
-    if (state !== undefined) {
-      getData(this,this.props.userToken, this.props.location.search);
-      getDataPieChart(this, state.fromDate, state.toDate);
+    const { dateValue } = this.props.location;
+    if (dateValue !== undefined) {
+      getData(this,this.props.location.search);
+      getDataPieChart(this, dateValue.fromDate, dateValue.toDate);
     }
   }
   goPage = async page => {
@@ -48,7 +48,7 @@ class History extends React.Component {
     await this.props.history.replace(
       `${API.HISTORY_PATHNAME}?currentPage=${currentPage}&pageSize=10&search=${search}&type=${type}&fromDate=${fromDate}&toDate=${toDate}`
     );
-    getData(this, this.props.location.search);
+    getData(this,this.props.location.search);
   };
   addTypeData = val => {
     this.setState({
@@ -83,7 +83,7 @@ class History extends React.Component {
     await this.props.history.replace(
       `${API.HISTORY_PATHNAME}?currentPage=${currentPage}&pageSize=10&search=${search}&type=${type}&userType=${userType}&fromDate=${fromDate}&toDate=${toDate}`
     );
-    getData(this,this.props.userToken, this.props.location.search);
+    getData(this,this.props.location.search);
     getDataPieChart(this, fromDate, toDate);
   };
   menu = (
@@ -134,7 +134,7 @@ class History extends React.Component {
       },
 
       {
-        title: "UserType",
+        title: "Type",
         dataIndex: "userType",
         key: "usertype",
         width: "7%",

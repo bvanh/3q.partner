@@ -1,5 +1,5 @@
 import React from "react";
-import { saveTokenToLocal, saveTokenToState } from "../services/loginService";
+import { saveTokenToLocal} from "../services/loginService";
 import "../../static/style-login.css";
 import logoclappigames from "../../static/img/logoclappigames.png";
 import imgLogin from "../../static/img/Group 1.svg";
@@ -15,35 +15,34 @@ class NormalLoginForm extends React.Component {
   handleSubmit = e => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
-      if (!err && values.remember) {
+      if (!err) {
         saveTokenToLocal(this, values);
-      } else if (!err && !values.remember)
-        saveTokenToState(this, values);
+      }
     });
   };
   render() {
     const { getFieldDecorator } = this.props.form;
     return (
-      <Row id='login_container'>  
+      <Row id="login_container">
         <img
-            src={logoclappigames}
-            alt="logo_clappigames"
-            className="logo_mobile"
-          ></img>     
-          <Col lg={{ span: 14, order: 1 }}>
-            <img
+          src={logoclappigames}
+          alt="logo_clappigames"
+          className="logo_mobile"
+        ></img>
+        <Col lg={{ span: 14, order: 1 }}>
+          <img
             src={logoclappigames}
             alt="logo_clappigames"
             className="logo"
           ></img>
           <img
-            src={imgLogin }
+            src={imgLogin}
             alt="logo_clappigames"
             className="logo"
-            style={{width:'100%'}}
+            style={{ width: "100%" }}
           ></img>
         </Col>
-        <Col lg={{ span: 10, order: 2 }} >
+        <Col lg={{ span: 10, order: 2 }}>
           <Form onSubmit={this.handleSubmit} className="login-form">
             <span className="login_text">LOGIN</span>
             <div className="input_form">

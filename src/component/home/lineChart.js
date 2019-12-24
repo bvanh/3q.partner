@@ -73,8 +73,8 @@ class LineChart extends React.Component {
         {
           label: "WEB",
           fill: false,
-          backgroundColor: "#ff7b00",
-          borderColor: "#ff7b00",
+          backgroundColor: "#ffd54f",
+          borderColor: "#ffd54f",
           borderWidth: 2,
           hoverBackgroundColor: "rgba(255,99,132,0.4)",
           hoverBorderColor: "rgba(255,99,132,1)",
@@ -83,8 +83,8 @@ class LineChart extends React.Component {
         {
           label: "APK",
           fill: false,
-          backgroundColor: "#d9ff00",
-          borderColor: "#d9ff00",
+          backgroundColor: "#fcaf18",
+          borderColor: "#fcaf18",
           borderWidth: 2,
           hoverBackgroundColor: "rgba(255,99,132,0.4)",
           hoverBorderColor: "rgba(255,99,132,1)",
@@ -109,8 +109,8 @@ class LineChart extends React.Component {
     });
   };
   componentDidMount() {
-    const { valueDateToday, valueDate7DayAgo, userToken } = this.props;
-    getDataLineChart(this, userToken, valueDate7DayAgo, valueDateToday);
+    const { valueDateToday, valueDate7DayAgo } = this.props;
+    getDataLineChart(this, valueDate7DayAgo, valueDateToday);
   }
   render() {
     const {
@@ -125,12 +125,7 @@ class LineChart extends React.Component {
     } = this.state;
     const fromDateValue = moment(startValue).format("YYYY-MM-DD");
     const toDateValue = moment(endValue).format("YYYY-MM-DD");
-    const {
-      valueDateToday,
-      valueDate7DayAgo,
-      valueDate30DayAgo,
-      userToken
-    } = this.props;
+    const { valueDateToday, valueDate7DayAgo, valueDate30DayAgo } = this.props;
     return (
       <div id="chart-frame">
         <div className="sum">
@@ -169,12 +164,7 @@ class LineChart extends React.Component {
             <Option
               value="2"
               onClick={() =>
-                getDataLineChart(
-                  this,
-                  userToken,
-                  valueDate7DayAgo,
-                  valueDateToday
-                )
+                getDataLineChart(this, valueDate7DayAgo, valueDateToday)
               }
             >
               Last 7 days
@@ -184,7 +174,6 @@ class LineChart extends React.Component {
               onClick={() =>
                 getDataLineChart(
                   this,
-                  userToken,
                   valueDateToday,
                   valueDateToday
                 )
@@ -197,7 +186,6 @@ class LineChart extends React.Component {
               onClick={() =>
                 getDataLineChart(
                   this,
-                  userToken,
                   valueDate30DayAgo,
                   valueDateToday
                 )
@@ -215,7 +203,7 @@ class LineChart extends React.Component {
               search:
                 API.HISTORY_PATHSEARCH_NODATE +
                 `&fromDate=${fromDate}&toDate=${toDate}`,
-              state: { fromDate: fromDate, toDate: toDate }
+              dateValue: { fromDate: fromDate, toDate: toDate }
             }}
           >
             MORE INSIGHTS <Icon type="caret-right" />
@@ -238,7 +226,6 @@ class LineChart extends React.Component {
                     onClick={() =>
                       getDataLineChart(
                         this,
-                        userToken,
                         fromDateValue,
                         toDateValue
                       )

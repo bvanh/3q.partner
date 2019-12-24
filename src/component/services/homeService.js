@@ -1,6 +1,7 @@
 import API from "../../api/apiAll";
 import errorAlert from "../../utils/errorAlert";
 import getToken from "../../utils/refreshToken";
+import moment from "moment";
 
 // lấy dữ liệu cho biểu đồ tròn
 function getDataPieChartWithCondition(
@@ -46,19 +47,22 @@ function getDataPieChartWithCondition(
     });
 }
 // condition + function
-function getDataPieChart(thisObj, userToken, fromDateValue, toDateValue) {
+function getDataPieChart(thisObj, fromDateValue, toDateValue) {
   const oldAccessToken = JSON.parse(localStorage.getItem("userAccessToken"));
   const currentTime = new Date().getTime();
-  if (currentTime - oldAccessToken.timestamp > 55000)
-    getToken(userToken).then(newAccessToken => {
-      getDataPieChartWithCondition(
-        thisObj,
-        fromDateValue,
-        toDateValue,
-        newAccessToken
-      );
-    });
-  else {
+  if (currentTime - oldAccessToken.timestamp > 55000) {
+    let checkToken = getToken(thisObj);
+    if (checkToken !== false) {
+      checkToken.then(newAccessToken => {
+        getDataPieChartWithCondition(
+          thisObj,
+          fromDateValue,
+          toDateValue,
+          newAccessToken
+        );
+      });
+    }
+  } else {
     const newAccessToken = JSON.parse(localStorage.getItem("userAccessToken"));
     getDataPieChartWithCondition(
       thisObj,
@@ -122,29 +126,40 @@ function getDataLineChartWithCondition(
   );
 }
 // function + condition
-function getDataLineChart(thisObj, userToken, fromDateValue, toDateValue) {
-  const oldAccessToken = JSON.parse(localStorage.getItem("userAccessToken"));
-  const currentTime = new Date().getTime();
-  if (currentTime - oldAccessToken.timestamp > 5000)
-    getToken(userToken).then(newAccessToken => {
+function getDataLineChart(thisObj, fromDateValue, toDateValue) {
+  const fromDayValue = moment(fromDateValue).valueOf();
+  const toDayValue = moment(toDateValue).valueOf();
+  console.log(toDayValue-fromDayValue)
+  if (toDayValue - fromDayValue <= 2592000000) {
+    const oldAccessToken = JSON.parse(localStorage.getItem("userAccessToken"));
+    const currentTime = new Date().getTime();
+    if (currentTime - oldAccessToken.timestamp > 55000) {
+      let checkToken = getToken(thisObj);
+      if (checkToken !== false) {
+        checkToken.then(newAccessToken => {
+          getDataLineChartWithCondition(
+            thisObj,
+            fromDateValue,
+            toDateValue,
+            newAccessToken
+          );
+        });
+      }
+    } else {
+      const newAccessToken = JSON.parse(
+        localStorage.getItem("userAccessToken")
+      );
       getDataLineChartWithCondition(
         thisObj,
         fromDateValue,
         toDateValue,
         newAccessToken
       );
-    });
-  else {
-    const newAccessToken = JSON.parse(localStorage.getItem("userAccessToken"));
-    getDataLineChartWithCondition(
-      thisObj,
-      fromDateValue,
-      toDateValue,
-      newAccessToken
-    );
+    }
+  }else{
+    errorAlert(500,'Date less than or equal 30 days');
   }
 }
-
 // lấy tổng số lượng giao dịch
 function getTotalPurchaseWithCondition(thisObj, fromDate, toDate, token) {
   let resStatus = 0;
@@ -180,13 +195,21 @@ function getTotalPurchaseWithCondition(thisObj, fromDate, toDate, token) {
       console.log("Request failed", error);
     });
 }
-function getTotalPurchase(thisObj, userToken, fromDate, toDate) {
+function getTotalPurchase(thisObj, fromDate, toDate) {
   const oldAccessToken = JSON.parse(localStorage.getItem("userAccessToken"));
   const currentTime = new Date().getTime();
-  if (currentTime - oldAccessToken.timestamp > 3000) {
-    getToken(userToken).then(newAccessToken => {
-      getTotalPurchaseWithCondition(thisObj, fromDate, toDate, newAccessToken);
-    });
+  if (currentTime - oldAccessToken.timestamp > 55000) {
+    let checkToken = getToken(thisObj);
+    if (checkToken !== false) {
+      checkToken.then(newAccessToken => {
+        getTotalPurchaseWithCondition(
+          thisObj,
+          fromDate,
+          toDate,
+          newAccessToken
+        );
+      });
+    }
   } else {
     const newAccessToken = JSON.parse(localStorage.getItem("userAccessToken"));
     getTotalPurchaseWithCondition(thisObj, fromDate, toDate, newAccessToken);

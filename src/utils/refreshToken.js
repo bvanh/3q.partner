@@ -1,9 +1,11 @@
 import fetch from "isomorphic-unfetch";
 import API from "../api/apiAll";
 
-const getToken = userToken => {
+const getToken = thisObj => {
+  const userToken = JSON.parse(localStorage.getItem("userToken"));
   const currentTime = new Date().getTime();
-  if (userToken === null || currentTime - userToken.timestamp > 2588400000) {
+  if (userToken === null || currentTime - userToken.timestamp > 175000) {
+    thisObj.props.logInOut(false);
     return false;
   } else {
     const db = fetch(API.ROOT_URL + API.REFRESHTOKEN_PATHNAME, {

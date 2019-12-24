@@ -101,8 +101,7 @@ class PieChart extends React.Component {
                   value="1"
                   onClick={() =>
                     getDataPieChart(
-                      this,
-                      userToken,
+                      this,                    
                       valueDate7DayAgo,
                       valueDateToday
                     )
@@ -115,7 +114,7 @@ class PieChart extends React.Component {
                   onClick={() =>
                     getDataPieChart(
                       this,
-                      userToken,
+                    
                       valueDateToday,
                       valueDateToday
                     )
@@ -128,7 +127,7 @@ class PieChart extends React.Component {
                   onClick={() =>
                     getDataPieChart(
                       this,
-                      userToken,
+                    
                       valueDate30DayAgo,
                       valueDateToday
                     )
@@ -143,7 +142,7 @@ class PieChart extends React.Component {
                   search:
                     API.HISTORY_PATHSEARCH_NODATE +
                     `&fromDate=${fromDate}&toDate=${toDate}`,
-                  state: { fromDate: fromDate, toDate: toDate }
+                  dateValue: { fromDate: fromDate, toDate: toDate }
                 }}
               >
                 MORE INSIGHTS <Icon type="caret-right" />

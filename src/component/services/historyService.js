@@ -3,11 +3,11 @@ import errorAlert from "../../utils/errorAlert";
 import getToken from "../../utils/refreshToken";
 
 // get data for table
-function getDataWithCondition(thisObj, accessToken, pathSearch) {
+function getDataWithCondition(thisObj,token, pathSearch) {
   let resStatus = 0;
   fetch(API.ROOT_URL + API.HISTORY_PATHNAME + pathSearch, {
     headers: {
-      Authorization: `Bearer ${JSON.stringify(accessToken)}`,
+      Authorization: `Bearer ${token.accessToken}`,
       "Content-Type": "application/x-www-form-urlencoded"
     },
     method: "GET"
@@ -32,20 +32,19 @@ function getDataWithCondition(thisObj, accessToken, pathSearch) {
       console.log("Request failed", error);
     });
 }
-function getData(thisObj, userToken, pathSearch) {
+function getData(thisObj, pathSearch) {
   const oldAccessToken = JSON.parse(localStorage.getItem("userAccessToken"));
   const currentTime = new Date().getTime();
-  if (currentTime - oldAccessToken.timestamp > 5000)
-    getToken(userToken).then(newAccessToken => {
-      getDataWithCondition(thisObj, newAccessToken, pathSearch);
-    });
-  else {
+  if (currentTime - oldAccessToken.timestamp > 55000) {
+    let checkToken = getToken(thisObj);
+    if (checkToken !== false) {
+      checkToken.then(newAccessToken => {
+        getDataWithCondition(thisObj,newAccessToken, pathSearch);
+      });
+    }
+  } else {
     const newAccessToken = JSON.parse(localStorage.getItem("userAccessToken"));
-    getDataWithCondition(
-      thisObj,
-      newAccessToken,
-      pathSearch
-    );
+    getDataWithCondition(thisObj, newAccessToken, pathSearch);
   }
 }
 

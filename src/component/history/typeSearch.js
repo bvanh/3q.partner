@@ -71,7 +71,7 @@ export default class TypeSearch extends React.Component {
             onChange={this.props.addUserTypeData}
             className="btn-checktype checkusertype"
           >
-            <Option value="4">USERTYPE</Option>
+            <Option value="4">TYPE</Option>
             <Option value="0">ALL</Option>
             <Option value="1">TEST</Option>
             <Option value="2">LIVE</Option>
