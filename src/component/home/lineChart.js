@@ -1,7 +1,7 @@
 import React from "react";
 import moment from "moment";
 import { Line } from "react-chartjs-2";
-import { getDataLineChart} from "../services/homeService";
+import { getDataLineChart } from "../services/homeService";
 import { Link } from "react-router-dom";
 import API from "../../api/apiAll";
 import { Icon, DatePicker, Input, Select } from "antd";
@@ -109,8 +109,8 @@ class LineChart extends React.Component {
     });
   };
   componentDidMount() {
-    const { valueDateToday, valueDate7DayAgo } = this.props;
-    getDataLineChart(this, valueDate7DayAgo, valueDateToday);
+    const { valueDateToday, valueDate7DayAgo, userToken } = this.props;
+    getDataLineChart(this, userToken, valueDate7DayAgo, valueDateToday);
   }
   render() {
     const {
@@ -119,26 +119,32 @@ class LineChart extends React.Component {
       endValue,
       indexModalDatePicker,
       totalPurchase,
+      totalPaidUsers,
       fromDate,
       toDate
     } = this.state;
     const fromDateValue = moment(startValue).format("YYYY-MM-DD");
     const toDateValue = moment(endValue).format("YYYY-MM-DD");
-    const { valueDateToday, valueDate7DayAgo, valueDate30DayAgo } = this.props;
+    const {
+      valueDateToday,
+      valueDate7DayAgo,
+      valueDate30DayAgo,
+      userToken
+    } = this.props;
     return (
       <div id="chart-frame">
         <div className="sum">
           <div>
-          <div style={{paddingRight:'3rem'}}>
-            <span>Users Purchase</span>
-            <br />
-            <span className="chart_title_value">12345K</span>
-          </div>
-          <div>
-            <span>Purchase</span>
-            <br />
-            <span className="chart_title_value">{totalPurchase}</span>
-          </div>
+            <div style={{ paddingRight: "3rem" }}>
+              <span>Users Purchase</span>
+              <br />
+              <span className="chart_title_value">{totalPaidUsers}</span>
+            </div>
+            <div>
+              <span>Purchase</span>
+              <br />
+              <span className="chart_title_value">{totalPurchase}</span>
+            </div>
           </div>
           <div id="logo_title">
             <img
@@ -163,7 +169,12 @@ class LineChart extends React.Component {
             <Option
               value="2"
               onClick={() =>
-                getDataLineChart(this, valueDate7DayAgo, valueDateToday)
+                getDataLineChart(
+                  this,
+                  userToken,
+                  valueDate7DayAgo,
+                  valueDateToday
+                )
               }
             >
               Last 7 days
@@ -171,7 +182,12 @@ class LineChart extends React.Component {
             <Option
               value="3"
               onClick={() =>
-                getDataLineChart(this, valueDateToday, valueDateToday)
+                getDataLineChart(
+                  this,
+                  userToken,
+                  valueDateToday,
+                  valueDateToday
+                )
               }
             >
               Today
@@ -179,7 +195,12 @@ class LineChart extends React.Component {
             <Option
               value="4"
               onClick={() =>
-                getDataLineChart(this, valueDate30DayAgo, valueDateToday)
+                getDataLineChart(
+                  this,
+                  userToken,
+                  valueDate30DayAgo,
+                  valueDateToday
+                )
               }
             >
               Last 30 days
@@ -215,9 +236,14 @@ class LineChart extends React.Component {
                   <span onClick={this.hideModalPicker}>CANCEL</span>
                   <span
                     onClick={() =>
-                      getDataLineChart(this, fromDateValue, toDateValue)
+                      getDataLineChart(
+                        this,
+                        userToken,
+                        fromDateValue,
+                        toDateValue
+                      )
                     }
-                    style={{color:'#0085ff'}}
+                    style={{ color: "#0085ff" }}
                   >
                     APPLY
                   </span>

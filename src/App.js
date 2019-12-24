@@ -14,7 +14,7 @@ export default class App extends React.Component {
     super(props);
     this.state = {
       isLogin: false,
-      userToken: localStorage.getItem("userToken"),
+      userToken: JSON.parse(localStorage.getItem("userToken")),
       imageLogo: "",
       pageName: "",
       isChangePassword: false
@@ -42,9 +42,6 @@ export default class App extends React.Component {
       </Menu.Item>
     </Menu>
   );
-  runRefreshToken = setInterval(() => {
-    getToken(this.state.userToken);
-  }, 3300000);
   componentDidMount() {
     const { userToken } = this.state;
     if (getToken(userToken) === false) {
@@ -59,7 +56,6 @@ export default class App extends React.Component {
         isLogin: true,
         imageLogo: imageLogo,
         pageName: pageName
-        // userToken: userToken
       });
     }
   }
@@ -83,7 +79,7 @@ export default class App extends React.Component {
     });
   };
   render() {
-    const { isLogin, imageLogo} = this.state;
+    const { isLogin, imageLogo, userToken } = this.state;
     if (isLogin === false) {
       return (
         <Router>
@@ -128,19 +124,27 @@ export default class App extends React.Component {
             </div>
           </Header>
           <Layout>
-            <Route exact path="/" render={() => (
-                <Charts imageLogo={imageLogo} />
-              )} />
+            <Route
+              exact
+              path="/"
+              render={() => (
+                <Charts imageLogo={imageLogo} userToken={userToken} />
+              )}
+            />
             <Route
               path={API.HISTORY_PATHNAME}
               render={props => (
-                <History {...props} userToken={this.state.userToken}imageLogo={imageLogo} />
+                <History
+                  {...props}
+                  userToken={userToken}
+                  imageLogo={imageLogo}
+                />
               )}
             />
             <Route
               exact
               path={API.CHANGEPASSWORD_PATHNAME}
-              render={props => <ChangePass {...props} />}
+              render={props => <ChangePass {...props} userToken={userToken} />}
             />
             {/* <Route path="/products/:id" component={Edit}/> */}
             <Footer style={{ textAlign: "center" }}>

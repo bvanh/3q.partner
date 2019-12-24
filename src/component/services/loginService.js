@@ -1,5 +1,4 @@
 import API from "../../api/apiAll";
-import { Modal } from "antd";
 import errorAlert from "../../utils/errorAlert";
 
 // lưu userToken vào local (lưu đăng nhập)
@@ -21,10 +20,15 @@ function saveTokenToLocal(thisObj, value) {
         errorAlert(result.status, result.message);
         return;
       } else {
-        localStorage.setItem("userToken", JSON.stringify(result));
+        let userToken = { token: result, timestamp: new Date().getTime() };
+        let userAccessToken = {
+          accessToken: result.accessToken,
+          timestamp: new Date().getTime()
+        };
+        localStorage.setItem("userToken", JSON.stringify(userToken));
         localStorage.setItem(
           "userAccessToken",
-          JSON.stringify(result.accessToken)
+          JSON.stringify(userAccessToken)
         );
         thisObj.props.logInOut(true);
         return result;
@@ -75,11 +79,16 @@ function saveTokenToState(thisObj, value) {
     .then(result => {
       if (resStatus !== 200) errorAlert(result.status, result.message);
       else {
+        let userToken = { token: result, timestamp: new Date().getTime() };
+        let userAccessToken = {
+          accessToken: result.accessToken,
+          timestamp: new Date().getTime()
+        };
         localStorage.setItem(
           "userAccessToken",
-          JSON.stringify(result.accessToken)
+          JSON.stringify(userAccessToken)
         );
-        thisObj.props.getTokenToState(result);
+        thisObj.props.getTokenToState(userToken);
         thisObj.props.logInOut(true);
       }
       return result;

@@ -41,16 +41,21 @@ class PieChart extends React.Component {
     return data;
   };
   componentDidMount() {
-    const { valueDateToday, valueDate7DayAgo } = this.props;
-    getDataPieChart(this, valueDate7DayAgo, valueDateToday);
+    const { valueDateToday, valueDate7DayAgo, userToken } = this.props;
+    getDataPieChart(this, userToken, valueDate7DayAgo, valueDateToday);
   }
   render() {
-    const { valueDateToday, valueDate7DayAgo, valueDate30DayAgo } = this.props;
+    const {
+      valueDateToday,
+      valueDate7DayAgo,
+      valueDate30DayAgo,
+      userToken
+    } = this.props;
     const { totalRevenue, fromDate, toDate } = this.state;
     return (
       <div className="card">
         <Row>
-          <Col md={{ span: 8, order: 1}} xl={{ span: 24, order: 1 }}>
+          <Col md={{ span: 8, order: 1 }} xl={{ span: 24, order: 1 }}>
             <div className="card_title">
               <p>TOTAL</p>
               <p id="value">{totalRevenue.toLocaleString()}</p>
@@ -60,7 +65,7 @@ class PieChart extends React.Component {
           <Col md={{ span: 16, order: 2 }} xl={{ span: 24, order: 2 }}>
             <div className="card_content">
               <div className="tag-pie_chart">
-                <p style={{ margin: "0"}}>PLATFORM</p>
+                <p style={{ margin: "0" }}>PLATFORM</p>
                 <div>
                   <div id="tag_pie_chart1"></div>
                   <span style={{ margin: "0 .5rem 0 0" }}>APK</span>
@@ -95,7 +100,12 @@ class PieChart extends React.Component {
                 <Option
                   value="1"
                   onClick={() =>
-                    getDataPieChart(this, valueDate7DayAgo, valueDateToday)
+                    getDataPieChart(
+                      this,
+                      userToken,
+                      valueDate7DayAgo,
+                      valueDateToday
+                    )
                   }
                 >
                   Last 7 days{" "}
@@ -103,15 +113,25 @@ class PieChart extends React.Component {
                 <Option
                   value="2"
                   onClick={() =>
-                    getDataPieChart(this, valueDateToday, valueDateToday)
+                    getDataPieChart(
+                      this,
+                      userToken,
+                      valueDateToday,
+                      valueDateToday
+                    )
                   }
                 >
-                 Today
+                  Today
                 </Option>
                 <Option
                   value="3"
                   onClick={() =>
-                    getDataPieChart(this, valueDate30DayAgo, valueDateToday)
+                    getDataPieChart(
+                      this,
+                      userToken,
+                      valueDate30DayAgo,
+                      valueDateToday
+                    )
                   }
                 >
                   Last 30 days
@@ -120,7 +140,7 @@ class PieChart extends React.Component {
               <Link
                 to={{
                   pathname: API.HISTORY_PATHNAME,
-                  search: 
+                  search:
                     API.HISTORY_PATHSEARCH_NODATE +
                     `&fromDate=${fromDate}&toDate=${toDate}`,
                   state: { fromDate: fromDate, toDate: toDate }

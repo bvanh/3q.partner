@@ -1,6 +1,6 @@
 import React from "react";
-import { Table, Pagination, Button, Menu, Dropdown} from "antd";
-import TypeSearch from "./datePicker";
+import { Table, Pagination, Button, Menu, Dropdown } from "antd";
+import TypeSearch from "./typeSearch";
 import { Link } from "react-router-dom";
 import ReactExport from "react-export-excel";
 import { getDataPieChart } from "../services/homeService";
@@ -27,15 +27,18 @@ class History extends React.Component {
       currentPage: 1,
       pageSize: 10,
       type: 1,
+      userType: 0,
       search: "",
-      fromDate: "2019-10-17",
-      toDate: "2019-10-25"
+      fromDate: "",
+      toDate: ""
     };
   }
   componentDidMount() {
     const { state } = this.props.location;
-    getData(this, this.props.location.search);
-    getDataPieChart(this, state.fromDate, state.toDate);
+    if (state !== undefined) {
+      getData(this,this.props.userToken, this.props.location.search);
+      getDataPieChart(this, state.fromDate, state.toDate);
+    }
   }
   goPage = async page => {
     await this.setState({
@@ -52,6 +55,11 @@ class History extends React.Component {
       type: val
     });
   };
+  addUserTypeData = val => {
+    this.setState({
+      userType: val
+    });
+  };
   addDateData = (startDate, endDate) => {
     this.setState({
       fromDate: startDate,
@@ -64,11 +72,18 @@ class History extends React.Component {
     });
   };
   searchData = async () => {
-    const { type, fromDate, toDate, search, currentPage } = this.state;
+    const {
+      type,
+      fromDate,
+      toDate,
+      search,
+      currentPage,
+      userType
+    } = this.state;
     await this.props.history.replace(
-      `${API.HISTORY_PATHNAME}?currentPage=${currentPage}&pageSize=10&search=${search}&type=${type}&fromDate=${fromDate}&toDate=${toDate}`
+      `${API.HISTORY_PATHNAME}?currentPage=${currentPage}&pageSize=10&search=${search}&type=${type}&userType=${userType}&fromDate=${fromDate}&toDate=${toDate}`
     );
-    getData(this, this.props.location.search);
+    getData(this,this.props.userToken, this.props.location.search);
     getDataPieChart(this, fromDate, toDate);
   };
   menu = (
@@ -109,13 +124,20 @@ class History extends React.Component {
         title: "PartnerChargeId",
         dataIndex: "partnerChargeId",
         key: "partnerChargeId",
-        width: "25%"
+        width: "20%"
       },
       {
         title: "UserID",
         dataIndex: "userId",
         key: "userId",
-        width: "20%"
+        width: "18%"
+      },
+
+      {
+        title: "UserType",
+        dataIndex: "userType",
+        key: "usertype",
+        width: "7%",
       },
       {
         title: "Time",
@@ -151,26 +173,18 @@ class History extends React.Component {
         render: price => <span>{price.toLocaleString()} đ</span>
       }
     ];
-    const {
-      data,
-      totalItem,
-      totalRevenue,
-      dataExport,
-      pageSize
-    } = this.state;
+    const { data, totalItem, totalRevenue, dataExport, pageSize } = this.state;
     return (
       <div className="history_container">
-        <div style={{padding: '.5rem 0'}}>
-          <img
-            src={Logo}
-            alt="logo_clappigames"
-          ></img>
+        <div style={{ padding: ".5rem 0" }}>
+          <img src={Logo} alt="logo_clappigames"></img>
         </div>
         <div className="btn-check">
           <TypeSearch
             addTypeData={this.addTypeData}
             addDateData={this.addDateData}
             addTextSearch={this.addTextSearch}
+            addUserTypeData={this.addUserTypeData}
           />
           <Button id="btn_search" onClick={this.searchData}>
             SEARCH

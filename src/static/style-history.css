@@ -29,7 +29,7 @@
   border: 1px solid rgb(233, 233, 233);
 }
 .btn-checktype > .ant-select-selection--single {
-  height: 2.5rem;
+  height: 2.4rem;
   border-radius: 3px;
   overflow: hidden !important;
   display: flex;
@@ -103,7 +103,10 @@
   .btn-check > .btn_checksearch > .input_search,
   .btn-checktype {
     width: 46%;
-    margin: 0 0 0.5rem 0;
+    margin: 0 .5 0.5rem 0;
+  }
+  .checkusertype{
+    margin: 0 !important;
   }
   .btn_checksearch {
     display: flex;
