@@ -14,12 +14,11 @@ class NormalLoginForm extends React.Component {
   };
   handleSubmit = e => {
     e.preventDefault();
-    let resStatus = 0;
     this.props.form.validateFields((err, values) => {
       if (!err && values.remember) {
-        saveTokenToLocal(this, values, resStatus);
+        saveTokenToLocal(this, values);
       } else if (!err && !values.remember)
-        saveTokenToState(this, values, resStatus);
+        saveTokenToState(this, values);
     });
   };
   render() {
