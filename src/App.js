@@ -117,7 +117,7 @@ export default class App extends React.Component {
                     className="ant-dropdown-link"
                     style={{ padding: "0 0 0 .5rem" }}
                   >
-                    ABCD{" "}
+                    WARA_staff{" "}
                     <Icon
                       type="caret-down"
                       style={{ padding: "0 0 0 1.5rem" }}

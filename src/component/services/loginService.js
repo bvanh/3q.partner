@@ -1,14 +1,10 @@
 import API from "../../api/apiAll";
 import { Modal } from "antd";
+import errorAlert from "../../utils/errorAlert";
 
 // lưu userToken vào local (lưu đăng nhập)
-function saveTokenToLocal(thisObj, value, resStatus) {
-  const errorAlert = (errorStatus, errorMessage) => {
-    Modal.error({
-      title: "SOMETHING WENT WRONG",
-      content: `${errorStatus}: ${errorMessage}`
-    });
-  };
+function saveTokenToLocal(thisObj, value) {
+  let resStatus = 0;
   fetch(API.ROOT_URL + API.LOGIN_PATHNAME, {
     headers: {
       "Content-Type": "application/x-www-form-urlencoded"
@@ -63,13 +59,8 @@ function saveTokenToLocal(thisObj, value, resStatus) {
     });
 }
 //  lưu userToken vào state (không lưu đăng nhập )
-function saveTokenToState(thisObj, value, resStatus) {
-  const errorAlert = (errorStatus, errorMessage) => {
-    Modal.error({
-      title: "SOMETHING WENT WRONG",
-      content: `${errorStatus}: ${errorMessage}`
-    });
-  };
+function saveTokenToState(thisObj, value) {
+  let resStatus = 0;
   fetch(API.ROOT_URL + API.LOGIN_PATHNAME, {
     headers: {
       "Content-Type": "application/x-www-form-urlencoded"
@@ -84,7 +75,10 @@ function saveTokenToState(thisObj, value, resStatus) {
     .then(result => {
       if (resStatus !== 200) errorAlert(result.status, result.message);
       else {
-        localStorage.setItem("userAccessToken", JSON.stringify(result.accessToken));
+        localStorage.setItem(
+          "userAccessToken",
+          JSON.stringify(result.accessToken)
+        );
         thisObj.props.getTokenToState(result);
         thisObj.props.logInOut(true);
       }
