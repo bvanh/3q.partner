@@ -5,21 +5,37 @@ import getToken from "../../utils/refreshToken";
 function changePassword(thisObj, oldPassword, newPassword) {
   const oldAccessToken = JSON.parse(localStorage.getItem("userAccessToken"));
   const currentTime = new Date().getTime();
-  if (currentTime - oldAccessToken.timestamp > 55000) {
+  if (currentTime - oldAccessToken.timestamp > 3300000) {
     let checkToken = getToken(thisObj);
     if (checkToken !== false) {
       checkToken.then(newAccessToken => {
-        changePasswordWithCondition(newAccessToken, oldPassword, newPassword);
+        changePasswordWithCondition(
+          thisObj,
+          newAccessToken,
+          oldPassword,
+          newPassword
+        );
       });
     }
   } else {
     const newAccessToken = JSON.parse(localStorage.getItem("userAccessToken"));
-    const res=changePasswordWithCondition(newAccessToken, oldPassword, newPassword);
+    const res = changePasswordWithCondition(
+      thisObj,
+      newAccessToken,
+      oldPassword,
+      newPassword
+    );
     return res;
   }
 }
-function changePasswordWithCondition(accessToken, oldPassword, newPassword) {
-  const res=fetch(API.ROOT_URL + API.CHANGEPASSWORD_PATHNAME, {
+function changePasswordWithCondition(
+  thisObj,
+  accessToken,
+  oldPassword,
+  newPassword
+) {
+  let resStatus = 0;
+  fetch(API.ROOT_URL + API.CHANGEPASSWORD_PATHNAME, {
     headers: {
       Authorization: `Bearer ${accessToken.accessToken}`,
       "Content-Type": "application/x-www-form-urlencoded"
@@ -27,11 +43,30 @@ function changePasswordWithCondition(accessToken, oldPassword, newPassword) {
     method: "POST",
     body: `oldPassword=${oldPassword}&newPassword=${newPassword}`
   })
-    .then(response => response.json())
-    .then(result => result)
+    .then(response => {
+      if (response.status === 200) {
+        thisObj.setState({
+          message: "Password updated successful !",
+          statusSuccess:'mes_success'
+        });
+      }
+      return response.json();
+    })
+    .then(result => {
+      if(result.status===1001){
+        thisObj.setState({
+          message: 'Your old password incorrect, try again!',
+          statusSuccess:'submit-mes'
+        });
+      }else{
+      thisObj.setState({
+        message: result.message,
+        statusSuccess:'submit-mes'
+      });
+    }
+    })
     .catch(function(error) {
       console.log("Request failed", error);
     });
-    return res;
 }
 export default changePassword;

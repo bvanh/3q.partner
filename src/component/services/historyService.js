@@ -3,7 +3,7 @@ import errorAlert from "../../utils/errorAlert";
 import getToken from "../../utils/refreshToken";
 
 // get data for table
-function getDataWithCondition(thisObj,token, pathSearch) {
+function getDataWithCondition(thisObj, token, pathSearch) {
   let resStatus = 0;
   fetch(API.ROOT_URL + API.HISTORY_PATHNAME + pathSearch, {
     headers: {
@@ -23,23 +23,22 @@ function getDataWithCondition(thisObj,token, pathSearch) {
       } else {
         thisObj.setState({
           data: result.rows,
-          dataExport: result.rows,
           totalItem: result.count
         });
       }
     })
-    .catch(function(error) {
+    .catch(function (error) {
       console.log("Request failed", error);
     });
 }
 function getData(thisObj, pathSearch) {
   const oldAccessToken = JSON.parse(localStorage.getItem("userAccessToken"));
   const currentTime = new Date().getTime();
-  if (currentTime - oldAccessToken.timestamp > 55000) {
+  if (currentTime - oldAccessToken.timestamp > 3300000) {
     let checkToken = getToken(thisObj);
     if (checkToken !== false) {
       checkToken.then(newAccessToken => {
-        getDataWithCondition(thisObj,newAccessToken, pathSearch);
+        getDataWithCondition(thisObj, newAccessToken, pathSearch);
       });
     }
   } else {

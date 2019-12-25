@@ -50,7 +50,9 @@ function getDataPieChartWithCondition(
 function getDataPieChart(thisObj, fromDateValue, toDateValue) {
   const oldAccessToken = JSON.parse(localStorage.getItem("userAccessToken"));
   const currentTime = new Date().getTime();
-  if (currentTime - oldAccessToken.timestamp > 3300000) {
+  if (oldAccessToken === null) {
+    thisObj.props.logInOut(false);
+  } else if (currentTime - oldAccessToken.timestamp > 3300000) {
     let checkToken = getToken(thisObj);
     if (checkToken !== false) {
       checkToken.then(newAccessToken => {
@@ -132,7 +134,9 @@ function getDataLineChart(thisObj, fromDateValue, toDateValue) {
   if (toDayValue - fromDayValue <= 2592000000) {
     const oldAccessToken = JSON.parse(localStorage.getItem("userAccessToken"));
     const currentTime = new Date().getTime();
-    if (currentTime - oldAccessToken.timestamp > 3300000) {
+    if (oldAccessToken === null) {
+      thisObj.props.logInOut(false);
+    } else if (currentTime - oldAccessToken.timestamp > 3300000) {
       let checkToken = getToken(thisObj);
       if (checkToken !== false) {
         checkToken.then(newAccessToken => {
@@ -155,8 +159,8 @@ function getDataLineChart(thisObj, fromDateValue, toDateValue) {
         newAccessToken
       );
     }
-  }else{
-    errorAlert(500,'Date less than or equal 30 days');
+  } else {
+    errorAlert(500, "Date less than or equal 30 days");
   }
 }
 // lấy tổng số lượng giao dịch
@@ -197,7 +201,9 @@ function getTotalPurchaseWithCondition(thisObj, fromDate, toDate, token) {
 function getTotalPurchase(thisObj, fromDate, toDate) {
   const oldAccessToken = JSON.parse(localStorage.getItem("userAccessToken"));
   const currentTime = new Date().getTime();
-  if (currentTime - oldAccessToken.timestamp > 3300000) {
+  if (oldAccessToken === null) {
+    thisObj.props.logInOut(false);
+  } else if (currentTime - oldAccessToken.timestamp > 3300000) {
     let checkToken = getToken(thisObj);
     if (checkToken !== false) {
       checkToken.then(newAccessToken => {

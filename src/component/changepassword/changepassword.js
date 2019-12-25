@@ -11,7 +11,8 @@ class ChangePass extends React.Component {
       oldPassword: "",
       newPassword: "",
       confirmNewPassword: "",
-      message: ""
+      message: "",
+      statusSuccess:"submit-mes"
     };
   }
   handleSubmit = () => {
@@ -19,16 +20,12 @@ class ChangePass extends React.Component {
     if (newPassword !== "" && oldPassword !== "" && confirmNewPassword !== "") {
       if (newPassword !== confirmNewPassword) {
         this.setState({
-          message: "Please, check your passwords again!            "
+          message: "Please, check your passwords again!",
+          statusSuccess:'submit-mes'
         });
         return;
       } else {
-        const mes = changePassword(this, oldPassword, newPassword);
-        mes.then(newMes =>
-          this.setState({
-            message: newMes.message
-          })
-        );
+        changePassword(this, oldPassword, newPassword);
       }
     }
   };
@@ -38,7 +35,7 @@ class ChangePass extends React.Component {
     });
   };
   render() {
-    const { message } = this.state;
+    const { message, statusSuccess } = this.state;
     return (
       <Row className="changepass_container">
         <Col lg={{ span: 16, order: 1 }} className="changepassword_img">
@@ -83,7 +80,7 @@ class ChangePass extends React.Component {
                 onChange={this.getTextPassword}
               />
             </Form.Item>
-            <p className="submit-mes">{message}</p>
+            <p className={statusSuccess}>{message}</p>
             <Button
               type="primary"
               className="login-form-button btn_changepass"

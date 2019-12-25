@@ -10,7 +10,6 @@ import icon_changepassword from "./static/img/icon_changepassword.png";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 const { Header, Footer } = Layout;
 export default class App extends React.Component {
-  _isMounted = false;
   constructor(props) {
     super(props);
     this.state = {
@@ -48,9 +47,9 @@ export default class App extends React.Component {
     </Menu>
   );
   componentDidMount() {
-    this._isMounted = true;
     const isLogin = localStorage.getItem("saveLogin");
-    if (isLogin === null || isLogin === "false") {
+    const checkToken = localStorage.getItem("userAccessToken");
+    if (isLogin === null || isLogin === "false"|| checkToken===null) {
       this.logInOut(false);
     } else {
       let imageLogo = localStorage.getItem("imageLogo");
@@ -61,13 +60,11 @@ export default class App extends React.Component {
       });
     }
   }
-  componentWillUnmount() {
-    this._isMounted = false;
-  }
   logInOut = elm => {
     if (elm === false) {
       localStorage.removeItem("userToken");
       localStorage.removeItem("saveLogin");
+      localStorage.removeItem("userAccessToken");
     }
     this.setState({
       isLogin: elm

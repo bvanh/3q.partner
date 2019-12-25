@@ -4,6 +4,7 @@ import { Line } from "react-chartjs-2";
 import { getDataLineChart } from "../services/homeService";
 import { Link } from "react-router-dom";
 import API from "../../api/apiAll";
+import optionLine from './lineChartOptions'
 import { Icon, DatePicker, Input, Select } from "antd";
 const { Option } = Select;
 
@@ -154,9 +155,7 @@ class LineChart extends React.Component {
             data={this.chartLineData}
             width={100}
             height={50}
-            options={{
-              maintainAspectRatio: false
-            }}
+            options={optionLine}
           />
         </div>
         <div className="chart-frame_footer">
@@ -202,8 +201,7 @@ class LineChart extends React.Component {
               pathname: API.HISTORY_PATHNAME,
               search:
                 API.HISTORY_PATHSEARCH_NODATE +
-                `&fromDate=${fromDate}&toDate=${toDate}`,
-              dateValue: { fromDate: fromDate, toDate: toDate }
+                `&fromDate=${fromDate}&toDate=${toDate}`             
             }}
           >
             MORE INSIGHTS <Icon type="caret-right" />
@@ -214,7 +212,7 @@ class LineChart extends React.Component {
               disabledDate={this.disabledDate}
               format="YYYY-MM-DD"
               value={startValue}
-              placeholder="Start"
+              placeholder="StartDate"
               onChange={e => this.onStartChange(e, "startTime")}
               className="input_date_chart"
               open={startOpen}
