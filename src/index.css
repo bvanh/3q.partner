@@ -65,9 +65,6 @@ input:focus{
 .ant-table-tbody {
   background-color: white;
 }
-/* .ant-input-group-wrapper {
-  width: 30% !important;
-} */
 .btn-check {
   padding: 0.5rem;
   display: flex;
@@ -93,6 +90,11 @@ input:focus{
 .submit-mes {
   height: 1.5rem;
   color: #f5222d;
+  padding-top: .5rem !important;
+}
+.mes_success{
+  height: 1.5rem;
+  color: #40d683;
   padding-top: .5rem !important;
 }
 .ant-form-item {

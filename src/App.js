@@ -5,12 +5,12 @@ import History from "./component/history/history";
 import ChangePass from "./component/changepassword/changepassword";
 import LoginForm from "./component/login/login";
 import API from "./api/apiAll";
+import checkToken from './utils/checkToken';
 import logoclappigames from "./static/img/logoForPages.jpg";
 import icon_changepassword from "./static/img/icon_changepassword.png";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 const { Header, Footer } = Layout;
 export default class App extends React.Component {
-  _isMounted = false;
   constructor(props) {
     super(props);
     this.state = {
@@ -47,8 +47,13 @@ export default class App extends React.Component {
       </Menu.Item>
     </Menu>
   );
+  refreshToken=setInterval(() => {
+    checkToken(this)
+  }, 3300000);
+  UNSAFE_componentWillMount(){
+    checkToken(this)
+  }
   componentDidMount() {
-    this._isMounted = true;
     const isLogin = localStorage.getItem("saveLogin");
     if (isLogin === null || isLogin === "false") {
       this.logInOut(false);
@@ -61,13 +66,11 @@ export default class App extends React.Component {
       });
     }
   }
-  componentWillUnmount() {
-    this._isMounted = false;
-  }
   logInOut = elm => {
     if (elm === false) {
       localStorage.removeItem("userToken");
       localStorage.removeItem("saveLogin");
+      localStorage.removeItem("userAccessToken");
     }
     this.setState({
       isLogin: elm

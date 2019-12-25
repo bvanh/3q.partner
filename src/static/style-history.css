@@ -2,6 +2,15 @@
   width: 75%;
   margin: 0 auto;
 }
+.history_header{
+  padding: .5rem 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+.history_header>a>i{
+  margin-left: .5rem;
+}
 .btn-check {
   background: #ffe9a4;
   border-radius: 3px;

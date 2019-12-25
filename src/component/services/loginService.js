@@ -1,5 +1,5 @@
 import API from "../../api/apiAll";
-import errorAlert from "../../utils/errorAlert";
+
 
 // login
 function saveTokenToLocal(thisObj, username,password,isRemember) {

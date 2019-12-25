@@ -35,7 +35,6 @@ class NormalLoginForm extends React.Component {
     });
   };
   render() {
-    const { getFieldDecorator } = this.props.form;
     const { validateStatus, message, isRemember } = this.state;
     return (
       <Row id="login_container">

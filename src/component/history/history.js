@@ -1,7 +1,9 @@
 import React from "react";
-import { Table, Pagination, Button, Menu, Dropdown } from "antd";
+import { Table, Pagination, Button, Menu, Dropdown, Icon } from "antd";
 import TypeSearch from "./typeSearch";
 import { Link } from "react-router-dom";
+import moment from "moment";
+import errorAlert from "../../utils/errorAlert";
 import ReactExport from "react-export-excel";
 import { getDataPieChart } from "../services/homeService";
 import "../../static/style-history.css";
@@ -19,6 +21,7 @@ class History extends React.Component {
     this.state = {
       data: [],
       dataExport: [],
+      statusBtnExport: true,
       totalRevenue: 0,
       totalRevenueWEB: 0,
       totalRevenueAPK: 0,
@@ -34,11 +37,9 @@ class History extends React.Component {
     };
   }
   componentDidMount() {
-    const { dateValue } = this.props.location;
-    if (dateValue !== undefined) {
-      getData(this,this.props.location.search);
-      getDataPieChart(this, dateValue.fromDate, dateValue.toDate);
-    }
+    const query = new URLSearchParams(this.props.location.search);
+    getData(this, this.props.location.search);
+    getDataPieChart(this, query.get("fromDate"), query.get("toDate"));
   }
   goPage = async page => {
     await this.setState({
@@ -48,7 +49,7 @@ class History extends React.Component {
     await this.props.history.replace(
       `${API.HISTORY_PATHNAME}?currentPage=${currentPage}&pageSize=10&search=${search}&type=${type}&fromDate=${fromDate}&toDate=${toDate}`
     );
-    getData(this,this.props.location.search);
+    getData(this, this.props.location.search);
   };
   addTypeData = val => {
     this.setState({
@@ -80,11 +81,17 @@ class History extends React.Component {
       currentPage,
       userType
     } = this.state;
-    await this.props.history.replace(
-      `${API.HISTORY_PATHNAME}?currentPage=${currentPage}&pageSize=10&search=${search}&type=${type}&userType=${userType}&fromDate=${fromDate}&toDate=${toDate}`
-    );
-    getData(this,this.props.location.search);
-    getDataPieChart(this, fromDate, toDate);
+    const fromDayValue = moment(fromDate).valueOf();
+    const toDayValue = moment(toDate).valueOf();
+    if (toDayValue - fromDayValue <= 2592000000) {
+      await this.props.history.replace(
+        `${API.HISTORY_PATHNAME}?currentPage=${currentPage}&pageSize=10&search=${search}&type=${type}&userType=${userType}&fromDate=${fromDate}&toDate=${toDate}`
+      );
+      getData(this, this.props.location.search);
+      getDataPieChart(this, fromDate, toDate);
+    } else {
+      errorAlert("Alert", "Between 2 dates bigger than 31 days!");
+    }
   };
   menu = (
     <Menu onClick={key => this.changePageSize(key)}>
@@ -137,7 +144,7 @@ class History extends React.Component {
         title: "Type",
         dataIndex: "userType",
         key: "usertype",
-        width: "7%",
+        width: "7%"
       },
       {
         title: "Time",
@@ -174,10 +181,19 @@ class History extends React.Component {
       }
     ];
     const { data, totalItem, totalRevenue, dataExport, pageSize } = this.state;
+    const hasSelected = dataExport.length > 0;
     return (
       <div className="history_container">
-        <div style={{ padding: ".5rem 0" }}>
+        <div className="history_header">
           <img src={Logo} alt="logo_clappigames"></img>
+          <Link to="/">
+            Chart view{" "}
+            <Icon
+              type="pie-chart"
+              theme="filled"
+              style={{ fontSize: "18px" }}
+            />
+          </Link>
         </div>
         <div className="btn-check">
           <TypeSearch
@@ -192,7 +208,12 @@ class History extends React.Component {
         </div>
         <ExcelFile
           element={
-            <Button icon="file-excel" type="primary" id="btn_export_excel">
+            <Button
+              icon="file-excel"
+              type="primary"
+              id="btn_export_excel"
+              disabled={!hasSelected}
+            >
               Export Excel
             </Button>
           }
@@ -263,11 +284,6 @@ class History extends React.Component {
           pageSize={pageSize}
           onChange={this.goPage}
         />
-        <Button type="primary" icon="caret-left">
-          <Link to="/" style={{ color: "white" }}>
-            Back
-          </Link>
-        </Button>
       </div>
     );
   }
