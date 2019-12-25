@@ -7,18 +7,12 @@ const optionLine = {
         ticks: {
           steps: 10,
           stepValue: 10000,
-          // max: function(value, index) {
-          //   console.log(value);
-          // },
           beginAtZero: true,
           min: 0,
           gridLines: {
             drawTicks: true
           },
           callback: function(value, index) {
-            // if(value<=1){
-            //     return value='';
-            // }
             return `${value.toLocaleString()}`;
           }
         },

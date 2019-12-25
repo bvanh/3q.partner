@@ -5,6 +5,7 @@ import History from "./component/history/history";
 import ChangePass from "./component/changepassword/changepassword";
 import LoginForm from "./component/login/login";
 import API from "./api/apiAll";
+import checkToken from './utils/checkToken';
 import logoclappigames from "./static/img/logoForPages.jpg";
 import icon_changepassword from "./static/img/icon_changepassword.png";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
@@ -46,14 +47,15 @@ export default class App extends React.Component {
       </Menu.Item>
     </Menu>
   );
-  componentWillMount(){
-    console.log('demo')
+  refreshToken=setInterval(() => {
+    checkToken(this)
+  }, 3300000);
+  UNSAFE_componentWillMount(){
+    checkToken(this)
   }
   componentDidMount() {
     const isLogin = localStorage.getItem("saveLogin");
-    const checkToken = localStorage.getItem("userAccessToken");
-    const checkUserToken = localStorage.getItem("userToken");
-    if (isLogin === null || isLogin === "false"|| checkToken===null||checkUserToken===null) {
+    if (isLogin === null || isLogin === "false") {
       this.logInOut(false);
     } else {
       let imageLogo = localStorage.getItem("imageLogo");

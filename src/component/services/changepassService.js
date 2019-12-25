@@ -1,43 +1,12 @@
 import API from "../../api/apiAll";
-import getToken from "../../utils/refreshToken";
+
 
 // doi mat khau
 function changePassword(thisObj, oldPassword, newPassword) {
-  const oldAccessToken = JSON.parse(localStorage.getItem("userAccessToken"));
-  const currentTime = new Date().getTime();
-  if (currentTime - oldAccessToken.timestamp > 3300000) {
-    let checkToken = getToken(thisObj);
-    if (checkToken !== false) {
-      checkToken.then(newAccessToken => {
-        changePasswordWithCondition(
-          thisObj,
-          newAccessToken,
-          oldPassword,
-          newPassword
-        );
-      });
-    }
-  } else {
-    const newAccessToken = JSON.parse(localStorage.getItem("userAccessToken"));
-    const res = changePasswordWithCondition(
-      thisObj,
-      newAccessToken,
-      oldPassword,
-      newPassword
-    );
-    return res;
-  }
-}
-function changePasswordWithCondition(
-  thisObj,
-  accessToken,
-  oldPassword,
-  newPassword
-) {
-  let resStatus = 0;
+  const getAccessToken = JSON.parse(localStorage.getItem("userAccessToken"));
   fetch(API.ROOT_URL + API.CHANGEPASSWORD_PATHNAME, {
     headers: {
-      Authorization: `Bearer ${accessToken.accessToken}`,
+      Authorization: `Bearer ${getAccessToken.accessToken}`,
       "Content-Type": "application/x-www-form-urlencoded"
     },
     method: "POST",

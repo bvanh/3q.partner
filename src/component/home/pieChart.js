@@ -41,15 +41,14 @@ class PieChart extends React.Component {
     return data;
   };
   componentDidMount() {
-    const { valueDateToday, valueDate7DayAgo, userToken } = this.props;
-    getDataPieChart(this, userToken, valueDate7DayAgo, valueDateToday);
+    const { valueDateToday, valueDate7DayAgo} = this.props;
+    getDataPieChart(this,valueDate7DayAgo, valueDateToday);
   }
   render() {
     const {
       valueDateToday,
       valueDate7DayAgo,
       valueDate30DayAgo,
-      userToken
     } = this.props;
     const { totalRevenue, fromDate, toDate } = this.state;
     return (

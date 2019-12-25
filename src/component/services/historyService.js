@@ -1,13 +1,14 @@
 import API from "../../api/apiAll";
 import errorAlert from "../../utils/errorAlert";
-import getToken from "../../utils/refreshToken";
+
 
 // get data for table
-function getDataWithCondition(thisObj, token, pathSearch) {
+function getData(thisObj, pathSearch) {
+  const getAccessToken = JSON.parse(localStorage.getItem("userAccessToken"));
   let resStatus = 0;
   fetch(API.ROOT_URL + API.HISTORY_PATHNAME + pathSearch, {
     headers: {
-      Authorization: `Bearer ${token.accessToken}`,
+      Authorization: `Bearer ${getAccessToken.accessToken}`,
       "Content-Type": "application/x-www-form-urlencoded"
     },
     method: "GET"
@@ -30,21 +31,6 @@ function getDataWithCondition(thisObj, token, pathSearch) {
     .catch(function(error) {
       console.log("Request failed", error);
     });
-}
-function getData(thisObj, pathSearch) {
-  const oldAccessToken = JSON.parse(localStorage.getItem("userAccessToken"));
-  const currentTime = new Date().getTime();
-  if (currentTime - oldAccessToken.timestamp > 3300000) {
-    let checkToken = getToken(thisObj);
-    if (checkToken !== false) {
-      checkToken.then(newAccessToken => {
-        getDataWithCondition(thisObj, newAccessToken, pathSearch);
-      });
-    }
-  } else {
-    const newAccessToken = JSON.parse(localStorage.getItem("userAccessToken"));
-    getDataWithCondition(thisObj, newAccessToken, pathSearch);
-  }
 }
 
 export { getData };
