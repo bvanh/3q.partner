@@ -1,6 +1,6 @@
 import React from "react";
 import moment from "moment";
-import { DatePicker, Select,Input } from "antd";
+import { DatePicker, Select, Input } from "antd";
 const { Option } = Select;
 export default class TypeSearch extends React.Component {
   state = {
@@ -25,7 +25,6 @@ export default class TypeSearch extends React.Component {
     await this.setState({
       [field]: value
     });
-    console.log(value);
   };
   onStartChange = value => {
     this.onChange("startValue", value);
@@ -51,22 +50,32 @@ export default class TypeSearch extends React.Component {
     const { startValue, endValue, endOpen } = this.state;
     return (
       <>
-      <div className='btn_checksearch'>
-        <Input
-          className="input_search"
-          placeholder="Search by products, name, etc..."
-          onChange={this.props.addTextSearch}
-        />
-        <Select
-          defaultValue="0"
-          onChange={this.props.addTypeData}
-          className="btn-checktype"
-        >
-          <Option value="0"> All</Option>
-          <Option value="1"> Partner_charge_ID</Option>
-          <Option value="2">User_ID</Option>
-          <Option value="3">Product_ID</Option>
-        </Select>
+        <div className="btn_checksearch">
+          <Input
+            className="input_search"
+            placeholder="Search by products, name, etc..."
+            onChange={this.props.addTextSearch}
+          />
+          <Select
+            defaultValue="0"
+            onChange={this.props.addTypeData}
+            className="btn-checktype"
+          >
+            <Option value="0"> All</Option>
+            <Option value="1"> Partner_charge_ID</Option>
+            <Option value="2">User_ID</Option>
+            <Option value="3">Product_ID</Option>
+          </Select>
+          <Select
+            defaultValue="4"
+            onChange={this.props.addUserTypeData}
+            className="btn-checktype checkusertype"
+          >
+            <Option value="4">TYPE</Option>
+            <Option value="0">ALL</Option>
+            <Option value="1">TEST</Option>
+            <Option value="2">LIVE</Option>
+          </Select>
         </div>
         <div className="btn-checkdate">
           <DatePicker
@@ -79,7 +88,9 @@ export default class TypeSearch extends React.Component {
             onOpenChange={this.handleStartOpenChange}
             className="input_date"
           />
-          <span style={{ padding: ".3rem" }} id='toDate'>To</span>
+          <span style={{ padding: ".3rem" }} id="toDate">
+            To
+          </span>
           <DatePicker
             disabledDate={this.disabledEndDate}
             showTime

@@ -1,10 +1,16 @@
 import API from "../../api/apiAll";
 import errorAlert from "../../utils/errorAlert";
+import getToken from "../../utils/refreshToken";
+import moment from "moment";
 
 // lấy dữ liệu cho biểu đồ tròn
-function getDataPieChart(thisObj, fromDateValue, toDateValue) {
+function getDataPieChartWithCondition(
+  thisObj,
+  fromDateValue,
+  toDateValue,
+  token
+) {
   let resStatus = 0;
-  let userAccessToken = localStorage.getItem("userAccessToken");
   fetch(
     API.ROOT_URL +
       API.CHARTS_PATHNAME +
@@ -12,7 +18,7 @@ function getDataPieChart(thisObj, fromDateValue, toDateValue) {
       `&fromDate=${fromDateValue}&toDate=${toDateValue}`,
     {
       headers: {
-        Authorization: `Bearer ${JSON.parse(userAccessToken)}`,
+        Authorization: `Bearer ${token.accessToken}`,
         "Content-Type": "application/x-www-form-urlencoded"
       },
       method: "GET"
@@ -40,10 +46,42 @@ function getDataPieChart(thisObj, fromDateValue, toDateValue) {
       console.log("Request failed", error);
     });
 }
+// condition + function
+function getDataPieChart(thisObj, fromDateValue, toDateValue) {
+  const oldAccessToken = JSON.parse(localStorage.getItem("userAccessToken"));
+  const currentTime = new Date().getTime();
+  if (currentTime - oldAccessToken.timestamp > 3300000) {
+    let checkToken = getToken(thisObj);
+    if (checkToken !== false) {
+      checkToken.then(newAccessToken => {
+        getDataPieChartWithCondition(
+          thisObj,
+          fromDateValue,
+          toDateValue,
+          newAccessToken
+        );
+      });
+    }
+  } else {
+    const newAccessToken = JSON.parse(localStorage.getItem("userAccessToken"));
+    getDataPieChartWithCondition(
+      thisObj,
+      fromDateValue,
+      toDateValue,
+      newAccessToken
+    );
+  }
+}
+// end
 // lấy dữ liệu cho biểu đồ cột
-function getDataLineChart(thisObj, fromDateValue, toDateValue) {
+
+function getDataLineChartWithCondition(
+  thisObj,
+  fromDateValue,
+  toDateValue,
+  newAccessToken
+) {
   let resStatus = 0;
-  let userAccessToken = localStorage.getItem("userAccessToken");
   fetch(
     API.ROOT_URL +
       API.CHARTS_PATHNAME +
@@ -51,7 +89,7 @@ function getDataLineChart(thisObj, fromDateValue, toDateValue) {
       `&fromDate=${fromDateValue}&toDate=${toDateValue}`,
     {
       headers: {
-        Authorization: `Bearer ${JSON.parse(userAccessToken)}`,
+        Authorization: `Bearer ${newAccessToken.accessToken}`,
         "Content-Type": "application/x-www-form-urlencoded"
       },
       method: "GET"
@@ -80,20 +118,58 @@ function getDataLineChart(thisObj, fromDateValue, toDateValue) {
       console.log("Request failed", error);
     });
   thisObj.hideModalPicker();
-  getTotalPurchase(thisObj, fromDateValue, toDateValue);
+  getTotalPurchaseWithCondition(
+    thisObj,
+    fromDateValue,
+    toDateValue,
+    newAccessToken
+  );
+}
+// function + condition
+function getDataLineChart(thisObj, fromDateValue, toDateValue) {
+  const fromDayValue = moment(fromDateValue).valueOf();
+  const toDayValue = moment(toDateValue).valueOf();
+  if (toDayValue - fromDayValue <= 2592000000) {
+    const oldAccessToken = JSON.parse(localStorage.getItem("userAccessToken"));
+    const currentTime = new Date().getTime();
+    if (currentTime - oldAccessToken.timestamp > 3300000) {
+      let checkToken = getToken(thisObj);
+      if (checkToken !== false) {
+        checkToken.then(newAccessToken => {
+          getDataLineChartWithCondition(
+            thisObj,
+            fromDateValue,
+            toDateValue,
+            newAccessToken
+          );
+        });
+      }
+    } else {
+      const newAccessToken = JSON.parse(
+        localStorage.getItem("userAccessToken")
+      );
+      getDataLineChartWithCondition(
+        thisObj,
+        fromDateValue,
+        toDateValue,
+        newAccessToken
+      );
+    }
+  }else{
+    errorAlert(500,'Date less than or equal 30 days');
+  }
 }
 // lấy tổng số lượng giao dịch
-function getTotalPurchase(thisObj, fromDate, toDate) {
+function getTotalPurchaseWithCondition(thisObj, fromDate, toDate, token) {
   let resStatus = 0;
-  let accessToken = localStorage.getItem("userAccessToken");
   fetch(
     API.ROOT_URL +
       API.HISTORY_PATHNAME +
       API.HISTORY_PATHSEARCH_NODATE +
-      `&fromDate=${fromDate}&toDate=${toDate}`,
+      `&fromDate=${fromDate}&toDate=${toDate}&userType=0`,
     {
       headers: {
-        Authorization: `Bearer ${JSON.parse(accessToken)}`,
+        Authorization: `Bearer ${token.accessToken}`,
         "Content-Type": "application/x-www-form-urlencoded"
       },
       method: "GET"
@@ -109,12 +185,33 @@ function getTotalPurchase(thisObj, fromDate, toDate) {
         return;
       } else {
         thisObj.setState({
-          totalPurchase: result.count
+          totalPurchase: result.count,
+          totalPaidUsers: result.totalPaidUsers
         });
       }
     })
     .catch(function(error) {
       console.log("Request failed", error);
     });
+}
+function getTotalPurchase(thisObj, fromDate, toDate) {
+  const oldAccessToken = JSON.parse(localStorage.getItem("userAccessToken"));
+  const currentTime = new Date().getTime();
+  if (currentTime - oldAccessToken.timestamp > 3300000) {
+    let checkToken = getToken(thisObj);
+    if (checkToken !== false) {
+      checkToken.then(newAccessToken => {
+        getTotalPurchaseWithCondition(
+          thisObj,
+          fromDate,
+          toDate,
+          newAccessToken
+        );
+      });
+    }
+  } else {
+    const newAccessToken = JSON.parse(localStorage.getItem("userAccessToken"));
+    getTotalPurchaseWithCondition(thisObj, fromDate, toDate, newAccessToken);
+  }
 }
 export { getDataPieChart, getDataLineChart, getTotalPurchase };

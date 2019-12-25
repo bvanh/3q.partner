@@ -92,9 +92,12 @@ input:focus{
 }
 .submit-mes {
   height: 1.5rem;
-  color: rgb(219, 121, 121);
+  color: #f5222d;
   padding-top: .5rem !important;
 }
 .ant-form-item {
   margin: 0 !important;
+}
+.ant-modal-wrap{
+  z-index: 9999 !important;
 }

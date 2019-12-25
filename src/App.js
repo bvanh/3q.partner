@@ -1,20 +1,20 @@
 import React from "react";
 import { Layout, Menu, Icon, Avatar, Dropdown } from "antd";
-import getToken from "./utils/refreshToken";
 import Charts from "./component/home/home";
 import History from "./component/history/history";
 import ChangePass from "./component/changepassword/changepassword";
 import LoginForm from "./component/login/login";
 import API from "./api/apiAll";
 import logoclappigames from "./static/img/logoForPages.jpg";
+import icon_changepassword from "./static/img/icon_changepassword.png";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 const { Header, Footer } = Layout;
 export default class App extends React.Component {
+  _isMounted = false;
   constructor(props) {
     super(props);
     this.state = {
-      isLogin: false,
-      userToken: localStorage.getItem("userToken"),
+      isLogin: "",
       imageLogo: "",
       pageName: "",
       isChangePassword: false
@@ -30,7 +30,12 @@ export default class App extends React.Component {
       </Menu.Item>
       <Menu.Item>
         <Link to={API.CHANGEPASSWORD_PATHNAME}>
-          <Icon type="key" style={{ paddingRight: ".5rem" }} />
+          <img
+            src={icon_changepassword}
+            alt="icon_changepassword"
+            className="icon_changepassword"
+            style={{ paddingRight: ".5rem" }}
+          ></img>
           <span>Change password</span>
         </Link>
       </Menu.Item>
@@ -42,38 +47,30 @@ export default class App extends React.Component {
       </Menu.Item>
     </Menu>
   );
-  runRefreshToken = setInterval(() => {
-    getToken(this.state.userToken);
-  }, 3300000);
   componentDidMount() {
-    const { userToken } = this.state;
-    if (getToken(userToken) === false) {
-      this.setState({
-        isLogin: false
-      });
-      return;
+    this._isMounted = true;
+    const isLogin = localStorage.getItem("saveLogin");
+    if (isLogin === null || isLogin === "false") {
+      this.logInOut(false);
     } else {
       let imageLogo = localStorage.getItem("imageLogo");
       let pageName = localStorage.getItem("fullname");
       this.setState({
-        isLogin: true,
         imageLogo: imageLogo,
         pageName: pageName
-        // userToken: userToken
       });
     }
+  }
+  componentWillUnmount() {
+    this._isMounted = false;
   }
   logInOut = elm => {
     if (elm === false) {
       localStorage.removeItem("userToken");
+      localStorage.removeItem("saveLogin");
     }
     this.setState({
       isLogin: elm
-    });
-  };
-  getTokenToState = val => {
-    this.setState({
-      userToken: val
     });
   };
   getImgAndName = val => {
@@ -83,8 +80,8 @@ export default class App extends React.Component {
     });
   };
   render() {
-    const { isLogin, imageLogo} = this.state;
-    if (isLogin === false) {
+    const { isLogin, imageLogo } = this.state;
+    if (isLogin === false || isLogin === null) {
       return (
         <Router>
           <Route
@@ -92,7 +89,6 @@ export default class App extends React.Component {
             render={() => (
               <LoginForm
                 logInOut={this.logInOut}
-                getTokenToState={this.getTokenToState}
                 getImgAndName={this.getImgAndName}
               />
             )}
@@ -128,19 +124,29 @@ export default class App extends React.Component {
             </div>
           </Header>
           <Layout>
-            <Route exact path="/" render={() => (
-                <Charts imageLogo={imageLogo} />
-              )} />
+            <Route
+              exact
+              path="/"
+              render={() => (
+                <Charts imageLogo={imageLogo} logInOut={this.logInOut} />
+              )}
+            />
             <Route
               path={API.HISTORY_PATHNAME}
               render={props => (
-                <History {...props} userToken={this.state.userToken}imageLogo={imageLogo} />
+                <History
+                  {...props}
+                  imageLogo={imageLogo}
+                  logInOut={this.logInOut}
+                />
               )}
             />
             <Route
               exact
               path={API.CHANGEPASSWORD_PATHNAME}
-              render={props => <ChangePass {...props} />}
+              render={props => (
+                <ChangePass {...props} logInOut={this.logInOut} />
+              )}
             />
             {/* <Route path="/products/:id" component={Edit}/> */}
             <Footer style={{ textAlign: "center" }}>

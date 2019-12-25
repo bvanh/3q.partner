@@ -1,16 +1,15 @@
 import API from "../../api/apiAll";
-import { Modal } from "antd";
 import errorAlert from "../../utils/errorAlert";
 
-// lưu userToken vào local (lưu đăng nhập)
-function saveTokenToLocal(thisObj, value) {
+// login
+function saveTokenToLocal(thisObj, username,password,isRemember) {
   let resStatus = 0;
   fetch(API.ROOT_URL + API.LOGIN_PATHNAME, {
     headers: {
       "Content-Type": "application/x-www-form-urlencoded"
     },
     method: "POST",
-    body: `partnerName=${value.username}&password=${value.password}`
+    body: `partnerName=${username}&password=${password}`
   })
     .then(response => {
       resStatus = response.status;
@@ -18,14 +17,22 @@ function saveTokenToLocal(thisObj, value) {
     })
     .then(result => {
       if (resStatus !== 200) {
-        errorAlert(result.status, result.message);
-        return;
+        thisObj.setState({
+          validateStatus: "error",
+          message: "Please doulbe check your information."
+        });
       } else {
-        localStorage.setItem("userToken", JSON.stringify(result));
+        let userToken = { token: result, timestamp: new Date().getTime() };
+        let userAccessToken = {
+          accessToken: result.accessToken,
+          timestamp: new Date().getTime()
+        };
+        localStorage.setItem("userToken", JSON.stringify(userToken));
         localStorage.setItem(
           "userAccessToken",
-          JSON.stringify(result.accessToken)
+          JSON.stringify(userAccessToken)
         );
+        localStorage.setItem("saveLogin", isRemember);
         thisObj.props.logInOut(true);
         return result;
       }
@@ -58,58 +65,4 @@ function saveTokenToLocal(thisObj, value) {
       console.log("Request failed", error);
     });
 }
-//  lưu userToken vào state (không lưu đăng nhập )
-function saveTokenToState(thisObj, value) {
-  let resStatus = 0;
-  fetch(API.ROOT_URL + API.LOGIN_PATHNAME, {
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded"
-    },
-    method: "POST",
-    body: `partnerName=${value.username}&password=${value.password}`
-  })
-    .then(response => {
-      resStatus = response.status;
-      return response.json();
-    })
-    .then(result => {
-      if (resStatus !== 200) errorAlert(result.status, result.message);
-      else {
-        localStorage.setItem(
-          "userAccessToken",
-          JSON.stringify(result.accessToken)
-        );
-        thisObj.props.getTokenToState(result);
-        thisObj.props.logInOut(true);
-      }
-      return result;
-    })
-    // get logo and fullname
-    .then(value => {
-      fetch(API.ROOT_URL + API.PARTNER_INFO, {
-        headers: {
-          Authorization: `Bearer ${value.accessToken}`,
-          "Content-Type": "application/x-www-form-urlencoded"
-        },
-        method: "GET"
-      })
-        .then(response => {
-          resStatus = response.status;
-          return response.json();
-        })
-        .then(value => {
-          if (resStatus === 200) {
-            localStorage.setItem("imageLogo", value.imageUrl);
-            localStorage.setItem("fullname", value.fullName);
-            thisObj.props.getImgAndName(value);
-          }
-        })
-        .catch(function(error) {
-          console.log("Request failed", error);
-        });
-    })
-    .catch(error => {
-      errorAlert("Request failed", error);
-    });
-}
-export { saveTokenToLocal, saveTokenToState };
+export { saveTokenToLocal };
