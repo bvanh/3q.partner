@@ -7,7 +7,9 @@ const optionLine = {
         ticks: {
           steps: 10,
           stepValue: 10000,
-          max: 1000000,
+          // max: function(value, index) {
+          //   console.log(value);
+          // },
           beginAtZero: true,
           min: 0,
           gridLines: {
@@ -17,12 +19,12 @@ const optionLine = {
             // if(value<=1){
             //     return value='';
             // }
-            return value.toLocaleString();
+            return `${value.toLocaleString()}`;
           }
         },
         scaleLabel: {
-            display: true,
-            labelString: 'Tiền (VNĐ)'
+          display: true,
+          labelString: "Tiền (VNĐ)"
         }
       }
     ]

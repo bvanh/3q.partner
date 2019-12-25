@@ -1,7 +1,9 @@
 import React from "react";
-import { Table, Pagination, Button, Menu, Dropdown,Icon } from "antd";
+import { Table, Pagination, Button, Menu, Dropdown, Icon } from "antd";
 import TypeSearch from "./typeSearch";
 import { Link } from "react-router-dom";
+import moment from "moment";
+import errorAlert from "../../utils/errorAlert";
 import ReactExport from "react-export-excel";
 import { getDataPieChart } from "../services/homeService";
 import "../../static/style-history.css";
@@ -79,11 +81,17 @@ class History extends React.Component {
       currentPage,
       userType
     } = this.state;
-    await this.props.history.replace(
-      `${API.HISTORY_PATHNAME}?currentPage=${currentPage}&pageSize=10&search=${search}&type=${type}&userType=${userType}&fromDate=${fromDate}&toDate=${toDate}`
-    );
-    getData(this, this.props.location.search);
-    getDataPieChart(this, fromDate, toDate);
+    const fromDayValue = moment(fromDate).valueOf();
+    const toDayValue = moment(toDate).valueOf();
+    if (toDayValue - fromDayValue <= 2592000000) {
+      await this.props.history.replace(
+        `${API.HISTORY_PATHNAME}?currentPage=${currentPage}&pageSize=10&search=${search}&type=${type}&userType=${userType}&fromDate=${fromDate}&toDate=${toDate}`
+      );
+      getData(this, this.props.location.search);
+      getDataPieChart(this, fromDate, toDate);
+    } else {
+      errorAlert("Alert", "Between 2 dates bigger than 31 days!");
+    }
   };
   menu = (
     <Menu onClick={key => this.changePageSize(key)}>
@@ -172,21 +180,20 @@ class History extends React.Component {
         render: price => <span>{price.toLocaleString()} đ</span>
       }
     ];
-    const {
-      data,
-      totalItem,
-      totalRevenue,
-      dataExport,
-      pageSize,
-    } = this.state;
+    const { data, totalItem, totalRevenue, dataExport, pageSize } = this.state;
     const hasSelected = dataExport.length > 0;
     return (
       <div className="history_container">
-        <div className='history_header'>
+        <div className="history_header">
           <img src={Logo} alt="logo_clappigames"></img>
           <Link to="/">
-        Chart view <Icon type="pie-chart"theme='filled'style={{ fontSize: '18px'}} />
-        </Link>
+            Chart view{" "}
+            <Icon
+              type="pie-chart"
+              theme="filled"
+              style={{ fontSize: "18px" }}
+            />
+          </Link>
         </div>
         <div className="btn-check">
           <TypeSearch

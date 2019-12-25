@@ -27,7 +27,7 @@ function getDataWithCondition(thisObj, token, pathSearch) {
         });
       }
     })
-    .catch(function (error) {
+    .catch(function(error) {
       console.log("Request failed", error);
     });
 }

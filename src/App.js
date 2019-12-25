@@ -46,10 +46,14 @@ export default class App extends React.Component {
       </Menu.Item>
     </Menu>
   );
+  componentWillMount(){
+    console.log('demo')
+  }
   componentDidMount() {
     const isLogin = localStorage.getItem("saveLogin");
     const checkToken = localStorage.getItem("userAccessToken");
-    if (isLogin === null || isLogin === "false"|| checkToken===null) {
+    const checkUserToken = localStorage.getItem("userToken");
+    if (isLogin === null || isLogin === "false"|| checkToken===null||checkUserToken===null) {
       this.logInOut(false);
     } else {
       let imageLogo = localStorage.getItem("imageLogo");

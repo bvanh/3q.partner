@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import imgChangepass from "../../static/img/changepassword.svg";
 import changePassword from "../services/changepassService";
 import "../../static/style-changepass.css";
@@ -34,6 +34,11 @@ class ChangePass extends React.Component {
       [e.target.name]: e.target.value
     });
   };
+  resetAlert=()=>{
+    this.setState({
+      message:'',
+    })
+  }
   render() {
     const { message, statusSuccess } = this.state;
     return (
@@ -66,18 +71,21 @@ class ChangePass extends React.Component {
               <Input.Password
                 name="oldPassword"
                 onChange={this.getTextPassword}
+                onFocus={this.resetAlert}
               />
             </Form.Item>
             <Form.Item label="New Password:">
               <Input.Password
                 name="newPassword"
                 onChange={this.getTextPassword}
+                onFocus={this.resetAlert}
               />
             </Form.Item>
             <Form.Item label="Re-enter Your New Password:">
               <Input.Password
                 name="confirmNewPassword"
                 onChange={this.getTextPassword}
+                onFocus={this.resetAlert}
               />
             </Form.Item>
             <p className={statusSuccess}>{message}</p>
