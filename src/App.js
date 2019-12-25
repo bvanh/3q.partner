@@ -1,15 +1,16 @@
 import React from "react";
 import { Layout, Menu, Icon, Avatar, Dropdown } from "antd";
-import getToken from "./utils/refreshToken";
 import Charts from "./component/home/home";
 import History from "./component/history/history";
 import ChangePass from "./component/changepassword/changepassword";
 import LoginForm from "./component/login/login";
 import API from "./api/apiAll";
 import logoclappigames from "./static/img/logoForPages.jpg";
+import icon_changepassword from "./static/img/icon_changepassword.png";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 const { Header, Footer } = Layout;
 export default class App extends React.Component {
+  _isMounted = false;
   constructor(props) {
     super(props);
     this.state = {
@@ -29,7 +30,12 @@ export default class App extends React.Component {
       </Menu.Item>
       <Menu.Item>
         <Link to={API.CHANGEPASSWORD_PATHNAME}>
-          <Icon type="key" style={{ paddingRight: ".5rem" }} />
+          <img
+            src={icon_changepassword}
+            alt="icon_changepassword"
+            className="icon_changepassword"
+            style={{ paddingRight: ".5rem" }}
+          ></img>
           <span>Change password</span>
         </Link>
       </Menu.Item>
@@ -42,6 +48,7 @@ export default class App extends React.Component {
     </Menu>
   );
   componentDidMount() {
+    this._isMounted = true;
     const isLogin = localStorage.getItem("saveLogin");
     if (isLogin === null || isLogin === "false") {
       this.logInOut(false);
@@ -53,6 +60,9 @@ export default class App extends React.Component {
         pageName: pageName
       });
     }
+  }
+  componentWillUnmount() {
+    this._isMounted = false;
   }
   logInOut = elm => {
     if (elm === false) {

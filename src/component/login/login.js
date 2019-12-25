@@ -1,27 +1,42 @@
 import React from "react";
-import { saveTokenToLocal} from "../services/loginService";
+import { saveTokenToLocal } from "../services/loginService";
 import "../../static/style-login.css";
 import logoclappigames from "../../static/img/logoclappigames.png";
 import imgLogin from "../../static/img/Group 1.svg";
-import { Form, Input, Button, Modal, Checkbox, Row, Col } from "antd";
+import { Form, Input, Button, Checkbox, Row, Col } from "antd";
 
 class NormalLoginForm extends React.Component {
-  errorAlert = (errorStatus, errorMessage) => {
-    Modal.error({
-      title: "SOMETHING WENT WRONG",
-      content: `${errorStatus}: ${errorMessage}`
-    });
+  state = {
+    username: "",
+    password: "",
+    isRemember: true,
+    validateStatus: "",
+    message: ""
   };
   handleSubmit = e => {
     e.preventDefault();
-    this.props.form.validateFields((err, values) => {
-      if (!err) {
-        saveTokenToLocal(this, values);
-      }
+    const { username, password, isRemember } = this.state;
+    saveTokenToLocal(this, username, password, isRemember);
+  };
+  addText = e => {
+    this.setState({
+      [e.target.name]: e.target.value
+    });
+  };
+  isRemember = e => {
+    this.setState({
+      isRemember: e.target.checked
+    });
+  };
+  resetStatus = () => {
+    this.setState({
+      validateStatus: "",
+      message: ""
     });
   };
   render() {
     const { getFieldDecorator } = this.props.form;
+    const { validateStatus, message, isRemember } = this.state;
     return (
       <Row id="login_container">
         <img
@@ -46,22 +61,33 @@ class NormalLoginForm extends React.Component {
           <Form onSubmit={this.handleSubmit} className="login-form">
             <span className="login_text">LOGIN</span>
             <div className="input_form">
-              <Form.Item label="Username" className="ant-input-login">
-                {getFieldDecorator("username", {
-                  rules: [
-                    { required: true, message: "Please input your Username!" }
-                  ]
-                })(
-                  <Input placeholder="Username" className="ant-input-login" />
-                )}
+              <Form.Item
+                label="Username"
+                className="ant-input-login"
+                validateStatus={validateStatus}
+              >
+                <Input
+                  placeholder="Username"
+                  name="username"
+                  className="ant-input-login"
+                  onFocus={this.resetStatus}
+                  onChange={this.addText}
+                />
               </Form.Item>
-              <Form.Item label="Password" className="ant-input-login">
-                {getFieldDecorator("password", {
-                  rules: [
-                    { required: true, message: "Please input your Password!" }
-                  ]
-                })(<Input type="password" placeholder="Password" />)}
+              <Form.Item
+                label="Password"
+                className="ant-input-login"
+                validateStatus={validateStatus}
+              >
+                <Input.Password
+                  type="password"
+                  name="password"
+                  placeholder="Password"
+                  onFocus={this.resetStatus}
+                  onChange={this.addText}
+                />
               </Form.Item>
+              <p className="submit-mes">{message}</p>
               <Form.Item className="btn-submit">
                 <Button
                   type="primary"
@@ -70,10 +96,9 @@ class NormalLoginForm extends React.Component {
                 >
                   Log in
                 </Button>
-                {getFieldDecorator("remember", {
-                  valuePropName: "checked",
-                  initialValue: true
-                })(<Checkbox>Remember me</Checkbox>)}
+                <Checkbox checked={isRemember} onChange={this.isRemember}>
+                  Remember me
+                </Checkbox>
               </Form.Item>
             </div>
           </Form>

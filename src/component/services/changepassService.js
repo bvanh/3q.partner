@@ -3,10 +3,8 @@ import getToken from "../../utils/refreshToken";
 
 // doi mat khau
 function changePassword(thisObj, oldPassword, newPassword) {
-  console.log(newPassword);
   const oldAccessToken = JSON.parse(localStorage.getItem("userAccessToken"));
   const currentTime = new Date().getTime();
-  console.log(currentTime - oldAccessToken.timestamp);
   if (currentTime - oldAccessToken.timestamp > 55000) {
     let checkToken = getToken(thisObj);
     if (checkToken !== false) {
@@ -14,11 +12,9 @@ function changePassword(thisObj, oldPassword, newPassword) {
         changePasswordWithCondition(newAccessToken, oldPassword, newPassword);
       });
     }
-    console.log("vao if");
   } else {
     const newAccessToken = JSON.parse(localStorage.getItem("userAccessToken"));
     const res=changePasswordWithCondition(newAccessToken, oldPassword, newPassword);
-    console.log("re")
     return res;
   }
 }

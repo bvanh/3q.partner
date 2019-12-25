@@ -1,15 +1,15 @@
 import API from "../../api/apiAll";
 import errorAlert from "../../utils/errorAlert";
 
-// lưu userToken vào local (lưu đăng nhập)
-function saveTokenToLocal(thisObj, value) {
+// login
+function saveTokenToLocal(thisObj, username,password,isRemember) {
   let resStatus = 0;
   fetch(API.ROOT_URL + API.LOGIN_PATHNAME, {
     headers: {
       "Content-Type": "application/x-www-form-urlencoded"
     },
     method: "POST",
-    body: `partnerName=${value.username}&password=${value.password}`
+    body: `partnerName=${username}&password=${password}`
   })
     .then(response => {
       resStatus = response.status;
@@ -17,8 +17,10 @@ function saveTokenToLocal(thisObj, value) {
     })
     .then(result => {
       if (resStatus !== 200) {
-        errorAlert(result.status, result.message);
-        return;
+        thisObj.setState({
+          validateStatus: "error",
+          message: "Please doulbe check your information."
+        });
       } else {
         let userToken = { token: result, timestamp: new Date().getTime() };
         let userAccessToken = {
@@ -30,7 +32,7 @@ function saveTokenToLocal(thisObj, value) {
           "userAccessToken",
           JSON.stringify(userAccessToken)
         );
-        localStorage.setItem("saveLogin", value.remember);
+        localStorage.setItem("saveLogin", isRemember);
         thisObj.props.logInOut(true);
         return result;
       }
@@ -63,4 +65,4 @@ function saveTokenToLocal(thisObj, value) {
       console.log("Request failed", error);
     });
 }
-export {saveTokenToLocal}
+export { saveTokenToLocal };

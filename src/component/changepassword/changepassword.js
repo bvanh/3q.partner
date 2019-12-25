@@ -14,41 +14,28 @@ class ChangePass extends React.Component {
       message: ""
     };
   }
-  handleSubmit = async () => {
-    const {
-      newPassword,
-      oldPassword,
-      confirmNewPassword,
-      message
-    } = this.state;
-    if (newPassword !== confirmNewPassword) {
-      this.setState({
-        message: "Password Not Equal !Try Again"
-      });
-      return;
-    } else {
-      const mes = changePassword(this,oldPassword,newPassword);
-      // mes.then(newMes =>
-      //   this.setState({
-      //     message: newMes.message
-      //   })
-      // );
-      console.log(mes)
+  handleSubmit = () => {
+    const { newPassword, oldPassword, confirmNewPassword } = this.state;
+    if (newPassword !== "" && oldPassword !== "" && confirmNewPassword !== "") {
+      if (newPassword !== confirmNewPassword) {
+        this.setState({
+          message: "Please, check your passwords again!            "
+        });
+        return;
+      } else {
+        const mes = changePassword(this, oldPassword, newPassword);
+        mes.then(newMes =>
+          this.setState({
+            message: newMes.message
+          })
+        );
+      }
     }
   };
   getTextPassword = e => {
-    if (e.target.name === "oldPassword") {
-      this.setState({
-        oldPassword: e.target.value
-      });
-    } else if (e.target.name === "confirmNewPassword") {
-      this.setState({
-        confirmNewPassword: e.target.value
-      });
-    } else
-      this.setState({
-        newPassword: e.target.value
-      });
+    this.setState({
+      [e.target.name]: e.target.value
+    });
   };
   render() {
     const { message } = this.state;

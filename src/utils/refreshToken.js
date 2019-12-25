@@ -4,7 +4,7 @@ import API from "../api/apiAll";
 const getToken = thisObj => {
   const userToken = JSON.parse(localStorage.getItem("userToken"));
   const currentTime = new Date().getTime();
-  if (userToken === null || currentTime - userToken.timestamp > 175000) {
+  if (userToken === null || currentTime - userToken.timestamp > 75168000000) {
     thisObj.props.logInOut(false);
     return false;
   } else {

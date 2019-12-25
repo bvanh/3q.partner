@@ -50,7 +50,7 @@ function getDataPieChartWithCondition(
 function getDataPieChart(thisObj, fromDateValue, toDateValue) {
   const oldAccessToken = JSON.parse(localStorage.getItem("userAccessToken"));
   const currentTime = new Date().getTime();
-  if (currentTime - oldAccessToken.timestamp > 55000) {
+  if (currentTime - oldAccessToken.timestamp > 3300000) {
     let checkToken = getToken(thisObj);
     if (checkToken !== false) {
       checkToken.then(newAccessToken => {
@@ -129,11 +129,10 @@ function getDataLineChartWithCondition(
 function getDataLineChart(thisObj, fromDateValue, toDateValue) {
   const fromDayValue = moment(fromDateValue).valueOf();
   const toDayValue = moment(toDateValue).valueOf();
-  console.log(toDayValue-fromDayValue)
   if (toDayValue - fromDayValue <= 2592000000) {
     const oldAccessToken = JSON.parse(localStorage.getItem("userAccessToken"));
     const currentTime = new Date().getTime();
-    if (currentTime - oldAccessToken.timestamp > 55000) {
+    if (currentTime - oldAccessToken.timestamp > 3300000) {
       let checkToken = getToken(thisObj);
       if (checkToken !== false) {
         checkToken.then(newAccessToken => {
@@ -198,7 +197,7 @@ function getTotalPurchaseWithCondition(thisObj, fromDate, toDate, token) {
 function getTotalPurchase(thisObj, fromDate, toDate) {
   const oldAccessToken = JSON.parse(localStorage.getItem("userAccessToken"));
   const currentTime = new Date().getTime();
-  if (currentTime - oldAccessToken.timestamp > 55000) {
+  if (currentTime - oldAccessToken.timestamp > 3300000) {
     let checkToken = getToken(thisObj);
     if (checkToken !== false) {
       checkToken.then(newAccessToken => {

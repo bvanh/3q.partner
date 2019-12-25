@@ -201,6 +201,7 @@ class History extends React.Component {
           <ExcelSheet data={dataExport} name="Partner_3Q">
             <ExcelColumn label="PartnerChargeId" value="partnerChargeId" />
             <ExcelColumn label="UserID" value="userId" />
+            <ExcelColumn label="Type" value="userType" />
             <ExcelColumn label="Time" value="createdAt" />
             <ExcelColumn
               label="Username"

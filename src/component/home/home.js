@@ -52,7 +52,6 @@ class Charts extends React.Component {
     const valueDate30DayAgo = moment()
       .subtract(30, "days")
       .format("YYYY-MM-DD");
-
     return (
       <>
         <Row
