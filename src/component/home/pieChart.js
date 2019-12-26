@@ -97,15 +97,7 @@ class PieChart extends React.Component {
                 style={{ width: 120 }}
                 // onChange={handleChange}
               >
-                <Option
-                  value="1"
-                  onClick={() =>
-                    getDataPieChart(this, valueDate7DayAgo, valueDateToday)
-                  }
-                >
-                  Last 7 days{" "}
-                </Option>
-                <Option
+                                <Option
                   value="2"
                   onClick={() =>
                     getDataPieChart(
@@ -115,8 +107,17 @@ class PieChart extends React.Component {
                       valueDateToday
                     )
                   }
+                  disabled
                 >
                   Today
+                </Option>
+                <Option
+                  value="1"
+                  onClick={() =>
+                    getDataPieChart(this, valueDate7DayAgo, valueDateToday)
+                  }
+                >
+                  Last 7 days{" "}
                 </Option>
                 <Option
                   value="3"

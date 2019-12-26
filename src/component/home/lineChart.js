@@ -160,15 +160,7 @@ class LineChart extends React.Component {
         </div>
         <div className="chart-frame_footer">
           <Select defaultValue="2" style={{ width: 120 }}>
-            <Option
-              value="2"
-              onClick={() =>
-                getDataLineChart(this, valueDate7DayAgo, valueDateToday)
-              }
-            >
-              Last 7 days
-            </Option>
-            <Option
+          <Option
               value="3"
               onClick={() =>
                 getDataLineChart(
@@ -177,8 +169,17 @@ class LineChart extends React.Component {
                   valueDateToday
                 )
               }
+              disabled
             >
               Today
+            </Option>
+            <Option
+              value="2"
+              onClick={() =>
+                getDataLineChart(this, valueDate7DayAgo, valueDateToday)
+              }
+            >
+              Last 7 days
             </Option>
             <Option
               value="4"

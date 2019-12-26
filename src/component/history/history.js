@@ -135,8 +135,8 @@ class History extends React.Component {
         width: "20%"
       },
       {
-        title: "UserID",
-        dataIndex: "userId",
+        title: "ProductID",
+        dataIndex: "productId",
         key: "userId",
         width: "18%"
       },

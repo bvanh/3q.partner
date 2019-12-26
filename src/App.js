@@ -6,7 +6,7 @@ import ChangePass from "./component/changepassword/changepassword";
 import LoginForm from "./component/login/login";
 import API from "./api/apiAll";
 import logoclappigames from "./static/img/logoForPages.jpg";
-import icon_changepassword from "./static/img/icon_changepassword.png";
+import icon_changepassword from "./static/img/changepassword_icon.svg";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 const { Header, Footer } = Layout;
 export default class App extends React.Component {
@@ -93,11 +93,13 @@ export default class App extends React.Component {
         <Router>
           <Header>
             <div className="header1">
+              <Link to='/'>
               <img
                 src={logoclappigames}
                 alt="logo_clappigames"
                 className="logoForPages"
               ></img>
+              </Link>
               <Dropdown overlay={this.menu} placement="bottomRight">
                 <div className="user_logout">
                   <Avatar icon="user" />
