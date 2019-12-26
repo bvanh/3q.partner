@@ -12,21 +12,13 @@ class ChangePass extends React.Component {
       newPassword: "",
       confirmNewPassword: "",
       message: "",
-      statusSuccess:"submit-mes"
+      statusSuccess: "submit-mes"
     };
   }
   handleSubmit = () => {
     const { newPassword, oldPassword, confirmNewPassword } = this.state;
-    if (newPassword !== "" && oldPassword !== "" && confirmNewPassword !== "") {
-      if (newPassword !== confirmNewPassword) {
-        this.setState({
-          message: "Please, check your passwords again!",
-          statusSuccess:'submit-mes'
-        });
-        return;
-      } else {
-        changePassword(this, oldPassword, newPassword);
-      }
+    if (newPassword !== "" && oldPassword !== "") {
+      changePassword(this, oldPassword, newPassword);
     }
   };
   getTextPassword = e => {
@@ -34,11 +26,11 @@ class ChangePass extends React.Component {
       [e.target.name]: e.target.value
     });
   };
-  resetAlert=()=>{
+  resetAlert = () => {
     this.setState({
-      message:'',
-    })
-  }
+      message: ""
+    });
+  };
   render() {
     const { message, statusSuccess } = this.state;
     return (
@@ -77,13 +69,6 @@ class ChangePass extends React.Component {
             <Form.Item label="New Password:">
               <Input.Password
                 name="newPassword"
-                onChange={this.getTextPassword}
-                onFocus={this.resetAlert}
-              />
-            </Form.Item>
-            <Form.Item label="Re-enter Your New Password:">
-              <Input.Password
-                name="confirmNewPassword"
                 onChange={this.getTextPassword}
                 onFocus={this.resetAlert}
               />

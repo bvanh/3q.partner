@@ -8,7 +8,7 @@ const API = {
   // API charts page
   CHARTS_PATHNAME: "/stats/revenue/date",
   CHARTS_PATHSEARCH_TYPE: "?type=1&userType=0",
-  CHARTS_PATHSEARCH_DATE: "&fromDate=2019-10-17&toDate=2019-10-25",
+  // CHARTS_PATHSEARCH_DATE: "&fromDate=2019-10-17&toDate=2019-10-25",
   // url change password page
   CHANGEPASSWORD_PATHNAME: "/partner/password/update",
   //   REFRESH TOKEN & LOGIN

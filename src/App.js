@@ -23,12 +23,6 @@ export default class App extends React.Component {
     <Menu>
       <Menu.Item>
         <Link to={API.CHANGEPASSWORD_PATHNAME}>
-          <Icon type="read" style={{ paddingRight: ".5rem" }} />
-          <span>Introduction</span>
-        </Link>
-      </Menu.Item>
-      <Menu.Item>
-        <Link to={API.CHANGEPASSWORD_PATHNAME}>
           <img
             src={icon_changepassword}
             alt="icon_changepassword"
@@ -46,9 +40,6 @@ export default class App extends React.Component {
       </Menu.Item>
     </Menu>
   );
-  componentWillMount(){
-    console.log('demo')
-  }
   componentDidMount() {
     const isLogin = localStorage.getItem("saveLogin");
     const checkToken = localStorage.getItem("userAccessToken");

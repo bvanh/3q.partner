@@ -1,6 +1,7 @@
 import API from "../../api/apiAll";
 import errorAlert from "../../utils/errorAlert";
 import getToken from "../../utils/refreshToken";
+import checkToken from "../../utils/checkToken";
 import moment from "moment";
 
 // lấy dữ liệu cho biểu đồ tròn
@@ -48,11 +49,7 @@ function getDataPieChartWithCondition(
 }
 // condition + function
 function getDataPieChart(thisObj, fromDateValue, toDateValue) {
-  const oldAccessToken = JSON.parse(localStorage.getItem("userAccessToken"));
-  const currentTime = new Date().getTime();
-  if (oldAccessToken === null) {
-    thisObj.props.logInOut(false);
-  } else if (currentTime - oldAccessToken.timestamp > 3300000) {
+  if (checkToken(thisObj)) {
     let checkToken = getToken(thisObj);
     if (checkToken !== false) {
       checkToken.then(newAccessToken => {
@@ -64,7 +61,7 @@ function getDataPieChart(thisObj, fromDateValue, toDateValue) {
         );
       });
     }
-  } else {
+  } else if(checkToken(thisObj)===false){
     const newAccessToken = JSON.parse(localStorage.getItem("userAccessToken"));
     getDataPieChartWithCondition(
       thisObj,
@@ -76,7 +73,6 @@ function getDataPieChart(thisObj, fromDateValue, toDateValue) {
 }
 // end
 // lấy dữ liệu cho biểu đồ cột
-
 function getDataLineChartWithCondition(
   thisObj,
   fromDateValue,
@@ -132,11 +128,7 @@ function getDataLineChart(thisObj, fromDateValue, toDateValue) {
   const fromDayValue = moment(fromDateValue).valueOf();
   const toDayValue = moment(toDateValue).valueOf();
   if (toDayValue - fromDayValue <= 2592000000) {
-    const oldAccessToken = JSON.parse(localStorage.getItem("userAccessToken"));
-    const currentTime = new Date().getTime();
-    if (oldAccessToken === null) {
-      thisObj.props.logInOut(false);
-    } else if (currentTime - oldAccessToken.timestamp > 3300000) {
+    if (checkToken(thisObj)) {
       let checkToken = getToken(thisObj);
       if (checkToken !== false) {
         checkToken.then(newAccessToken => {
@@ -148,7 +140,7 @@ function getDataLineChart(thisObj, fromDateValue, toDateValue) {
           );
         });
       }
-    } else {
+    } else if(checkToken(thisObj)===false) {
       const newAccessToken = JSON.parse(
         localStorage.getItem("userAccessToken")
       );
@@ -199,11 +191,7 @@ function getTotalPurchaseWithCondition(thisObj, fromDate, toDate, token) {
     });
 }
 function getTotalPurchase(thisObj, fromDate, toDate) {
-  const oldAccessToken = JSON.parse(localStorage.getItem("userAccessToken"));
-  const currentTime = new Date().getTime();
-  if (oldAccessToken === null) {
-    thisObj.props.logInOut(false);
-  } else if (currentTime - oldAccessToken.timestamp > 3300000) {
+  if (checkToken(thisObj)) {
     let checkToken = getToken(thisObj);
     if (checkToken !== false) {
       checkToken.then(newAccessToken => {
@@ -215,7 +203,7 @@ function getTotalPurchase(thisObj, fromDate, toDate) {
         );
       });
     }
-  } else {
+  } else if(checkToken(thisObj)===false){
     const newAccessToken = JSON.parse(localStorage.getItem("userAccessToken"));
     getTotalPurchaseWithCondition(thisObj, fromDate, toDate, newAccessToken);
   }

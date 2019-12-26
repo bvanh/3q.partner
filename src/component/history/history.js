@@ -111,12 +111,13 @@ class History extends React.Component {
       toDate,
       search,
       currentPage,
-      pageSize
+      pageSize,
+      userType
     } = this.state;
     await this.props.history.replace(
-      `${API.HISTORY_PATHNAME}?currentPage=${currentPage}&pageSize=${pageSize}&search=${search}&type=${type}&fromDate=${fromDate}&toDate=${toDate}`
+      `${API.HISTORY_PATHNAME}?currentPage=${currentPage}&pageSize=${pageSize}&search=${search}&type=${type}&userType=${userType}&fromDate=${fromDate}&toDate=${toDate}`
     );
-    getData(this.props.location.search);
+    getData(this,this.props.location.search);
   };
   render() {
     const rowSelection = {
