@@ -40,6 +40,7 @@ function getDataPieChart(thisObj, fromDateValue, toDateValue) {
     .catch(function(error) {
       console.log("Request failed", error);
     });
+    console.log(getAccessToken.timestamp)
 }
 // end
 // get data linechart

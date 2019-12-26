@@ -17,7 +17,8 @@ export default class App extends React.Component {
       isLogin: "",
       imageLogo: "",
       pageName: "",
-      isChangePassword: false
+      isChangePassword: false,
+      userAccessToken:JSON.parse(localStorage.getItem('userAccessToken'))
     };
   }
   menu = (
@@ -50,8 +51,11 @@ export default class App extends React.Component {
   refreshToken=setInterval(() => {
     checkToken(this)
   }, 3300000);
-  UNSAFE_componentWillMount(){
-    checkToken(this)
+  UNSAFE_componentWillMount=async()=>{
+    await checkToken(this)
+    this.setState({
+      userAccessToken:localStorage.getItem("userAccessToken")
+    })
   }
   componentDidMount() {
     const isLogin = localStorage.getItem("saveLogin");
@@ -65,6 +69,7 @@ export default class App extends React.Component {
         pageName: pageName
       });
     }
+    console.log(this.state.userAccessToken)
   }
   logInOut = elm => {
     if (elm === false) {
