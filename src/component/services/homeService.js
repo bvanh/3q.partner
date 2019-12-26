@@ -11,41 +11,143 @@ function getDataPieChartWithCondition(
   toDateValue,
   token
 ) {
-  let resStatus = 0;
-  fetch(
-    API.ROOT_URL +
-      API.CHARTS_PATHNAME +
-      API.CHARTS_PATHSEARCH_TYPE +
-      `&fromDate=${fromDateValue}&toDate=${toDateValue}`,
-    {
-      headers: {
-        Authorization: `Bearer ${token.accessToken}`,
-        "Content-Type": "application/x-www-form-urlencoded"
-      },
-      method: "GET"
-    }
-  )
-    .then(response => {
-      resStatus = response.status;
-      return response.json();
-    })
-    .then(result => {
-      if (resStatus !== 200) {
-        errorAlert(result.status, result.message);
-        return;
-      } else {
-        thisObj.setState({
-          fromDate: fromDateValue,
-          toDate: toDateValue,
-          totalRevenueWEB: result.yAxis.WEB.reduce((x, y) => x + y),
-          totalRevenueAPK: result.yAxis.APK.reduce((x, y) => x + y),
-          totalRevenue: result.yAxis.TOTAL.reduce((x, y) => x + y)
-        });
-      }
-    })
-    .catch(function(error) {
-      console.log("Request failed", error);
+  if (fromDateValue === toDateValue) {
+    let AxisTotal = [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      18000000,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ];
+    let AxisWeb = [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      900000,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ];
+    let AxisApk = [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      900000,
+      0,
+      0,
+      0
+    ];
+    thisObj.setState({
+      fromDate: fromDateValue,
+      toDate: toDateValue,
+      totalRevenueWEB: AxisWeb.reduce((x, y) => x + y),
+      totalRevenueAPK: AxisApk.reduce((x, y) => x + y),
+      totalRevenue: AxisTotal.reduce((x, y) => x + y)
     });
+  } else {
+    let resStatus = 0;
+    fetch(
+      API.ROOT_URL +
+        API.CHARTS_PATHNAME +
+        API.CHARTS_PATHSEARCH_TYPE +
+        `&fromDate=${fromDateValue}&toDate=${toDateValue}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token.accessToken}`,
+          "Content-Type": "application/x-www-form-urlencoded"
+        },
+        method: "GET"
+      }
+    )
+      .then(response => {
+        resStatus = response.status;
+        return response.json();
+      })
+      .then(result => {
+        if (resStatus !== 200) {
+          errorAlert(result.status, result.message);
+          return;
+        } else {
+          thisObj.setState({
+            fromDate: fromDateValue,
+            toDate: toDateValue,
+            totalRevenueWEB: result.yAxis.WEB.reduce((x, y) => x + y),
+            totalRevenueAPK: result.yAxis.APK.reduce((x, y) => x + y),
+            totalRevenue: result.yAxis.TOTAL.reduce((x, y) => x + y)
+          });
+        }
+      })
+      .catch(function(error) {
+        console.log("Request failed", error);
+      });
+  }
 }
 // condition + function
 function getDataPieChart(thisObj, fromDateValue, toDateValue) {
@@ -61,7 +163,7 @@ function getDataPieChart(thisObj, fromDateValue, toDateValue) {
         );
       });
     }
-  } else if(checkToken(thisObj)===false){
+  } else if (checkToken(thisObj) === false) {
     const newAccessToken = JSON.parse(localStorage.getItem("userAccessToken"));
     getDataPieChartWithCondition(
       thisObj,
@@ -80,12 +182,126 @@ function getDataLineChartWithCondition(
   newAccessToken
 ) {
   let resStatus = 0;
-  if(fromDateValue===toDateValue){
+  if (fromDateValue === toDateValue) {
     thisObj.setState({
-      vndChartxAxis: ['0h','1h','2h','3h','4h','5h','6h','7h','8h','9h','10h','11h','12h','13h','14h','15h','16h','17h','18h','19h','20h','21h','22h','23h'],
-      vndChartyAxisTotal: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,9000000,0,0,0,0,0,0,0,0,0,0,0],
-      vndChartyAxisWeb: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,9000000,0,0,0,0,0,0,0,0,0,0,0],
-      vndChartyAxisApk: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,9000000,0,0,0],
+      vndChartxAxis: [
+        "0h",
+        "1h",
+        "2h",
+        "3h",
+        "4h",
+        "5h",
+        "6h",
+        "7h",
+        "8h",
+        "9h",
+        "10h",
+        "11h",
+        "12h",
+        "13h",
+        "14h",
+        "15h",
+        "16h",
+        "17h",
+        "18h",
+        "19h",
+        "20h",
+        "21h",
+        "22h",
+        "23h"
+      ],
+      vndChartyAxisTotal: [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        18000000,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      vndChartyAxisWeb: [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        900000,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      vndChartyAxisApk: [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        900000,
+        0,
+        0,
+        0
+      ],
       fromDate: fromDateValue,
       toDate: toDateValue
     });
@@ -96,50 +312,50 @@ function getDataLineChartWithCondition(
       toDateValue,
       newAccessToken
     );
-  }else{
-  fetch(
-    API.ROOT_URL +
-      API.CHARTS_PATHNAME +
-      API.CHARTS_PATHSEARCH_TYPE +
-      `&fromDate=${fromDateValue}&toDate=${toDateValue}`,
-    {
-      headers: {
-        Authorization: `Bearer ${newAccessToken.accessToken}`,
-        "Content-Type": "application/x-www-form-urlencoded"
-      },
-      method: "GET"
-    }
-  )
-    .then(response => {
-      resStatus = response.status;
-      return response.json();
-    })
-    .then(result => {
-      if (resStatus !== 200) {
-        errorAlert(result.status, result.message);
-        return;
-      } else {
-        thisObj.setState({
-          vndChartxAxis: result.xAxis,
-          vndChartyAxisTotal: result.yAxis.TOTAL,
-          vndChartyAxisWeb: result.yAxis.WEB,
-          vndChartyAxisApk: result.yAxis.APK,
-          fromDate: fromDateValue,
-          toDate: toDateValue
-        });
+  } else {
+    fetch(
+      API.ROOT_URL +
+        API.CHARTS_PATHNAME +
+        API.CHARTS_PATHSEARCH_TYPE +
+        `&fromDate=${fromDateValue}&toDate=${toDateValue}`,
+      {
+        headers: {
+          Authorization: `Bearer ${newAccessToken.accessToken}`,
+          "Content-Type": "application/x-www-form-urlencoded"
+        },
+        method: "GET"
       }
-    })
-    .catch(function(error) {
-      console.log("Request failed", error);
-    });
-  thisObj.hideModalPicker();
-  getTotalPurchaseWithCondition(
-    thisObj,
-    fromDateValue,
-    toDateValue,
-    newAccessToken
-  );
-}
+    )
+      .then(response => {
+        resStatus = response.status;
+        return response.json();
+      })
+      .then(result => {
+        if (resStatus !== 200) {
+          errorAlert(result.status, result.message);
+          return;
+        } else {
+          thisObj.setState({
+            vndChartxAxis: result.xAxis,
+            vndChartyAxisTotal: result.yAxis.TOTAL,
+            vndChartyAxisWeb: result.yAxis.WEB,
+            vndChartyAxisApk: result.yAxis.APK,
+            fromDate: fromDateValue,
+            toDate: toDateValue
+          });
+        }
+      })
+      .catch(function(error) {
+        console.log("Request failed", error);
+      });
+    thisObj.hideModalPicker();
+    getTotalPurchaseWithCondition(
+      thisObj,
+      fromDateValue,
+      toDateValue,
+      newAccessToken
+    );
+  }
 }
 // function + condition
 function getDataLineChart(thisObj, fromDateValue, toDateValue) {
@@ -158,7 +374,7 @@ function getDataLineChart(thisObj, fromDateValue, toDateValue) {
           );
         });
       }
-    } else if(checkToken(thisObj)===false) {
+    } else if (checkToken(thisObj) === false) {
       const newAccessToken = JSON.parse(
         localStorage.getItem("userAccessToken")
       );
@@ -221,7 +437,7 @@ function getTotalPurchase(thisObj, fromDate, toDate) {
         );
       });
     }
-  } else if(checkToken(thisObj)===false){
+  } else if (checkToken(thisObj) === false) {
     const newAccessToken = JSON.parse(localStorage.getItem("userAccessToken"));
     getTotalPurchaseWithCondition(thisObj, fromDate, toDate, newAccessToken);
   }
