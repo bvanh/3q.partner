@@ -45,9 +45,9 @@ class History extends React.Component {
     await this.setState({
       currentPage: page
     });
-    const { type, fromDate, toDate, search, currentPage } = this.state;
+    const { type, fromDate, toDate, search, currentPage,userType } = this.state;
     await this.props.history.replace(
-      `${API.HISTORY_PATHNAME}?currentPage=${currentPage}&pageSize=10&search=${search}&type=${type}&fromDate=${fromDate}&toDate=${toDate}`
+      `${API.HISTORY_PATHNAME}?currentPage=${currentPage}&pageSize=10&search=${search}&type=${type}&userType=${userType}&fromDate=${fromDate}&toDate=${toDate}`
     );
     getData(this, this.props.location.search);
   };
@@ -135,9 +135,9 @@ class History extends React.Component {
         width: "20%"
       },
       {
-        title: "ProductID",
-        dataIndex: "productId",
-        key: "userId",
+        title: "PartnerProductID",
+        dataIndex: "partnerProductId",
+        key: "partnerProductId",
         width: "18%"
       },
 
@@ -156,7 +156,7 @@ class History extends React.Component {
       {
         title: "Username",
         dataIndex: "payload",
-        key: "productId",
+        key: "payload",
         width: "13%",
         render: index => JSON.parse(index).gameUserName
       },
