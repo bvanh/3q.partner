@@ -169,7 +169,6 @@ class LineChart extends React.Component {
                   valueDateToday
                 )
               }
-              disabled
             >
               Today
             </Option>

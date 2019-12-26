@@ -80,6 +80,23 @@ function getDataLineChartWithCondition(
   newAccessToken
 ) {
   let resStatus = 0;
+  if(fromDateValue===toDateValue){
+    thisObj.setState({
+      vndChartxAxis: ['0h','1h','2h','3h','4h','5h','6h','7h','8h','9h','10h','11h','12h','13h','14h','15h','16h','17h','18h','19h','20h','21h','22h','23h'],
+      vndChartyAxisTotal: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,9000000,0,0,0,0,0,0,0,0,0,0,0],
+      vndChartyAxisWeb: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,9000000,0,0,0,0,0,0,0,0,0,0,0],
+      vndChartyAxisApk: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,9000000,0,0,0],
+      fromDate: fromDateValue,
+      toDate: toDateValue
+    });
+    thisObj.hideModalPicker();
+    getTotalPurchaseWithCondition(
+      thisObj,
+      fromDateValue,
+      toDateValue,
+      newAccessToken
+    );
+  }else{
   fetch(
     API.ROOT_URL +
       API.CHARTS_PATHNAME +
@@ -122,6 +139,7 @@ function getDataLineChartWithCondition(
     toDateValue,
     newAccessToken
   );
+}
 }
 // function + condition
 function getDataLineChart(thisObj, fromDateValue, toDateValue) {
