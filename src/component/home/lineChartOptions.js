@@ -13,6 +13,11 @@ function nFormatter(num) {
 const optionLine = {
   maintainAspectRatio: false,
   scaleStartValue: 0,
+  tooltips:{
+    callback:function(tooltipItem){
+      return nFormatter(tooltipItem);
+    }
+  },
   scales: {
     yAxes: [
       {
