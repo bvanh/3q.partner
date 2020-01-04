@@ -72,7 +72,7 @@ export default class App extends React.Component {
     });
   };
   render() {
-    const { isLogin, imageLogo } = this.state;
+    const { isLogin, imageLogo,pageName } = this.state;
     if (isLogin === false || isLogin === null) {
       return (
         <Router>
@@ -107,7 +107,7 @@ export default class App extends React.Component {
                     className="ant-dropdown-link"
                     style={{ padding: "0 0 0 .5rem" }}
                   >
-                    WARA_staff{" "}
+                    {pageName}
                     <Icon
                       type="caret-down"
                       style={{ padding: "0 0 0 1.5rem" }}
