@@ -32,6 +32,12 @@ export default class App extends React.Component {
           <span>Change password</span>
         </Link>
       </Menu.Item>
+      <Menu.Item>
+        <Link to="/">
+          <Icon type="question-circle" style={{ paddingRight: ".5rem" }} />
+          Support
+        </Link>
+      </Menu.Item>
       <Menu.Item onClick={() => this.logInOut(false)}>
         <Link to="/">
           <Icon type="export" style={{ paddingRight: ".5rem" }} />
