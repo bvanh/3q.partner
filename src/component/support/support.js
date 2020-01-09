@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Layout, Menu } from "antd";
 import { Default, ChangePass, Login, Start } from "./subcontent/default";
+import "../../static/style-support.css";
 import {
   NavigationBar,
   OverviewDashboard,
@@ -44,8 +45,12 @@ function Support() {
   const printContent = (content, vals) => {
     const newContent = content.map((val, index1) => {
       return (
-        <Menu.Item key={index1 + vals}>
-          <span onClick={() => changeContent(val[1])}>{val[0]}</span>
+        <Menu.Item
+          key={index1 + vals}
+          onClick={() => changeContent(val[1])}
+          style={{ background: "#f0f2f5",margin:'0'}}
+        >
+          <span>{val[0]}</span>
         </Menu.Item>
       );
     });
@@ -58,12 +63,16 @@ function Support() {
     <Layout>
       <Router>
         <Layout style={{ padding: "24px 0", background: "#fff" }}>
-          <Sider width={200} style={{ background: "#fff" }}>
-            <Menu mode="inline" style={{ height: "100%" }}>
+          <Sider width={200} style={{ background: "#f0f2f5" }}>
+            <Menu
+              mode="inline"
+              style={{ height: "100%", background: "#f0f2f5" }}
+            >
               {printRouter}
               <SubMenu
                 key="222"
                 title={<span>Take a Tour of the CCR Interface</span>}
+                style={{ background: "#f0f2f5", margin: "0" }}
               >
                 {printOverviewMenu}
               </SubMenu>

@@ -1,0 +1,11 @@
+.ant-layout-sider{
+    flex: none !important;
+    width: 25% !important;
+    max-width: none !important;
+}
+.ant-layout-content{
+    width: 75%;
+}
+.ant-layout-has-sider{
+    background-color: #f0f2f5 !important    ;
+}

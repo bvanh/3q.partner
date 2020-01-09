@@ -56,7 +56,7 @@ function LeftChart() {
     return (
       <div>
         <h2>Left Chart</h2>
-        <img src={leftchart1} />
+        <img style={{width:'100%'}} src={leftchart1} />
         <p>The chart allows you to see:</p>
         <ul>
           <li>The total amount of user makes payments</li>
@@ -67,20 +67,20 @@ function LeftChart() {
           </li>
         </ul>
         <p>You can choose timeline to show revenue. </p>
-        <img src={leftchart2} />
+        <img style={{width:'100%'}} src={leftchart2} />
         <ol>
           <li>Today</li>
         </ol>
-        <img src={leftchart3} />
+        <img style={{width:'100%'}} src={leftchart3} />
         <ol>
           <li>Last 7 days</li>
           <li> Last 30 days</li>
         </ol>
-        <img src={leftchart4} />
+        <img style={{width:'100%'}} src={leftchart4} />
         <ol>
           <li>Custom</li>
         </ol>
-        <img src={leftchart5} />
+        <img style={{width:'100%'}} src={leftchart5} />
         <br/>
         <i>
           If you want to get list revenue for more 30 days, please contact with
@@ -102,7 +102,7 @@ function LeftChart() {
           The CCR UI allows you to see about Total Revenue of game and percentage
           of platform where user purchase.
         </p>
-        <img src={rightchart} />
+        <img style={{width:'100%'}} src={rightchart} />
       </div>
     );
   }

@@ -12,7 +12,7 @@ function OverviewDetail() {
         Data details show more insights of data. We provide further details of a
         purchase and allow you use some feature to do with data.
       </p>
-      <img src={detail1} />
+      <img  src={detail1}style={{width:'100%'}} />
       <p>
         A purchase contains Product name, ID product, ID Purchase, Time,
         Username who buy, Source, Price exchange to C.coin and Price exchange to
@@ -49,7 +49,7 @@ function Export() {
       <p>Export in Excel format</p>
       <p>To export your data from CCR you need to make your selection. After you select purchase, then export excel button will be able. </p>
       <p>You can select which purchase you’d like to export. This could be:</p>
-      <img src={leftchart2} />
+      <img style={{width:'100%'}} src={leftchart2} />
       <ol>
         <li>A single purchase</li>
         <li>A list purchase</li>
