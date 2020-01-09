@@ -73,8 +73,8 @@ export default class TypeSearch extends React.Component {
           >
             <Option value="4">TYPE</Option>
             <Option value="0">ALL</Option>
-            <Option value="1">TEST</Option>
-            <Option value="2">LIVE</Option>
+            <Option value="2">TEST</Option>
+            <Option value="1">LIVE</Option>
           </Select>
         </div>
         <div className="btn-checkdate">
