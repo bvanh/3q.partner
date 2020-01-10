@@ -56,11 +56,6 @@ class History extends React.Component {
       type: val
     });
   };
-  addUserTypeData = val => {
-    this.setState({
-      userType: val
-    });
-  };
   addDateData = (startDate, endDate) => {
     this.setState({
       fromDate: startDate,
@@ -140,13 +135,6 @@ class History extends React.Component {
         key: "partnerProductId",
         width: "19%"
       },
-
-      {
-        title: "Type",
-        dataIndex: "userType",
-        key: "usertype",
-        width: "9%"
-      },
       {
         title: "Time",
         dataIndex: "createdAt",
@@ -201,7 +189,6 @@ class History extends React.Component {
             addTypeData={this.addTypeData}
             addDateData={this.addDateData}
             addTextSearch={this.addTextSearch}
-            addUserTypeData={this.addUserTypeData}
           />
           <Button id="btn_search" onClick={this.searchData}>
             SEARCH

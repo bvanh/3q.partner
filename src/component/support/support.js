@@ -67,6 +67,7 @@ function Support() {
             <Menu
               mode="inline"
               style={{ height: "100%", background: "#f0f2f5" }}
+              id='menu_support'
             >
               {printRouter}
               <SubMenu
