@@ -38,6 +38,7 @@ function getDataAfterSetCondition(thisObj, token, pathSearch) {
         errorAlert(result.status, result.message);
         return;
       } else {
+        // console.log(result)
         thisObj.setState({
           data: result.rows,
           totalItem: result.count

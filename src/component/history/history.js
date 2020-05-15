@@ -45,7 +45,7 @@ class History extends React.Component {
     await this.setState({
       currentPage: page
     });
-    const { type, fromDate, toDate, search, currentPage,userType } = this.state;
+    const { type, fromDate, toDate, search, currentPage, userType } = this.state;
     await this.props.history.replace(
       `${API.HISTORY_PATHNAME}?currentPage=${currentPage}&pageSize=10&search=${search}&type=${type}&userType=${userType}&fromDate=${fromDate}&toDate=${toDate}`
     );
@@ -112,7 +112,7 @@ class History extends React.Component {
     await this.props.history.replace(
       `${API.HISTORY_PATHNAME}?currentPage=${currentPage}&pageSize=${pageSize}&search=${search}&type=${type}&userType=${userType}&fromDate=${fromDate}&toDate=${toDate}`
     );
-    getData(this,this.props.location.search);
+    getData(this, this.props.location.search);
   };
   render() {
     const rowSelection = {
@@ -143,10 +143,10 @@ class History extends React.Component {
       },
       {
         title: "Username",
-        dataIndex: "payload",
-        key: "payload",
+        dataIndex: "username",
+        key: "username",
         width: "13%",
-        render: index => JSON.parse(index).gameUserName
+        // render: index => JSON.parse(index).gameUserName
       },
       {
         title: "Source",
@@ -205,16 +205,16 @@ class History extends React.Component {
               Export Excel
             </Button>
           }
-          filename="Partner_3Q_Data"
+          filename="Lịch sử giao dịch C.COIN"
         >
-          <ExcelSheet data={dataExport} name="Partner_3Q">
+          <ExcelSheet name="Partner_3Q" data={dataExport}>{/*data={dataExport}*/}
             <ExcelColumn label="PartnerChargeId" value="partnerChargeId" />
             <ExcelColumn label="UserID" value="userId" />
             <ExcelColumn label="Type" value="userType" />
             <ExcelColumn label="Time" value="createdAt" />
             <ExcelColumn
               label="Username"
-              value={col => JSON.parse(col.payload).gameUserName}
+              value="username"
             />
             <ExcelColumn label="Source" value="os" />
             <ExcelColumn label="C.coin" value="coin" />

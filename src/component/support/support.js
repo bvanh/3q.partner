@@ -80,6 +80,9 @@ function Support() {
               <SubMenu key="99" title={<span>Working with data details</span>}>
                 {printOverviewDetail}
               </SubMenu>
+              <SubMenu key="99" title={<span>Working with data details</span>}>
+                <a href='../Guide_partner.docx' download='Guide_partner.docx'>download</a>
+              </SubMenu>
             </Menu>
           </Sider>
           <Content style={{ padding: "0 24px", minHeight: 280 }}>
