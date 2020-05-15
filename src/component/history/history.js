@@ -155,10 +155,10 @@ class History extends React.Component {
       },
       {
         title: "Username",
-        dataIndex: "payload",
+        dataIndex: "username",
         key: "productId",
         width: "13%",
-        render: index => JSON.parse(index).gameUserName
+        
       },
       {
         title: "Source",
@@ -227,7 +227,7 @@ class History extends React.Component {
             <ExcelColumn label="Time" value="createdAt" />
             <ExcelColumn
               label="Username"
-              value={col => JSON.parse(col.payload).gameUserName}
+              value="username"
             />
             <ExcelColumn label="Source" value="os" />
             <ExcelColumn label="C.coin" value="coin" />
