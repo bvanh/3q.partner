@@ -45,20 +45,15 @@ class History extends React.Component {
     await this.setState({
       currentPage: page
     });
-    const { type, fromDate, toDate, search, currentPage } = this.state;
+    const { type, fromDate, toDate, search, currentPage, userType } = this.state;
     await this.props.history.replace(
-      `${API.HISTORY_PATHNAME}?currentPage=${currentPage}&pageSize=10&search=${search}&type=${type}&fromDate=${fromDate}&toDate=${toDate}`
+      `${API.HISTORY_PATHNAME}?currentPage=${currentPage}&pageSize=10&search=${search}&type=${type}&userType=${userType}&fromDate=${fromDate}&toDate=${toDate}`
     );
     getData(this, this.props.location.search);
   };
   addTypeData = val => {
     this.setState({
       type: val
-    });
-  };
-  addUserTypeData = val => {
-    this.setState({
-      userType: val
     });
   };
   addDateData = (startDate, endDate) => {
@@ -117,7 +112,7 @@ class History extends React.Component {
     await this.props.history.replace(
       `${API.HISTORY_PATHNAME}?currentPage=${currentPage}&pageSize=${pageSize}&search=${search}&type=${type}&userType=${userType}&fromDate=${fromDate}&toDate=${toDate}`
     );
-    getData(this,this.props.location.search);
+    getData(this, this.props.location.search);
   };
   render() {
     const rowSelection = {
@@ -129,23 +124,16 @@ class History extends React.Component {
     };
     const columns = [
       {
-        title: "PartnerChargeId",
-        dataIndex: "partnerChargeId",
+        title: "Product Name",
+        dataIndex: "partnerProductName",
         key: "partnerChargeId",
-        width: "20%"
+        width: "17%"
       },
       {
-        title: "UserID",
-        dataIndex: "userId",
-        key: "userId",
-        width: "18%"
-      },
-
-      {
-        title: "Type",
-        dataIndex: "userType",
-        key: "usertype",
-        width: "7%"
+        title: "Product ID",
+        dataIndex: "partnerProductId",
+        key: "partnerProductId",
+        width: "19%"
       },
       {
         title: "Time",
@@ -156,9 +144,9 @@ class History extends React.Component {
       {
         title: "Username",
         dataIndex: "username",
-        key: "productId",
+        key: "username",
         width: "13%",
-        
+        // render: index => JSON.parse(index).gameUserName
       },
       {
         title: "Source",
@@ -201,7 +189,6 @@ class History extends React.Component {
             addTypeData={this.addTypeData}
             addDateData={this.addDateData}
             addTextSearch={this.addTextSearch}
-            addUserTypeData={this.addUserTypeData}
           />
           <Button id="btn_search" onClick={this.searchData}>
             SEARCH
@@ -218,9 +205,9 @@ class History extends React.Component {
               Export Excel
             </Button>
           }
-          filename="Partner_3Q_Data"
+          filename="Lịch sử giao dịch C.COIN"
         >
-          <ExcelSheet data={dataExport} name="Partner_3Q">
+          <ExcelSheet name="Partner_3Q" data={dataExport}>{/*data={dataExport}*/}
             <ExcelColumn label="PartnerChargeId" value="partnerChargeId" />
             <ExcelColumn label="UserID" value="userId" />
             <ExcelColumn label="Type" value="userType" />

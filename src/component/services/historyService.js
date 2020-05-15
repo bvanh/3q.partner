@@ -9,18 +9,18 @@ function getData(thisObj, pathSearch) {
     let checkToken = getToken(thisObj);
     if (checkToken !== false) {
       checkToken.then(newAccessToken => {
-        getDataWithCondition(thisObj, newAccessToken, pathSearch);
+        getDataAfterSetCondition(thisObj, newAccessToken, pathSearch);
       });
     }
   } else if (checkToken(thisObj)===false) {
     const newAccessToken = JSON.parse(localStorage.getItem("userAccessToken"));
-    getDataWithCondition(thisObj, newAccessToken, pathSearch);
+    getDataAfterSetCondition(thisObj, newAccessToken, pathSearch);
   }
 }
 
 export { getData };
 // 
-function getDataWithCondition(thisObj, token, pathSearch) {
+function getDataAfterSetCondition(thisObj, token, pathSearch) {
   let resStatus = 0;
   fetch(API.ROOT_URL + API.HISTORY_PATHNAME + pathSearch, {
     headers: {
@@ -38,6 +38,7 @@ function getDataWithCondition(thisObj, token, pathSearch) {
         errorAlert(result.status, result.message);
         return;
       } else {
+        // console.log(result)
         thisObj.setState({
           data: result.rows,
           totalItem: result.count

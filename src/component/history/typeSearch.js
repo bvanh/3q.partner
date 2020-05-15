@@ -61,20 +61,10 @@ export default class TypeSearch extends React.Component {
             onChange={this.props.addTypeData}
             className="btn-checktype"
           >
-            <Option value="0"> All</Option>
+            <Option value="0"> ID Purchase</Option>
             <Option value="1"> Partner_charge_ID</Option>
             <Option value="2">User_ID</Option>
             <Option value="3">Product_ID</Option>
-          </Select>
-          <Select
-            defaultValue="4"
-            onChange={this.props.addUserTypeData}
-            className="btn-checktype checkusertype"
-          >
-            <Option value="4">TYPE</Option>
-            <Option value="0">ALL</Option>
-            <Option value="1">TEST</Option>
-            <Option value="2">LIVE</Option>
           </Select>
         </div>
         <div className="btn-checkdate">

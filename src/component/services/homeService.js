@@ -5,55 +5,13 @@ import checkToken from "../../utils/checkToken";
 import moment from "moment";
 
 // lấy dữ liệu cho biểu đồ tròn
-function getDataPieChartWithCondition(
-  thisObj,
-  fromDateValue,
-  toDateValue,
-  token
-) {
-  let resStatus = 0;
-  fetch(
-    API.ROOT_URL +
-      API.CHARTS_PATHNAME +
-      API.CHARTS_PATHSEARCH_TYPE +
-      `&fromDate=${fromDateValue}&toDate=${toDateValue}`,
-    {
-      headers: {
-        Authorization: `Bearer ${token.accessToken}`,
-        "Content-Type": "application/x-www-form-urlencoded"
-      },
-      method: "GET"
-    }
-  )
-    .then(response => {
-      resStatus = response.status;
-      return response.json();
-    })
-    .then(result => {
-      if (resStatus !== 200) {
-        errorAlert(result.status, result.message);
-        return;
-      } else {
-        thisObj.setState({
-          fromDate: fromDateValue,
-          toDate: toDateValue,
-          totalRevenueWEB: result.yAxis.WEB.reduce((x, y) => x + y),
-          totalRevenueAPK: result.yAxis.APK.reduce((x, y) => x + y),
-          totalRevenue: result.yAxis.TOTAL.reduce((x, y) => x + y)
-        });
-      }
-    })
-    .catch(function(error) {
-      console.log("Request failed", error);
-    });
-}
-// condition + function
+// function set condition
 function getDataPieChart(thisObj, fromDateValue, toDateValue) {
   if (checkToken(thisObj)) {
     let checkToken = getToken(thisObj);
     if (checkToken !== false) {
       checkToken.then(newAccessToken => {
-        getDataPieChartWithCondition(
+        getDataPieChartAfterSetCondition(
           thisObj,
           fromDateValue,
           toDateValue,
@@ -61,9 +19,9 @@ function getDataPieChart(thisObj, fromDateValue, toDateValue) {
         );
       });
     }
-  } else if(checkToken(thisObj)===false){
+  } else if (checkToken(thisObj) === false) {
     const newAccessToken = JSON.parse(localStorage.getItem("userAccessToken"));
-    getDataPieChartWithCondition(
+    getDataPieChartAfterSetCondition(
       thisObj,
       fromDateValue,
       toDateValue,
@@ -71,59 +29,82 @@ function getDataPieChart(thisObj, fromDateValue, toDateValue) {
     );
   }
 }
-// end
-// lấy dữ liệu cho biểu đồ cột
-function getDataLineChartWithCondition(
+// function callback after set condition
+function getDataPieChartAfterSetCondition(
   thisObj,
   fromDateValue,
   toDateValue,
-  newAccessToken
+  token
 ) {
   let resStatus = 0;
-  fetch(
-    API.ROOT_URL +
-      API.CHARTS_PATHNAME +
-      API.CHARTS_PATHSEARCH_TYPE +
-      `&fromDate=${fromDateValue}&toDate=${toDateValue}`,
-    {
+  if (fromDateValue === toDateValue) {
+    fetch(API.ROOT_URL + API.CHARTS_PATH_HOUR + `&date=${fromDateValue}`, {
       headers: {
-        Authorization: `Bearer ${newAccessToken.accessToken}`,
+        Authorization: `Bearer ${token.accessToken}`,
         "Content-Type": "application/x-www-form-urlencoded"
       },
       method: "GET"
-    }
-  )
-    .then(response => {
-      resStatus = response.status;
-      return response.json();
     })
-    .then(result => {
-      if (resStatus !== 200) {
-        errorAlert(result.status, result.message);
-        return;
-      } else {
-        thisObj.setState({
-          vndChartxAxis: result.xAxis,
-          vndChartyAxisTotal: result.yAxis.TOTAL,
-          vndChartyAxisWeb: result.yAxis.WEB,
-          vndChartyAxisApk: result.yAxis.APK,
-          fromDate: fromDateValue,
-          toDate: toDateValue
-        });
+      .then(response => {
+        resStatus = response.status;
+        return response.json();
+      })
+      .then(result => {
+        if (resStatus !== 200) {
+          errorAlert(result.status, result.message);
+          return;
+        } else {
+          thisObj.setState({
+            fromDate: fromDateValue,
+            toDate: toDateValue,
+            totalRevenueWEB: result.yAxis.WEB.reduce((x, y) => x + y),
+            totalRevenueAPK: result.yAxis.APK.reduce((x, y) => x + y),
+            totalRevenue: result.yAxis.TOTAL.reduce((x, y) => x + y)
+          });
+        }
+      })
+      .catch(function(error) {
+        console.log("Request failed", error);
+      });
+  } else {
+    fetch(
+      API.ROOT_URL +
+        API.CHARTS_PATHNAME +
+        API.CHARTS_PATHSEARCH_TYPE +
+        `&fromDate=${fromDateValue}&toDate=${toDateValue}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token.accessToken}`,
+          "Content-Type": "application/x-www-form-urlencoded"
+        },
+        method: "GET"
       }
-    })
-    .catch(function(error) {
-      console.log("Request failed", error);
-    });
-  thisObj.hideModalPicker();
-  getTotalPurchaseWithCondition(
-    thisObj,
-    fromDateValue,
-    toDateValue,
-    newAccessToken
-  );
+    )
+      .then(response => {
+        resStatus = response.status;
+        return response.json();
+      })
+      .then(result => {
+        if (resStatus !== 200) {
+          errorAlert(result.status, result.message);
+          return;
+        } else {
+          thisObj.setState({
+            fromDate: fromDateValue,
+            toDate: toDateValue,
+            totalRevenueWEB: result.yAxis.WEB.reduce((x, y) => x + y),
+            totalRevenueAPK: result.yAxis.APK.reduce((x, y) => x + y),
+            totalRevenue: result.yAxis.TOTAL.reduce((x, y) => x + y)
+          });
+        }
+      })
+      .catch(function(error) {
+        console.log("Request failed", error);
+      });
+  }
 }
-// function + condition
+// lấy dữ liệu cho biểu đồ cột
+// function check condition
 function getDataLineChart(thisObj, fromDateValue, toDateValue) {
   const fromDayValue = moment(fromDateValue).valueOf();
   const toDayValue = moment(toDateValue).valueOf();
@@ -132,7 +113,7 @@ function getDataLineChart(thisObj, fromDateValue, toDateValue) {
       let checkToken = getToken(thisObj);
       if (checkToken !== false) {
         checkToken.then(newAccessToken => {
-          getDataLineChartWithCondition(
+          getDataLineChartAfterSetCondition(
             thisObj,
             fromDateValue,
             toDateValue,
@@ -140,11 +121,11 @@ function getDataLineChart(thisObj, fromDateValue, toDateValue) {
           );
         });
       }
-    } else if(checkToken(thisObj)===false) {
+    } else if (checkToken(thisObj) === false) {
       const newAccessToken = JSON.parse(
         localStorage.getItem("userAccessToken")
       );
-      getDataLineChartWithCondition(
+      getDataLineChartAfterSetCondition(
         thisObj,
         fromDateValue,
         toDateValue,
@@ -155,8 +136,119 @@ function getDataLineChart(thisObj, fromDateValue, toDateValue) {
     errorAlert(500, "Date less than or equal 30 days");
   }
 }
+// function callback after condition
+function getDataLineChartAfterSetCondition(
+  thisObj,
+  fromDateValue,
+  toDateValue,
+  newAccessToken
+) {
+  let resStatus = 0;
+  if (fromDateValue === toDateValue) {
+    fetch(API.ROOT_URL + API.CHARTS_PATH_HOUR + `&date=${fromDateValue}`, {
+      headers: {
+        Authorization: `Bearer ${newAccessToken.accessToken}`,
+        "Content-Type": "application/x-www-form-urlencoded"
+      },
+      method: "GET"
+    })
+      .then(response => {
+        resStatus = response.status;
+        return response.json();
+      })
+      .then(result => {
+        if (resStatus !== 200) {
+          errorAlert(result.status, result.message);
+          return;
+        } else {
+         let newXaxis=result.xAxis.map(val=>val+'h' )
+          thisObj.setState({
+            vndChartxAxis: newXaxis,
+            vndChartyAxisTotal: result.yAxis.TOTAL,
+            vndChartyAxisWeb: result.yAxis.WEB,
+            vndChartyAxisApk: result.yAxis.APK,
+            fromDate: fromDateValue,
+            toDate: toDateValue
+          });
+        }
+      })
+      .catch(function(error) {
+        console.log("Request failed", error);
+      });
+    thisObj.hideModalPicker();
+    getTotalPurchaseAfterSetCondition(
+      thisObj,
+      fromDateValue,
+      toDateValue,
+      newAccessToken
+    );
+  } else {
+    fetch(
+      API.ROOT_URL +
+        API.CHARTS_PATHNAME +
+        API.CHARTS_PATHSEARCH_TYPE +
+        `&fromDate=${fromDateValue}&toDate=${toDateValue}`,
+      {
+        headers: {
+          Authorization: `Bearer ${newAccessToken.accessToken}`,
+          "Content-Type": "application/x-www-form-urlencoded"
+        },
+        method: "GET"
+      }
+    )
+      .then(response => {
+        resStatus = response.status;
+        return response.json();
+      })
+      .then(result => {
+        if (resStatus !== 200) {
+          errorAlert(result.status, result.message);
+          return;
+        } else {
+          thisObj.setState({
+            vndChartxAxis: result.xAxis,
+            vndChartyAxisTotal: result.yAxis.TOTAL,
+            vndChartyAxisWeb: result.yAxis.WEB,
+            vndChartyAxisApk: result.yAxis.APK,
+            fromDate: fromDateValue,
+            toDate: toDateValue
+          });
+        }
+      })
+      .catch(function(error) {
+        console.log("Request failed", error);
+      });
+    thisObj.hideModalPicker();
+    getTotalPurchaseAfterSetCondition(
+      thisObj,
+      fromDateValue,
+      toDateValue,
+      newAccessToken
+    );
+  }
+}
 // lấy tổng số lượng giao dịch
-function getTotalPurchaseWithCondition(thisObj, fromDate, toDate, token) {
+// function check condition
+function getTotalPurchase(thisObj, fromDate, toDate) {
+  if (checkToken(thisObj)) {
+    let checkToken = getToken(thisObj);
+    if (checkToken !== false) {
+      checkToken.then(newAccessToken => {
+        getTotalPurchaseAfterSetCondition(
+          thisObj,
+          fromDate,
+          toDate,
+          newAccessToken
+        );
+      });
+    }
+  } else if (checkToken(thisObj) === false) {
+    const newAccessToken = JSON.parse(localStorage.getItem("userAccessToken"));
+    getTotalPurchaseAfterSetCondition(thisObj, fromDate, toDate, newAccessToken);
+  }
+}
+// function callback after check condition
+function getTotalPurchaseAfterSetCondition(thisObj, fromDate, toDate, token) {
   let resStatus = 0;
   fetch(
     API.ROOT_URL +
@@ -189,23 +281,5 @@ function getTotalPurchaseWithCondition(thisObj, fromDate, toDate, token) {
     .catch(function(error) {
       console.log("Request failed", error);
     });
-}
-function getTotalPurchase(thisObj, fromDate, toDate) {
-  if (checkToken(thisObj)) {
-    let checkToken = getToken(thisObj);
-    if (checkToken !== false) {
-      checkToken.then(newAccessToken => {
-        getTotalPurchaseWithCondition(
-          thisObj,
-          fromDate,
-          toDate,
-          newAccessToken
-        );
-      });
-    }
-  } else if(checkToken(thisObj)===false){
-    const newAccessToken = JSON.parse(localStorage.getItem("userAccessToken"));
-    getTotalPurchaseWithCondition(thisObj, fromDate, toDate, newAccessToken);
-  }
 }
 export { getDataPieChart, getDataLineChart, getTotalPurchase };

@@ -1,12 +1,13 @@
 import React from "react";
 import { Layout, Menu, Icon, Avatar, Dropdown } from "antd";
+import Support from "./component/support/support";
 import Charts from "./component/home/home";
 import History from "./component/history/history";
 import ChangePass from "./component/changepassword/changepassword";
 import LoginForm from "./component/login/login";
 import API from "./api/apiAll";
 import logoclappigames from "./static/img/logoForPages.jpg";
-import icon_changepassword from "./static/img/icon_changepassword.png";
+import icon_changepassword from "./static/img/changepassword_icon.svg";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 const { Header, Footer } = Layout;
 export default class App extends React.Component {
@@ -32,9 +33,21 @@ export default class App extends React.Component {
           <span>Change password</span>
         </Link>
       </Menu.Item>
+      <Menu.Item>
+        <Link to="/support">
+          <Icon
+            type="question-circle"
+            style={{ paddingRight: ".5rem", color: "#AEAEAE" }}
+          />
+          Support
+        </Link>
+      </Menu.Item>
       <Menu.Item onClick={() => this.logInOut(false)}>
         <Link to="/">
-          <Icon type="export" style={{ paddingRight: ".5rem" }} />
+          <Icon
+            type="export"
+            style={{ paddingRight: ".5rem", color: "#AEAEAE" }}
+          />
           Log out
         </Link>
       </Menu.Item>
@@ -44,7 +57,12 @@ export default class App extends React.Component {
     const isLogin = localStorage.getItem("saveLogin");
     const checkToken = localStorage.getItem("userAccessToken");
     const checkUserToken = localStorage.getItem("userToken");
-    if (isLogin === null || isLogin === "false"|| checkToken===null||checkUserToken===null) {
+    if (
+      isLogin === null ||
+      isLogin === "false" ||
+      checkToken === null ||
+      checkUserToken === null
+    ) {
       this.logInOut(false);
     } else {
       let imageLogo = localStorage.getItem("imageLogo");
@@ -72,7 +90,7 @@ export default class App extends React.Component {
     });
   };
   render() {
-    const { isLogin, imageLogo } = this.state;
+    const { isLogin, imageLogo, pageName } = this.state;
     if (isLogin === false || isLogin === null) {
       return (
         <Router>
@@ -93,11 +111,13 @@ export default class App extends React.Component {
         <Router>
           <Header>
             <div className="header1">
-              <img
-                src={logoclappigames}
-                alt="logo_clappigames"
-                className="logoForPages"
-              ></img>
+              <Link to="/">
+                <img
+                  src={logoclappigames}
+                  alt="logo_clappigames"
+                  className="logoForPages"
+                ></img>
+              </Link>
               <Dropdown overlay={this.menu} placement="bottomRight">
                 <div className="user_logout">
                   <Avatar icon="user" />
@@ -105,7 +125,7 @@ export default class App extends React.Component {
                     className="ant-dropdown-link"
                     style={{ padding: "0 0 0 .5rem" }}
                   >
-                    WARA_staff{" "}
+                    {pageName}
                     <Icon
                       type="caret-down"
                       style={{ padding: "0 0 0 1.5rem" }}
@@ -133,6 +153,9 @@ export default class App extends React.Component {
                 />
               )}
             />
+            <Route path="/support">
+              <Support />
+            </Route>
             <Route
               exact
               path={API.CHANGEPASSWORD_PATHNAME}

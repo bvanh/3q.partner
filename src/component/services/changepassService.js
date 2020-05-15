@@ -8,7 +8,7 @@ function changePassword(thisObj, oldPassword, newPassword) {
     let checkToken = getToken(thisObj);
     if (checkToken !== false) {
       checkToken.then(newAccessToken => {
-        changePasswordWithCondition(
+        changePasswordAfterSetCondition(
           thisObj,
           newAccessToken,
           oldPassword,
@@ -18,7 +18,7 @@ function changePassword(thisObj, oldPassword, newPassword) {
     }
   } else if (checkToken(thisObj) === false) {
     const newAccessToken = JSON.parse(localStorage.getItem("userAccessToken"));
-    const res = changePasswordWithCondition(
+    const res = changePasswordAfterSetCondition(
       thisObj,
       newAccessToken,
       oldPassword,
@@ -27,7 +27,7 @@ function changePassword(thisObj, oldPassword, newPassword) {
     return res;
   }
 }
-function changePasswordWithCondition(
+function changePasswordAfterSetCondition(
   thisObj,
   accessToken,
   oldPassword,
