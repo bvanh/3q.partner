@@ -29,8 +29,13 @@ export default class TypeSearch extends React.Component {
   onStartChange = value => {
     this.onChange("startValue", value);
   };
-  onEndChange = value => {
-    this.onChange("endValue", value);
+  onEndChange = async value => {
+    await  this.onChange("endValue", value);
+    const { startValue, endValue } = this.state;
+    let startTime = moment(startValue).format("YYYY-MM-DD");
+    let endTime = moment(endValue).format("YYYY-MM-DD");
+    this.props.addDateData(startTime, endTime); 
+    console.log(value)
   };
   handleStartOpenChange = open => {
     if (!open) {

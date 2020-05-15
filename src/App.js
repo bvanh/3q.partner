@@ -22,15 +22,10 @@ export default class App extends React.Component {
   }
   menu = (
     <Menu>
-      <Menu.Item>
-        <Link to={API.CHANGEPASSWORD_PATHNAME}>
-          <img
-            src={icon_changepassword}
-            alt="icon_changepassword"
-            className="icon_changepassword"
-            style={{ paddingRight: ".5rem" }}
-          ></img>
-          <span>Change password</span>
+       <Menu.Item>
+        <Link to='/'>
+        <Icon type="home" style={{ paddingRight: ".5rem" }} />
+          <span>Home</span>
         </Link>
       </Menu.Item>
       <Menu.Item>
@@ -40,6 +35,17 @@ export default class App extends React.Component {
             style={{ paddingRight: ".5rem", color: "#AEAEAE" }}
           />
           Support
+        </Link>
+      </Menu.Item>
+      <Menu.Item>
+        <Link to={API.CHANGEPASSWORD_PATHNAME}>
+          <img
+            src={icon_changepassword}
+            alt="icon_changepassword"
+            className="icon_changepassword"
+            style={{ paddingRight: ".5rem" }}
+          ></img>
+          <span>Change password</span>
         </Link>
       </Menu.Item>
       <Menu.Item onClick={() => this.logInOut(false)}>
