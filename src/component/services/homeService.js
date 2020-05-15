@@ -254,7 +254,7 @@ function getTotalPurchaseAfterSetCondition(thisObj, fromDate, toDate, token) {
     API.ROOT_URL +
       API.HISTORY_PATHNAME +
       API.HISTORY_PATHSEARCH_NODATE +
-      `&fromDate=${fromDate}&toDate=${toDate}&userType=0`,
+      `&fromDate=${fromDate}&toDate=${toDate}`,
     {
       headers: {
         Authorization: `Bearer ${token.accessToken}`,

@@ -29,8 +29,7 @@ class History extends React.Component {
       totalItem: 0,
       currentPage: 1,
       pageSize: 10,
-      type: 1,
-      userType: 0,
+      type: 0,
       search: "",
       fromDate: "",
       toDate: ""
@@ -45,9 +44,9 @@ class History extends React.Component {
     await this.setState({
       currentPage: page
     });
-    const { type, fromDate, toDate, search, currentPage, userType } = this.state;
+    const { type, fromDate, toDate, search, currentPage } = this.state;
     await this.props.history.replace(
-      `${API.HISTORY_PATHNAME}?currentPage=${currentPage}&pageSize=10&search=${search}&type=${type}&userType=${userType}&fromDate=${fromDate}&toDate=${toDate}`
+      `${API.HISTORY_PATHNAME}?currentPage=${currentPage}&pageSize=10&search=${search}&type=${type}&fromDate=${fromDate}&toDate=${toDate}`
     );
     getData(this, this.props.location.search);
   };
@@ -74,13 +73,12 @@ class History extends React.Component {
       toDate,
       search,
       currentPage,
-      userType
     } = this.state;
     const fromDayValue = moment(fromDate).valueOf();
     const toDayValue = moment(toDate).valueOf();
     if (toDayValue - fromDayValue <= 2592000000) {
       await this.props.history.replace(
-        `${API.HISTORY_PATHNAME}?currentPage=${currentPage}&pageSize=10&search=${search}&type=${type}&userType=${userType}&fromDate=${fromDate}&toDate=${toDate}`
+        `${API.HISTORY_PATHNAME}?currentPage=${currentPage}&pageSize=10&search=${search}&type=${type}&fromDate=${fromDate}&toDate=${toDate}`
       );
       getData(this, this.props.location.search);
       getDataPieChart(this, fromDate, toDate);
@@ -107,10 +105,10 @@ class History extends React.Component {
       search,
       currentPage,
       pageSize,
-      userType
+
     } = this.state;
     await this.props.history.replace(
-      `${API.HISTORY_PATHNAME}?currentPage=${currentPage}&pageSize=${pageSize}&search=${search}&type=${type}&userType=${userType}&fromDate=${fromDate}&toDate=${toDate}`
+      `${API.HISTORY_PATHNAME}?currentPage=${currentPage}&pageSize=${pageSize}&search=${search}&type=${type}&fromDate=${fromDate}&toDate=${toDate}`
     );
     getData(this, this.props.location.search);
   };
@@ -127,32 +125,38 @@ class History extends React.Component {
         title: "Product Name",
         dataIndex: "partnerProductName",
         key: "partnerChargeId",
-        width: "17%"
+        width: "12%"
       },
       {
-        title: "Product ID",
-        dataIndex: "partnerProductId",
-        key: "partnerProductId",
-        width: "19%"
+        title: "Charge ID",
+        dataIndex: "partnerChargeId",
+        key: "productId",
+        width: "18%"
       },
       {
         title: "Time",
         dataIndex: "createdAt",
         key: "createAt",
-        width: "13%"
+        width: "12%"
       },
       {
         title: "Username",
         dataIndex: "username",
         key: "username",
-        width: "13%",
+        width: "12%",
         // render: index => JSON.parse(index).gameUserName
+      },
+      {
+        title: "Game user ID",
+        dataIndex: "gameUserId",
+        key: "gameUserId",
+        width: "9%",
       },
       {
         title: "Source",
         dataIndex: "os",
         key: "os",
-        width: "10%"
+        width: "9%"
       },
       {
         title: "C.coin",
@@ -165,7 +169,7 @@ class History extends React.Component {
         title: "VNĐ",
         dataIndex: "vnd",
         key: "vnd",
-        width: "12%",
+        width: "11%",
         render: price => <span>{price.toLocaleString()} đ</span>
       }
     ];
@@ -205,17 +209,17 @@ class History extends React.Component {
               Export Excel
             </Button>
           }
-          filename="Lịch sử giao dịch C.COIN"
+          filename="Histoty revenue 3Q_Zombie"
         >
           <ExcelSheet name="Partner_3Q" data={dataExport}>{/*data={dataExport}*/}
-            <ExcelColumn label="PartnerChargeId" value="partnerChargeId" />
-            <ExcelColumn label="UserID" value="userId" />
-            <ExcelColumn label="Type" value="userType" />
+            <ExcelColumn label="Product Name" value="partnerProductName" />
+            <ExcelColumn label="Charge Id" value="partnerChargeId" />
             <ExcelColumn label="Time" value="createdAt" />
             <ExcelColumn
               label="Username"
               value="username"
             />
+            <ExcelColumn label="Game User ID" value="gameUserId" />
             <ExcelColumn label="Source" value="os" />
             <ExcelColumn label="C.coin" value="coin" />
             <ExcelColumn label="Vnđ" value="vnd" />

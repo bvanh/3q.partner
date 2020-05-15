@@ -30,11 +30,11 @@ export default class TypeSearch extends React.Component {
     this.onChange("startValue", value);
   };
   onEndChange = async value => {
-    await  this.onChange("endValue", value);
+    await this.onChange("endValue", value);
     const { startValue, endValue } = this.state;
     let startTime = moment(startValue).format("YYYY-MM-DD");
     let endTime = moment(endValue).format("YYYY-MM-DD");
-    this.props.addDateData(startTime, endTime); 
+    this.props.addDateData(startTime, endTime);
     console.log(value)
   };
   handleStartOpenChange = open => {
@@ -62,14 +62,14 @@ export default class TypeSearch extends React.Component {
             onChange={this.props.addTextSearch}
           />
           <Select
-            defaultValue="0"
+            defaultValue="1"
             onChange={this.props.addTypeData}
             className="btn-checktype"
           >
-            <Option value="0"> ID Purchase</Option>
-            <Option value="1"> Partner_charge_ID</Option>
-            <Option value="2">User_ID</Option>
-            <Option value="3">Product_ID</Option>
+            <Option value="3">Product Name</Option>
+            <Option value="1"> Charge_ID</Option>
+            <Option value="2">Game_User_ID</Option>
+            {/* <Option value="3">Product_ID</Option> */}
           </Select>
         </div>
         <div className="btn-checkdate">
