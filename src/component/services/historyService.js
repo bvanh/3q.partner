@@ -30,6 +30,7 @@ function getDataAfterSetCondition(thisObj, token, pathSearch) {
     method: "GET"
   })
     .then(response => {
+      console.log(response)
       resStatus = response.status;
       return response.json();
     })

@@ -54,6 +54,7 @@ function getDataPieChartAfterSetCondition(
           errorAlert(result.status, result.message);
           return;
         } else {
+          console.log(result)
           thisObj.setState({
             fromDate: fromDateValue,
             toDate: toDateValue,
@@ -89,6 +90,7 @@ function getDataPieChartAfterSetCondition(
           errorAlert(result.status, result.message);
           return;
         } else {
+          console.log(result)
           thisObj.setState({
             fromDate: fromDateValue,
             toDate: toDateValue,

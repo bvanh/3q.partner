@@ -38,7 +38,7 @@ class History extends React.Component {
   componentDidMount() {
     const query = new URLSearchParams(this.props.location.search);
     getData(this, this.props.location.search);
-    getDataPieChart(this, query.get("fromDate"), query.get("toDate"));
+    const demo=getDataPieChart(this, query.get("fromDate"), query.get("toDate"));
   }
   goPage = async page => {
     await this.setState({
@@ -235,7 +235,7 @@ class History extends React.Component {
                 paddingLeft: ".5rem"
               }}
             >
-              {totalRevenue.toLocaleString()} VNĐ
+              {(totalRevenue*1000).toLocaleString()} VNĐ
             </span>
           </span>
           <span id="items_page">

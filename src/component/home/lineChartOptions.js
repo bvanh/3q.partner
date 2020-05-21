@@ -35,7 +35,7 @@ const optionLine = {
         },
         scaleLabel: {
           display: true,
-          labelString: "Tiền (VNĐ)"
+          labelString: "Money (VNĐ)"
         }
       }
     ]

@@ -58,7 +58,7 @@ class PieChart extends React.Component {
           <Col md={{ span: 8, order: 1 }} xl={{ span: 24, order: 1 }}>
             <div className="card_title">
               <p>TOTAL</p>
-              <p id="value">{totalRevenue.toLocaleString()}</p>
+              <p id="value">{(totalRevenue*1000).toLocaleString()}</p>
               <p>VNĐ</p>
             </div>
           </Col>
