@@ -8,7 +8,7 @@ import ReactExport from "react-export-excel";
 import { getDataPieChart } from "../services/homeService";
 import "../../static/style-history.css";
 import API from "../../api/apiAll";
-import { getData } from "../services/historyService";
+import { getData, getDataAll } from "../services/historyService";
 import moreitem from "../../static/img/more_item.png";
 import Logo from "../../static/img/Logo.png";
 const ExcelFile = ReactExport.ExcelFile;
@@ -32,13 +32,14 @@ class History extends React.Component {
       type: 0,
       search: "",
       fromDate: "",
-      toDate: ""
+      toDate: "",
+      dataAll: 0
     };
   }
   componentDidMount() {
     const query = new URLSearchParams(this.props.location.search);
     getData(this, this.props.location.search);
-    const demo=getDataPieChart(this, query.get("fromDate"), query.get("toDate"));
+    const demo = getDataPieChart(this, query.get("fromDate"), query.get("toDate"));
   }
   goPage = async page => {
     await this.setState({
@@ -94,6 +95,8 @@ class History extends React.Component {
       <Menu.Item key="50">50 Purchase</Menu.Item>
     </Menu>
   );
+
+
   changePageSize = async val => {
     await this.setState({
       pageSize: Number(val.key)
@@ -113,8 +116,30 @@ class History extends React.Component {
     getData(this, this.props.location.search);
   };
   render() {
+    const {
+      totalItem,
+      type,
+      fromDate,
+      toDate,
+      search,
+      currentPage,
+    } = this.state;
     const rowSelection = {
+      onSelectAll: (isSelectAll) => {
+        if (isSelectAll) {
+          getDataAll(this, `?currentPage=1&pageSize=${totalItem}&search=${search}&type=${type}&fromDate=${fromDate}&toDate=${toDate}`)
+          // this.setState({
+          //   dataExport: data
+          // })
+        } else {
+          this.setState({
+            dataExport: []
+          })
+        }
+      },
+
       onChange: (selectedRowKeys, selectedRows) => {
+        console.log(selectedRows)
         this.setState({
           dataExport: selectedRows
         });
@@ -137,7 +162,8 @@ class History extends React.Component {
         title: "Time",
         dataIndex: "createdAt",
         key: "createAt",
-        width: "12%"
+        width: "12%",
+        // render: index => <span>{}</span>
       },
       {
         title: "Username",
@@ -173,8 +199,45 @@ class History extends React.Component {
         render: price => <span>{price.toLocaleString()} đ</span>
       }
     ];
-    const { data, totalItem, totalRevenue, dataExport, pageSize } = this.state;
+    const { data, totalRevenue, dataExport, pageSize } = this.state;
     const hasSelected = dataExport.length > 0;
+    const menu2 = (
+      <Menu>
+        <Menu.Item key="1">
+          <Icon type="user" />
+          Export Item Selected
+        </Menu.Item>
+        <Menu.Item key="2">
+          <ExcelFile
+            element={
+              <a
+                icon="file-excel"
+                type="primary"
+                // id="btn_export_excel"
+                disabled={!hasSelected}
+              >
+                Export Excel
+              </a>
+            }
+            filename="Histoty revenue 3Q_Zombie"
+          >
+            <ExcelSheet name="Partner_3Q" data={dataExport}>{/*data={dataExport}*/}
+              <ExcelColumn label="Product Name" value="partnerProductName" />
+              <ExcelColumn label="Charge Id" value="partnerChargeId" />
+              <ExcelColumn label="Time" value="createdAt" />
+              <ExcelColumn
+                label="Username"
+                value="username"
+              />
+              <ExcelColumn label="Game User ID" value="gameUserId" />
+              <ExcelColumn label="Source" value="os" />
+              <ExcelColumn label="C.coin" value="coin" />
+              <ExcelColumn label="Vnđ" value="vnd" />
+            </ExcelSheet>
+          </ExcelFile>
+        </Menu.Item>
+      </Menu>
+    );
     return (
       <div className="history_container">
         <div className="history_header">
@@ -198,33 +261,11 @@ class History extends React.Component {
             SEARCH
           </Button>
         </div>
-        <ExcelFile
-          element={
-            <Button
-              icon="file-excel"
-              type="primary"
-              id="btn_export_excel"
-              disabled={!hasSelected}
-            >
-              Export Excel
-            </Button>
-          }
-          filename="Histoty revenue 3Q_Zombie"
-        >
-          <ExcelSheet name="Partner_3Q" data={dataExport}>{/*data={dataExport}*/}
-            <ExcelColumn label="Product Name" value="partnerProductName" />
-            <ExcelColumn label="Charge Id" value="partnerChargeId" />
-            <ExcelColumn label="Time" value="createdAt" />
-            <ExcelColumn
-              label="Username"
-              value="username"
-            />
-            <ExcelColumn label="Game User ID" value="gameUserId" />
-            <ExcelColumn label="Source" value="os" />
-            <ExcelColumn label="C.coin" value="coin" />
-            <ExcelColumn label="Vnđ" value="vnd" />
-          </ExcelSheet>
-        </ExcelFile>
+        <Dropdown overlay={menu2}>
+          <Button>
+            Button <Icon type="down" />
+          </Button>
+        </Dropdown>
         <div className="table_sum">
           <span style={{ padding: "0 2rem 0 0" }}>
             Tổng doanh thu:
@@ -235,7 +276,7 @@ class History extends React.Component {
                 paddingLeft: ".5rem"
               }}
             >
-              {(totalRevenue*1000).toLocaleString()} VNĐ
+              {(totalRevenue * 1000).toLocaleString()} VNĐ
             </span>
           </span>
           <span id="items_page">

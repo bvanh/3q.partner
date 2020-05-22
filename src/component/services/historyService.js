@@ -12,13 +12,25 @@ function getData(thisObj, pathSearch) {
         getDataAfterSetCondition(thisObj, newAccessToken, pathSearch);
       });
     }
-  } else if (checkToken(thisObj)===false) {
+  } else if (checkToken(thisObj) === false) {
     const newAccessToken = JSON.parse(localStorage.getItem("userAccessToken"));
     getDataAfterSetCondition(thisObj, newAccessToken, pathSearch);
   }
 }
-
-export { getData };
+function getDataAll(thisObj, pathSearch) {
+  if (checkToken(thisObj)) {
+    let checkToken = getToken(thisObj);
+    if (checkToken !== false) {
+      checkToken.then(newAccessToken => {
+        getDataAllAfterSetCondition(thisObj, newAccessToken, pathSearch);
+      });
+    }
+  } else if (checkToken(thisObj) === false) {
+    const newAccessToken = JSON.parse(localStorage.getItem("userAccessToken"));
+    getDataAllAfterSetCondition(thisObj, newAccessToken, pathSearch);
+  }
+}
+export { getData, getDataAll };
 // 
 function getDataAfterSetCondition(thisObj, token, pathSearch) {
   let resStatus = 0;
@@ -46,7 +58,36 @@ function getDataAfterSetCondition(thisObj, token, pathSearch) {
         });
       }
     })
-    .catch(function(error) {
+    .catch(function (error) {
+      console.log("Request failed", error);
+    });
+}
+function getDataAllAfterSetCondition(thisObj, token, pathSearch) {
+  let resStatus = 0;
+  fetch(API.ROOT_URL + API.HISTORY_PATHNAME + pathSearch, {
+    headers: {
+      Authorization: `Bearer ${token.accessToken}`,
+      "Content-Type": "application/x-www-form-urlencoded"
+    },
+    method: "GET"
+  })
+    .then(response => {
+      console.log(response)
+      resStatus = response.status;
+      return response.json();
+    })
+    .then(result => {
+      if (resStatus !== 200) {
+        errorAlert(result.status, result.message);
+        return;
+      } else {
+        console.log(result)
+        thisObj.setState({
+          dataExport: result.rows,
+        });
+      }
+    })
+    .catch(function (error) {
       console.log("Request failed", error);
     });
 }
