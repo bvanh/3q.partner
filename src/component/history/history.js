@@ -339,7 +339,7 @@ class History extends React.Component {
                 paddingLeft: ".5rem"
               }}
             >
-              {(totalRevenue * 1000).toLocaleString()} VNĐ
+              {totalRevenue.toLocaleString()} VNĐ
             </span>
           </span>
           <span id="items_page">
