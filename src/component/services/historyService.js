@@ -43,7 +43,7 @@ function getDataAfterSetCondition(thisObj, token, pathSearch) {
     method: "GET"
   })
     .then(response => {
-      console.log(response)
+      // console.log(response)
       resStatus = response.status;
       return response.json();
     })
@@ -52,7 +52,6 @@ function getDataAfterSetCondition(thisObj, token, pathSearch) {
         errorAlert(result.status, result.message);
         return;
       } else {
-        console.log(result)
         thisObj.setState({
           // dataExport:[],
           data: result.rows,

@@ -164,7 +164,6 @@ class History extends React.Component {
     } = this.state;
     const rowSelection = {
       onSelect: (record, selected, selectedRows, nativeEvent) => {
-        console.log(selected, record)
         let newData = this.state.dataExport;
         switch (selected) {
           case true:
