@@ -147,3 +147,6 @@
     display: none;
   }
 }
+tr>th:first-child>span{
+  display: none !important;
+}

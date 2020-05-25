@@ -47,10 +47,10 @@ class Charts extends React.Component {
   render() {
     const valueDateToday = moment().format("YYYY-MM-DD");
     const valueDate7DayAgo = moment()
-      .subtract(7, "days")
+      .subtract(6, "days")
       .format("YYYY-MM-DD");
     const valueDate30DayAgo = moment()
-      .subtract(30, "days")
+      .subtract(29, "days")
       .format("YYYY-MM-DD");
     return (
       <>

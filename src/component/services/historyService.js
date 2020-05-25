@@ -34,6 +34,7 @@ export { getData, getDataAll };
 // 
 function getDataAfterSetCondition(thisObj, token, pathSearch) {
   let resStatus = 0;
+  thisObj.setState({ ...thisObj.state, loading: true })
   fetch(API.ROOT_URL + API.HISTORY_PATHNAME + pathSearch, {
     headers: {
       Authorization: `Bearer ${token.accessToken}`,
@@ -53,8 +54,10 @@ function getDataAfterSetCondition(thisObj, token, pathSearch) {
       } else {
         console.log(result)
         thisObj.setState({
+          // dataExport:[],
           data: result.rows,
-          totalItem: result.count
+          totalItem: result.count,
+          loading: false
         });
       }
     })
@@ -83,8 +86,9 @@ function getDataAllAfterSetCondition(thisObj, token, pathSearch) {
       } else {
         console.log(result)
         thisObj.setState({
-          dataExport: result.rows,
+          dataExportAll: result.rows,
         });
+        return result.rows;
       }
     })
     .catch(function (error) {
