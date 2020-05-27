@@ -6,7 +6,7 @@ import moment from "moment";
 
 // lấy dữ liệu cho biểu đồ tròn
 // function set condition
-function getDataPieChart(thisObj, fromDateValue, toDateValue) {
+function getDataPieChart(thisObj, fromDateValue, toDateValue,partnerId) {
   if (checkToken(thisObj)) {
     let checkToken = getToken(thisObj);
     if (checkToken !== false) {
@@ -15,7 +15,8 @@ function getDataPieChart(thisObj, fromDateValue, toDateValue) {
           thisObj,
           fromDateValue,
           toDateValue,
-          newAccessToken
+          newAccessToken,
+          partnerId
         );
       });
     }
@@ -25,7 +26,8 @@ function getDataPieChart(thisObj, fromDateValue, toDateValue) {
       thisObj,
       fromDateValue,
       toDateValue,
-      newAccessToken
+      newAccessToken,
+      partnerId
     );
   }
 }
@@ -34,11 +36,12 @@ function getDataPieChartAfterSetCondition(
   thisObj,
   fromDateValue,
   toDateValue,
-  token
+  token,
+  partnerId
 ) {
   let resStatus = 0;
   if (fromDateValue === toDateValue) {
-    fetch(API.ROOT_URL + API.CHARTS_PATH_HOUR + `&date=${fromDateValue}`, {
+    fetch(API.ROOT_URL + API.CHARTS_PATH_HOUR + `&date=${fromDateValue}&data=${partnerId}`, {
       headers: {
         Authorization: `Bearer ${token.accessToken}`,
         "Content-Type": "application/x-www-form-urlencoded"
@@ -72,7 +75,7 @@ function getDataPieChartAfterSetCondition(
       API.ROOT_URL +
       API.CHARTS_PATHNAME +
       API.CHARTS_PATHSEARCH_TYPE +
-      `&fromDate=${fromDateValue}&toDate=${toDateValue}`,
+      `&fromDate=${fromDateValue}&toDate=${toDateValue}&data=${partnerId}`,
       {
         headers: {
           Authorization: `Bearer ${token.accessToken}`,
@@ -323,7 +326,8 @@ function getListPartnersAfterSetCondition(thisObj, token) {
     .then((result) => {
       if (resStatus === 200) {
         thisObj.setState({
-          listPartners: result
+          listPartners: result,
+          partnerId:"1BA3F861-D4F2-4D97-9F78-38633155EC27"
         })
         console.log(result);
       }

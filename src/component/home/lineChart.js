@@ -1,11 +1,12 @@
 import React, { useMemo } from "react";
 import moment from "moment";
-import memoize from "memoize-one";
+// import memoize from "memoize-one";
 import { Line } from "react-chartjs-2";
 import { getDataLineChart } from "../services/homeService";
 import { Link } from "react-router-dom";
 import API from "../../api/apiAll";
 import optionLine from "./lineChartOptions";
+import { listOptionsDates, dateValue } from "./datesInfo";
 import { Icon, DatePicker, Input, Select } from "antd";
 const { Option } = Select;
 
@@ -110,46 +111,47 @@ class LineChart extends React.Component {
     });
   };
   changeOptionDates = (e) => {
-    console.log(e)
+    console.log(e);
     this.setState({
       optionDates: e,
     });
   };
   componentWillUpdate(nextProps, nextState) {
-    // console.log(nextProps)
-    const { valueDateToday, valueDate7DayAgo, valueDate30DayAgo, partnerId } = nextProps;
+    const { partnerId } = nextProps;
+    const { today, sevenDayAgo, thirtyDayAgo } = dateValue;
     const { startValue, endValue } = this.state;
     const fromDateValue = moment(startValue).format("YYYY-MM-DD");
     const toDateValue = moment(endValue).format("YYYY-MM-DD");
     if (nextProps.partnerId !== this.props.partnerId) {
       switch (this.state.optionDates) {
         case "Today":
-          getDataLineChart(this, valueDateToday, valueDateToday, partnerId)
-          console.log("today")
+          getDataLineChart(this, today, today, partnerId);
+          console.log("today");
           break;
-        case 'Last 7 days':
-          getDataLineChart(this, valueDate7DayAgo, valueDateToday, partnerId)
-          console.log("7day")
+        case "Last 7 days":
+          getDataLineChart(this, sevenDayAgo, today, partnerId);
+          console.log("7day");
           break;
-        case 'Last 30 days':
-          getDataLineChart(this, valueDate30DayAgo, valueDateToday, partnerId);
-          console.log("30")
+        case "Last 30 days":
+          getDataLineChart(this, thirtyDayAgo, today, partnerId);
+          console.log("30");
           break;
-        case 'customDates':
+        case "customDates":
           getDataLineChart(this, fromDateValue, toDateValue, partnerId);
-          console.log("custom")
-          break
+          console.log("custom");
+          break;
         default:
           break;
       }
-      console.log("run change partner id")
+      console.log("run change partner id");
     } else {
-      console.log('dr')
+      console.log("dr");
     }
   }
   componentDidMount() {
-    const { valueDateToday, valueDate7DayAgo, partnerId } = this.props;
-    getDataLineChart(this, valueDate7DayAgo, valueDateToday, partnerId);
+    const { partnerId } = this.props;
+    const { today, sevenDayAgo } = dateValue;
+    getDataLineChart(this, sevenDayAgo, today, partnerId);
   }
   render() {
     // console.log(this.state)
@@ -165,24 +167,7 @@ class LineChart extends React.Component {
       toDate,
       optionDates,
     } = this.state;
-    const { valueDateToday, valueDate7DayAgo, valueDate30DayAgo, partnerId } = this.props;
-    const listOptionsDates = [
-      {
-        dates: "Today",
-        valueDateToday: valueDateToday,
-        valueDate: valueDateToday,
-      },
-      {
-        dates: "Last 7 days",
-        valueDateToday: valueDateToday,
-        valueDate: valueDate7DayAgo,
-      },
-      {
-        dates: "Last 30 days",
-        valueDateToday: valueDateToday,
-        valueDate: valueDate30DayAgo,
-      },
-    ];
+    const { partnerId } = this.props;
     const fromDateValue = moment(startValue).format("YYYY-MM-DD");
     const toDateValue = moment(endValue).format("YYYY-MM-DD");
     const printOptionDates = listOptionsDates.map((val, index) => (
@@ -211,6 +196,16 @@ class LineChart extends React.Component {
             </div>
           </div>
           <div id="logo_title">
+            <Select
+              value={partnerId}
+              style={{ width: 120 }}
+              onChange={(e) => this.props.handleChangePartner(e)}
+              className={
+                partnerId === "" ? "hideOptionPartner" : "showOptionPartner"
+              }
+            >
+              {this.props.printPartners}
+            </Select>
             <img
               src={this.props.imageLogo}
               alt="logo_clappigames"
@@ -233,38 +228,6 @@ class LineChart extends React.Component {
             onChange={this.changeOptionDates}
           >
             {printOptionDates}
-            {/* <Option
-              value="3"
-              onClick={() =>
-                getDataLineChart(
-                  this,
-                  valueDateToday,
-                  valueDateToday
-                )
-              }
-            >
-              Today
-            </Option>
-            <Option
-              value="2"
-              onClick={() =>
-                getDataLineChart(this, valueDate7DayAgo, valueDateToday)
-              }
-            >
-              Last 7 days
-            </Option>
-            <Option
-              value="4"
-              onClick={() =>
-                getDataLineChart(
-                  this,
-                  valueDate30DayAgo,
-                  valueDateToday
-                )
-              }
-            >
-              Last 30 days
-            </Option> */}
             <Option value="customDates" onClick={this.showModalPicker}>
               Custom...
             </Option>
@@ -274,7 +237,7 @@ class LineChart extends React.Component {
               pathname: API.HISTORY_PATHNAME,
               search:
                 API.HISTORY_PATHSEARCH_NODATE +
-                `&fromDate=${fromDate}&toDate=${toDate}`,
+                `&fromDate=${fromDate}&toDate=${toDate}&data=${partnerId}`,
             }}
           >
             MORE INSIGHTS <Icon type="caret-right" />
@@ -295,7 +258,12 @@ class LineChart extends React.Component {
                   <span onClick={this.hideModalPicker}>CANCEL</span>
                   <span
                     onClick={() =>
-                      getDataLineChart(this, fromDateValue, toDateValue, partnerId)
+                      getDataLineChart(
+                        this,
+                        fromDateValue,
+                        toDateValue,
+                        partnerId
+                      )
                     }
                     style={{ color: "#0085ff" }}
                   >

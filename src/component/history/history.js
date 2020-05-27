@@ -14,10 +14,10 @@ import Logo from "../../static/img/Logo.png";
 const ExcelFile = ReactExport.ExcelFile;
 const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
 const ExcelColumn = ReactExport.ExcelFile.ExcelColumn;
-
 class History extends React.Component {
   constructor(props) {
     super(props);
+    const query = new URLSearchParams(this.props.location.search);
     this.state = {
       data: [],
       dataExport: [],
@@ -37,12 +37,18 @@ class History extends React.Component {
       toDate: "",
       dataAll: 0,
       loading: false,
+      partnerId: query.get("data"),
     };
   }
   componentDidMount() {
     const query = new URLSearchParams(this.props.location.search);
     getData(this, this.props.location.search);
-    const demo = getDataPieChart(this, query.get("fromDate"), query.get("toDate"));
+    const demo = getDataPieChart(
+      this,
+      query.get("fromDate"),
+      query.get("toDate"),
+      this.state.partnerId
+    );
   }
   componentDidUpdate(prevProps, prevState) {
     const query = new URLSearchParams(this.props.location.search);
@@ -52,47 +58,49 @@ class History extends React.Component {
       toDate,
       search,
       currentPage,
-      totalItem
+      totalItem,
+      partnerId,
     } = this.state;
     if (prevState.totalItem !== this.state.totalItem) {
-      getDataAll(this, `?currentPage=1&pageSize=${totalItem}&search=${search}&type=${type}&fromDate=${query.get("fromDate")}&toDate=${query.get("toDate")}`)
+      getDataAll(
+        this,
+        `?currentPage=1&pageSize=${totalItem}&search=${search}&type=${type}&fromDate=${query.get(
+          "fromDate"
+        )}&toDate=${query.get("toDate")}&data=${partnerId}`
+      );
     }
   }
-  // componentDidUpdate(){
-  //   const {
-  //     type,
-  //     fromDate,
-  //     toDate,
-  //     search,
-  //     currentPage,
-  //     totalItem
-  //   } = this.state;
-  //   getDataAll(this, `?currentPage=1&pageSize=${totalItem}&search=${search}&type=${type}&fromDate=${fromDate}&toDate=${toDate}`)
-  // }
-  goPage = async page => {
+  goPage = async (page) => {
     await this.setState({
-      currentPage: page
+      currentPage: page,
     });
-    const { type, fromDate, toDate, search, currentPage } = this.state;
+    const {
+      type,
+      fromDate,
+      toDate,
+      search,
+      currentPage,
+      partnerId,
+    } = this.state;
     await this.props.history.replace(
-      `${API.HISTORY_PATHNAME}?currentPage=${currentPage}&pageSize=10&search=${search}&type=${type}&fromDate=${fromDate}&toDate=${toDate}`
+      `${API.HISTORY_PATHNAME}?currentPage=${currentPage}&pageSize=10&search=${search}&type=${type}&fromDate=${fromDate}&toDate=${toDate}&data=${partnerId}`
     );
     getData(this, this.props.location.search);
   };
-  addTypeData = val => {
+  addTypeData = (val) => {
     this.setState({
-      type: val
+      type: val,
     });
   };
   addDateData = (startDate, endDate) => {
     this.setState({
       fromDate: startDate,
-      toDate: endDate
+      toDate: endDate,
     });
   };
-  addTextSearch = e => {
+  addTextSearch = (e) => {
     this.setState({
-      search: e.target.value
+      search: e.target.value,
     });
   };
   searchData = async () => {
@@ -102,42 +110,33 @@ class History extends React.Component {
       toDate,
       search,
       currentPage,
+      partnerId,
     } = this.state;
-    this.setState({ ...this.state, currentPage: 1 })
+    this.setState({ ...this.state, currentPage: 1 });
     const fromDayValue = moment(fromDate).valueOf();
     const toDayValue = moment(toDate).valueOf();
     if (toDayValue - fromDayValue <= 2592000000) {
       await this.props.history.replace(
-        `${API.HISTORY_PATHNAME}?currentPage=1&pageSize=10&search=${search}&type=${type}&fromDate=${fromDate}&toDate=${toDate}`
+        `${API.HISTORY_PATHNAME}?currentPage=1&pageSize=10&search=${search}&type=${type}&fromDate=${fromDate}&toDate=${toDate}&data=${partnerId}`
       );
       getData(this, this.props.location.search);
-      getDataPieChart(this, fromDate, toDate);
+      getDataPieChart(this, fromDate, toDate, partnerId);
     } else {
       errorAlert("Alert", "Between 2 dates bigger than 31 days!");
     }
   };
-  // exportAllData = () => {
-  //   const {
-  //     type,
-  //     fromDate,
-  //     toDate,
-  //     search,
-  //     currentPage,
-  //     totalItem
-  //   } = this.state;
-  //   getDataAll(this, `?currentPage=1&pageSize=${totalItem}&search=${search}&type=${type}&fromDate=${fromDate}&toDate=${toDate}`)
-  // }
+
   menu = (
-    <Menu onClick={key => this.changePageSize(key)}>
+    <Menu onClick={(key) => this.changePageSize(key)}>
       <b>Show up to</b>
       <Menu.Item key="10">10 Purchase</Menu.Item>
       <Menu.Item key="25">25 Purchase</Menu.Item>
       <Menu.Item key="50">50 Purchase</Menu.Item>
     </Menu>
   );
-  changePageSize = async val => {
+  changePageSize = async (val) => {
     await this.setState({
-      pageSize: Number(val.key)
+      pageSize: Number(val.key),
     });
     const {
       type,
@@ -146,10 +145,10 @@ class History extends React.Component {
       search,
       currentPage,
       pageSize,
-
+      partnerId,
     } = this.state;
     await this.props.history.replace(
-      `${API.HISTORY_PATHNAME}?currentPage=${currentPage}&pageSize=${pageSize}&search=${search}&type=${type}&fromDate=${fromDate}&toDate=${toDate}`
+      `${API.HISTORY_PATHNAME}?currentPage=${currentPage}&pageSize=${pageSize}&search=${search}&type=${type}&fromDate=${fromDate}&toDate=${toDate}&data=${partnerId}`
     );
     getData(this, this.props.location.search);
   };
@@ -167,11 +166,16 @@ class History extends React.Component {
         let newData = this.state.dataExport;
         switch (selected) {
           case true:
-            this.setState({ ...this.state, dataExport: [...this.state.dataExport, record] })
+            this.setState({
+              ...this.state,
+              dataExport: [...this.state.dataExport, record],
+            });
             break;
           case false:
-            let demo=newData.filter((val, i) => val.partnerChargeId !== record.partnerChargeId);
-            this.setState({ ...this.state, dataExport:demo})
+            let demo = newData.filter(
+              (val, i) => val.partnerChargeId !== record.partnerChargeId
+            );
+            this.setState({ ...this.state, dataExport: demo });
             break;
           default:
             break;
@@ -183,13 +187,13 @@ class History extends React.Component {
         title: "Product Name",
         dataIndex: "partnerProductName",
         key: "partnerChargeId",
-        width: "12%"
+        width: "12%",
       },
       {
         title: "Charge ID",
         dataIndex: "partnerChargeId",
         key: "productId",
-        width: "18%"
+        width: "18%",
       },
       {
         title: "Time",
@@ -215,13 +219,13 @@ class History extends React.Component {
         title: "Source",
         dataIndex: "os",
         key: "os",
-        width: "9%"
+        width: "9%",
       },
       {
         title: "C.coin",
         dataIndex: "coin",
         key: "coin",
-        width: "7%"
+        width: "7%",
       },
       ,
       {
@@ -229,10 +233,17 @@ class History extends React.Component {
         dataIndex: "vnd",
         key: "vnd",
         width: "11%",
-        render: price => <span>{price.toLocaleString()} đ</span>
-      }
+        render: (price) => <span>{price.toLocaleString()} đ</span>,
+      },
     ];
-    const { data, totalRevenue, dataExport, pageSize, dataExportAll, loading } = this.state;
+    const {
+      data,
+      totalRevenue,
+      dataExport,
+      pageSize,
+      dataExportAll,
+      loading,
+    } = this.state;
     const hasSelected = dataExport.length > 0;
     const menu2 = (
       <Menu>
@@ -244,11 +255,11 @@ class History extends React.Component {
                 icon="file-excel"
                 type="primary"
                 style={{ width: "100%", textAlign: "left" }}
-              // id="btn_export_excel"
-              // disabled={!hasSelected}
+                // id="btn_export_excel"
+                disabled={dataExportAll.length < 0 ? true : false}
               >
                 Export all data
-            </Button>
+              </Button>
             }
             filename="Histoty revenue 3Q_Zombie"
           >
@@ -256,10 +267,7 @@ class History extends React.Component {
               <ExcelColumn label="Product Name" value="partnerProductName" />
               <ExcelColumn label="Charge Id" value="partnerChargeId" />
               <ExcelColumn label="Time" value="createdAt" />
-              <ExcelColumn
-                label="Username"
-                value="username"
-              />
+              <ExcelColumn label="Username" value="username" />
               <ExcelColumn label="Game User ID" value="gameUserId" />
               <ExcelColumn label="Source" value="os" />
               <ExcelColumn label="C.coin" value="coin" />
@@ -287,10 +295,7 @@ class History extends React.Component {
               <ExcelColumn label="Product Name" value="partnerProductName" />
               <ExcelColumn label="Charge Id" value="partnerChargeId" />
               <ExcelColumn label="Time" value="createdAt" />
-              <ExcelColumn
-                label="Username"
-                value="username"
-              />
+              <ExcelColumn label="Username" value="username" />
               <ExcelColumn label="Game User ID" value="gameUserId" />
               <ExcelColumn label="Source" value="os" />
               <ExcelColumn label="C.coin" value="coin" />
@@ -335,7 +340,7 @@ class History extends React.Component {
               style={{
                 fontSize: "1.1rem",
                 color: "#0085ff",
-                paddingLeft: ".5rem"
+                paddingLeft: ".5rem",
               }}
             >
               {totalRevenue.toLocaleString()} VNĐ
@@ -360,18 +365,20 @@ class History extends React.Component {
             </Dropdown>
           </span>
         </div>
-        {!loading ?
+        {!loading ? (
           <Table
             rowSelection={rowSelection}
             columns={columns}
             dataSource={data}
-            rowKey={record => record.partnerChargeId}
+            rowKey={(record) => record.partnerChargeId}
             pagination={false}
             bordered
             scroll={{ x: 800 }}
             loading={loading}
-
-          /> : 'Loading'}
+          />
+        ) : (
+          "Loading"
+        )}
         <Pagination
           current={currentPage}
           // defaultCurrent={1}
