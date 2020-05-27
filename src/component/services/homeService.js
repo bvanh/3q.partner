@@ -20,7 +20,7 @@ function getDataPieChart(thisObj, fromDateValue, toDateValue) {
       });
     }
   } else if (checkToken(thisObj) === false) {
-    const newAccessToken = JSON.parse(localStorage.getItem("userAccessToken"));
+    const newAccessToken = JSON.parse(localStorage.getItem("accessTokenPartner"));
     getDataPieChartAfterSetCondition(
       thisObj,
       fromDateValue,
@@ -64,15 +64,15 @@ function getDataPieChartAfterSetCondition(
           });
         }
       })
-      .catch(function(error) {
+      .catch(function (error) {
         console.log("Request failed", error);
       });
   } else {
     fetch(
       API.ROOT_URL +
-        API.CHARTS_PATHNAME +
-        API.CHARTS_PATHSEARCH_TYPE +
-        `&fromDate=${fromDateValue}&toDate=${toDateValue}`,
+      API.CHARTS_PATHNAME +
+      API.CHARTS_PATHSEARCH_TYPE +
+      `&fromDate=${fromDateValue}&toDate=${toDateValue}`,
       {
         headers: {
           Authorization: `Bearer ${token.accessToken}`,
@@ -100,14 +100,15 @@ function getDataPieChartAfterSetCondition(
           });
         }
       })
-      .catch(function(error) {
+      .catch(function (error) {
         console.log("Request failed", error);
       });
   }
 }
 // lấy dữ liệu cho biểu đồ cột
 // function check condition
-function getDataLineChart(thisObj, fromDateValue, toDateValue) {
+function getDataLineChart(thisObj, fromDateValue, toDateValue, partnerId) {
+  // console.log(thisObj, fromDateValue, toDateValue, partnerId)
   const fromDayValue = moment(fromDateValue).valueOf();
   const toDayValue = moment(toDateValue).valueOf();
   if (toDayValue - fromDayValue <= 2592000000) {
@@ -119,19 +120,21 @@ function getDataLineChart(thisObj, fromDateValue, toDateValue) {
             thisObj,
             fromDateValue,
             toDateValue,
-            newAccessToken
+            newAccessToken,
+            partnerId
           );
         });
       }
     } else if (checkToken(thisObj) === false) {
       const newAccessToken = JSON.parse(
-        localStorage.getItem("userAccessToken")
+        localStorage.getItem("accessTokenPartner")
       );
       getDataLineChartAfterSetCondition(
         thisObj,
         fromDateValue,
         toDateValue,
-        newAccessToken
+        newAccessToken,
+        partnerId
       );
     }
   } else {
@@ -143,11 +146,13 @@ function getDataLineChartAfterSetCondition(
   thisObj,
   fromDateValue,
   toDateValue,
-  newAccessToken
+  newAccessToken,
+  partnerId
 ) {
+  console.log(thisObj, fromDateValue, toDateValue, partnerId)
   let resStatus = 0;
   if (fromDateValue === toDateValue) {
-    fetch(API.ROOT_URL + API.CHARTS_PATH_HOUR + `&date=${fromDateValue}`, {
+    fetch(API.ROOT_URL + API.CHARTS_PATH_HOUR + `&date=${fromDateValue}&data=${partnerId}`, {
       headers: {
         Authorization: `Bearer ${newAccessToken.accessToken}`,
         "Content-Type": "application/x-www-form-urlencoded"
@@ -163,7 +168,7 @@ function getDataLineChartAfterSetCondition(
           errorAlert(result.status, result.message);
           return;
         } else {
-         let newXaxis=result.xAxis.map(val=>val+'h' )
+          let newXaxis = result.xAxis.map(val => val + 'h')
           thisObj.setState({
             vndChartxAxis: newXaxis,
             vndChartyAxisTotal: result.yAxis.TOTAL,
@@ -174,7 +179,7 @@ function getDataLineChartAfterSetCondition(
           });
         }
       })
-      .catch(function(error) {
+      .catch(function (error) {
         console.log("Request failed", error);
       });
     thisObj.hideModalPicker();
@@ -187,9 +192,9 @@ function getDataLineChartAfterSetCondition(
   } else {
     fetch(
       API.ROOT_URL +
-        API.CHARTS_PATHNAME +
-        API.CHARTS_PATHSEARCH_TYPE +
-        `&fromDate=${fromDateValue}&toDate=${toDateValue}`,
+      API.CHARTS_PATHNAME +
+      API.CHARTS_PATHSEARCH_TYPE +
+      `&fromDate=${fromDateValue}&toDate=${toDateValue}&data=${partnerId}`,
       {
         headers: {
           Authorization: `Bearer ${newAccessToken.accessToken}`,
@@ -203,6 +208,7 @@ function getDataLineChartAfterSetCondition(
         return response.json();
       })
       .then(result => {
+        // console.log(result)
         if (resStatus !== 200) {
           errorAlert(result.status, result.message);
           return;
@@ -217,7 +223,7 @@ function getDataLineChartAfterSetCondition(
           });
         }
       })
-      .catch(function(error) {
+      .catch(function (error) {
         console.log("Request failed", error);
       });
     thisObj.hideModalPicker();
@@ -245,7 +251,7 @@ function getTotalPurchase(thisObj, fromDate, toDate) {
       });
     }
   } else if (checkToken(thisObj) === false) {
-    const newAccessToken = JSON.parse(localStorage.getItem("userAccessToken"));
+    const newAccessToken = JSON.parse(localStorage.getItem("accessTokenPartner"));
     getTotalPurchaseAfterSetCondition(thisObj, fromDate, toDate, newAccessToken);
   }
 }
@@ -254,9 +260,9 @@ function getTotalPurchaseAfterSetCondition(thisObj, fromDate, toDate, token) {
   let resStatus = 0;
   fetch(
     API.ROOT_URL +
-      API.HISTORY_PATHNAME +
-      API.HISTORY_PATHSEARCH_NODATE +
-      `&fromDate=${fromDate}&toDate=${toDate}`,
+    API.HISTORY_PATHNAME +
+    API.HISTORY_PATHSEARCH_NODATE +
+    `&fromDate=${fromDate}&toDate=${toDate}`,
     {
       headers: {
         Authorization: `Bearer ${token.accessToken}`,
@@ -280,8 +286,50 @@ function getTotalPurchaseAfterSetCondition(thisObj, fromDate, toDate, token) {
         });
       }
     })
-    .catch(function(error) {
+    .catch(function (error) {
       console.log("Request failed", error);
     });
 }
-export { getDataPieChart, getDataLineChart, getTotalPurchase };
+// get list partners
+function getListPartners(thisObj) {
+  if (checkToken(thisObj)) {
+    let checkToken = getToken(thisObj);
+    if (checkToken !== false) {
+      checkToken.then(newAccessToken => {
+        getListPartnersAfterSetCondition(
+          thisObj,
+          newAccessToken
+        );
+      });
+    }
+  } else if (checkToken(thisObj) === false) {
+    const newAccessToken = JSON.parse(localStorage.getItem("accessTokenPartner"));
+    getListPartnersAfterSetCondition(thisObj, newAccessToken);
+  }
+}
+function getListPartnersAfterSetCondition(thisObj, token) {
+  let resStatus = 0;
+  fetch(API.ROOT_URL + API.LIST_PARTNERS, {
+    headers: {
+      Authorization: `Bearer ${token.accessToken}`,
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    method: "GET",
+  })
+    .then((response) => {
+      resStatus = response.status;
+      return response.json();
+    })
+    .then((result) => {
+      if (resStatus === 200) {
+        thisObj.setState({
+          listPartners: result
+        })
+        console.log(result);
+      }
+    })
+    .catch(function (error) {
+      console.log("Request failed", error);
+    });
+}
+export { getDataPieChart, getDataLineChart, getTotalPurchase, getListPartners };

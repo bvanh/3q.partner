@@ -16,6 +16,8 @@ const API = {
   REFRESHTOKEN_PATHNAME: "/auth/renew/token/access",
   LOGIN_PATHNAME: "/auth/login",
   //
-  PARTNER_INFO: "/partner/info"
+  PARTNER_INFO: "/partner/info",
+  // 
+  LIST_PARTNERS:"/partner/partners"
 };
 export default API;

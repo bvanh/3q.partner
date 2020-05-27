@@ -61,8 +61,8 @@ export default class App extends React.Component {
   );
   componentDidMount() {
     const isLogin = localStorage.getItem("saveLogin");
-    const checkToken = localStorage.getItem("userAccessToken");
-    const checkUserToken = localStorage.getItem("userToken");
+    const checkToken = localStorage.getItem("accessTokenPartner");
+    const checkUserToken = localStorage.getItem("tokenPartner");
     if (
       isLogin === null ||
       isLogin === "false" ||
@@ -81,9 +81,9 @@ export default class App extends React.Component {
   }
   logInOut = elm => {
     if (elm === false) {
-      localStorage.removeItem("userToken");
+      localStorage.removeItem("tokenPartner");
       localStorage.removeItem("saveLogin");
-      localStorage.removeItem("userAccessToken");
+      localStorage.removeItem("accessTokenPartner");
     }
     this.setState({
       isLogin: elm

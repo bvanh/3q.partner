@@ -17,7 +17,7 @@ function changePassword(thisObj, oldPassword, newPassword) {
       });
     }
   } else if (checkToken(thisObj) === false) {
-    const newAccessToken = JSON.parse(localStorage.getItem("userAccessToken"));
+    const newAccessToken = JSON.parse(localStorage.getItem("accessTokenPartner"));
     const res = changePasswordAfterSetCondition(
       thisObj,
       newAccessToken,

@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useMemo } from "react";
 import moment from "moment";
+import memoize from "memoize-one";
 import { Line } from "react-chartjs-2";
 import { getDataLineChart } from "../services/homeService";
 import { Link } from "react-router-dom";
 import API from "../../api/apiAll";
-import optionLine from './lineChartOptions'
+import optionLine from "./lineChartOptions";
 import { Icon, DatePicker, Input, Select } from "antd";
 const { Option } = Select;
 
@@ -13,17 +14,16 @@ class LineChart extends React.Component {
     super(props);
     this.state = {
       startValue: null,
-      endValue: null
+      endValue: null,
+      optionDates: "Last 7 days",
+      partnerId: props.partnerId,
     };
   }
-  disabledDate = current => {
+  disabledDate = (current) => {
     const { startValue } = this.state;
     return (
       (current &&
-        current <
-          moment(startValue)
-            .subtract(1, "days")
-            .endOf("day")) ||
+        current < moment(startValue).subtract(1, "days").endOf("day")) ||
       current > moment().endOf("day")
     );
   };
@@ -40,21 +40,21 @@ class LineChart extends React.Component {
     const { startValue } = this.state;
     if (startValue === null) {
       this.setState({
-        startValue: value
+        startValue: value,
       });
     } else {
       this.setState({
-        endValue: value
+        endValue: value,
       });
     }
   };
-  onStartChange = value => {
+  onStartChange = (value) => {
     this.onChange("startValue", value);
   };
   clearInputDate = () => {
     this.setState({
       startValue: null,
-      endValue: null
+      endValue: null,
     });
   };
   chartLineData = () => {
@@ -69,7 +69,7 @@ class LineChart extends React.Component {
           borderWidth: 2,
           hoverBackgroundColor: "rgba(255,99,132,0.4)",
           hoverBorderColor: "rgba(255,99,132,1)",
-          data: this.state.vndChartyAxisTotal
+          data: this.state.vndChartyAxisTotal,
         },
         {
           label: "WEB",
@@ -79,7 +79,7 @@ class LineChart extends React.Component {
           borderWidth: 2,
           hoverBackgroundColor: "rgba(255,99,132,0.4)",
           hoverBorderColor: "rgba(255,99,132,1)",
-          data: this.state.vndChartyAxisWeb
+          data: this.state.vndChartyAxisWeb,
         },
         {
           label: "APK",
@@ -89,31 +89,64 @@ class LineChart extends React.Component {
           borderWidth: 2,
           hoverBackgroundColor: "rgba(255,99,132,0.4)",
           hoverBorderColor: "rgba(255,99,132,1)",
-          data: this.state.vndChartyAxisApk
-        }
-      ]
+          data: this.state.vndChartyAxisApk,
+        },
+      ],
     };
     return data;
   };
   showModalPicker = () => {
     this.setState({
       indexModalDatePicker: "modal_datepicker",
-      startOpen: true
+      startOpen: true,
     });
   };
   hideModalPicker = async () => {
     await this.setState({
-      startOpen: false
+      startOpen: false,
     });
     this.setState({
-      indexModalDatePicker: "modal_datepicker_hide"
+      indexModalDatePicker: "modal_datepicker_hide",
     });
   };
+  changeOptionDates = (e) => {
+    console.log(e)
+    this.setState({
+      optionDates: e,
+    });
+  };
+  componentWillUpdate(nextProps, nextState) {
+    // console.log(nextProps)
+    const { valueDateToday, valueDate7DayAgo, valueDate30DayAgo, partnerId } = nextProps;
+    const { startValue, endValue } = this.state;
+    const fromDateValue = moment(startValue).format("YYYY-MM-DD");
+    const toDateValue = moment(endValue).format("YYYY-MM-DD");
+    if (nextProps.partnerId !== this.props.partnerId) {
+      switch (this.state.optionDates) {
+        case "Today":
+          getDataLineChart(this, valueDateToday, valueDateToday, partnerId)
+          break;
+        case 'Last 7 days':
+          getDataLineChart(this, valueDate7DayAgo, valueDateToday, partnerId)
+        case 'Last 30 days':
+          getDataLineChart(this, valueDate30DayAgo, valueDateToday, partnerId);
+        case 'customDates':
+          getDataLineChart(this, fromDateValue, toDateValue, partnerId)
+        default:
+          break;
+      }
+      console.log("run change partner id")
+    } else {
+      console.log('dr')
+    }
+  }
   componentDidMount() {
-    const { valueDateToday, valueDate7DayAgo } = this.props;
-    getDataLineChart(this, valueDate7DayAgo, valueDateToday);
+    const { valueDateToday, valueDate7DayAgo, partnerId } = this.props;
+    getDataLineChart(this, valueDate7DayAgo, valueDateToday, partnerId);
   }
   render() {
+    // console.log(this.state)
+    // const getData=this.getData(this.props.partnerId);
     const {
       startValue,
       startOpen,
@@ -122,11 +155,39 @@ class LineChart extends React.Component {
       totalPurchase,
       totalPaidUsers,
       fromDate,
-      toDate
+      toDate,
+      optionDates,
     } = this.state;
+    const { valueDateToday, valueDate7DayAgo, valueDate30DayAgo, partnerId } = this.props;
+    const listOptionsDates = [
+      {
+        dates: "Today",
+        valueDateToday: valueDateToday,
+        valueDate: valueDateToday,
+      },
+      {
+        dates: "Last 7 days",
+        valueDateToday: valueDateToday,
+        valueDate: valueDate7DayAgo,
+      },
+      {
+        dates: "Last 30 days",
+        valueDateToday: valueDateToday,
+        valueDate: valueDate30DayAgo,
+      },
+    ];
     const fromDateValue = moment(startValue).format("YYYY-MM-DD");
     const toDateValue = moment(endValue).format("YYYY-MM-DD");
-    const { valueDateToday, valueDate7DayAgo, valueDate30DayAgo } = this.props;
+    const printOptionDates = listOptionsDates.map((val, index) => (
+      <Option
+        value={val.dates}
+        onClick={() =>
+          getDataLineChart(this, val.valueDate, val.valueDateToday, partnerId)
+        }
+      >
+        {val.dates}
+      </Option>
+    ));
     return (
       <div id="chart-frame">
         <div className="sum">
@@ -159,8 +220,13 @@ class LineChart extends React.Component {
           />
         </div>
         <div className="chart-frame_footer">
-          <Select defaultValue="2" style={{ width: 120 }}>
-          <Option
+          <Select
+            value={optionDates}
+            style={{ width: 120 }}
+            onChange={this.changeOptionDates}
+          >
+            {printOptionDates}
+            {/* <Option
               value="3"
               onClick={() =>
                 getDataLineChart(
@@ -191,8 +257,8 @@ class LineChart extends React.Component {
               }
             >
               Last 30 days
-            </Option>
-            <Option value="5" onClick={this.showModalPicker}>
+            </Option> */}
+            <Option value="customDates" onClick={this.showModalPicker}>
               Custom...
             </Option>
           </Select>
@@ -201,7 +267,7 @@ class LineChart extends React.Component {
               pathname: API.HISTORY_PATHNAME,
               search:
                 API.HISTORY_PATHSEARCH_NODATE +
-                `&fromDate=${fromDate}&toDate=${toDate}`             
+                `&fromDate=${fromDate}&toDate=${toDate}`,
             }}
           >
             MORE INSIGHTS <Icon type="caret-right" />
@@ -213,7 +279,7 @@ class LineChart extends React.Component {
               format="YYYY-MM-DD"
               value={startValue}
               placeholder="StartDate"
-              onChange={e => this.onStartChange(e, "startTime")}
+              onChange={(e) => this.onStartChange(e, "startTime")}
               className="input_date_chart"
               open={startOpen}
               renderExtraFooter={() => (
@@ -222,11 +288,7 @@ class LineChart extends React.Component {
                   <span onClick={this.hideModalPicker}>CANCEL</span>
                   <span
                     onClick={() =>
-                      getDataLineChart(
-                        this,
-                        fromDateValue,
-                        toDateValue
-                      )
+                      getDataLineChart(this, fromDateValue, toDateValue, partnerId)
                     }
                     style={{ color: "#0085ff" }}
                   >

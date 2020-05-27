@@ -1,5 +1,5 @@
 function checkToken(thisObj) {
-  const oldAccessToken = JSON.parse(localStorage.getItem("userAccessToken"));
+  const oldAccessToken = JSON.parse(localStorage.getItem("accessTokenPartner"));
   const currentTime = new Date().getTime();
   if (oldAccessToken === null) {
     thisObj.props.logInOut(false);   

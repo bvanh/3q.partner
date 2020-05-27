@@ -2,7 +2,7 @@ import fetch from "isomorphic-unfetch";
 import API from "../api/apiAll";
 
 const getToken = thisObj => {
-  const userToken = JSON.parse(localStorage.getItem("userToken"));
+  const userToken = JSON.parse(localStorage.getItem("tokenPartner"));
   const currentTime = new Date().getTime();
   if (userToken === null || currentTime - userToken.timestamp > 75168000000) {
     thisObj.props.logInOut(false);
@@ -22,7 +22,7 @@ const getToken = thisObj => {
           timestamp: new Date().getTime()
         };
         localStorage.setItem(
-          "userAccessToken",
+          "accessTokenPartner",
           JSON.stringify(userAccessToken)
         );
         return result;

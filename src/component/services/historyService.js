@@ -13,7 +13,7 @@ function getData(thisObj, pathSearch) {
       });
     }
   } else if (checkToken(thisObj) === false) {
-    const newAccessToken = JSON.parse(localStorage.getItem("userAccessToken"));
+    const newAccessToken = JSON.parse(localStorage.getItem("accessTokenPartner"));
     getDataAfterSetCondition(thisObj, newAccessToken, pathSearch);
   }
 }
@@ -26,7 +26,7 @@ function getDataAll(thisObj, pathSearch) {
       });
     }
   } else if (checkToken(thisObj) === false) {
-    const newAccessToken = JSON.parse(localStorage.getItem("userAccessToken"));
+    const newAccessToken = JSON.parse(localStorage.getItem("accessTokenPartner"));
     getDataAllAfterSetCondition(thisObj, newAccessToken, pathSearch);
   }
 }
