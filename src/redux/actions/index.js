@@ -15,17 +15,17 @@ const setPartnerInHistory = payload => {
     payload
   };
 };
-const setIsHistory = payload => {
+const setListPartner = payload => {
   return {
-    type: actions.SET_IS_HISTORY_BACK,
+    type: actions.SET_LISTPARTNER,
     payload
   };
 };
 function dispatchSetPartner(data) {
   store.dispatch(setPartner(data));
 }
-function dispatchSetIsHistory(data) {
-  store.dispatch(setIsHistory(data));
+function dispatchSetListPartner(data) {
+  store.dispatch(setListPartner(data));
 }
 function dispatchSetPartnerLogo(data) {
   store.dispatch(setPartnerInHistory(data));
@@ -33,6 +33,6 @@ function dispatchSetPartnerLogo(data) {
 
 export {
   dispatchSetPartner,
-  dispatchSetIsHistory,
+  dispatchSetListPartner,
   dispatchSetPartnerLogo
 };

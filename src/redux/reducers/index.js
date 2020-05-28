@@ -1,6 +1,7 @@
 import { actions } from "../action_types/index";
 
 const initialState = {
+  listPartner: [],
   partnerId: "1BA3F861-D4F2-4D97-9F78-38633155EC27",
   isHistoryBack: true,
   logoPartner: "https://cms.cubegame.vn/static/uploads/games/1576737204.png"
@@ -19,10 +20,10 @@ export default (state = initialState, action) => {
         ...state,
         logoPartner: action.payload
       }
-    case actions.SET_IS_HISTORY_BACK:
+    case actions.SET_LISTPARTNER:
       return {
         ...state,
-        isHistoryBack: action.payload
+        listPartner: action.payload
       }
     default:
       return state;

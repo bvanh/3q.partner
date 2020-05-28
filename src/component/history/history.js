@@ -402,7 +402,7 @@ class History extends React.Component {
   }
 }
 function mapStateToProps(state) {
-  console.log(state);
+  // console.log(state);
   return {
     logoPartner: state.logoPartner
   };

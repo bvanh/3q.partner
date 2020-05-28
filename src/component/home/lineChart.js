@@ -168,7 +168,7 @@ class LineChart extends React.Component {
       toDate,
       optionDates,
     } = this.state;
-    const { partnerId, logoPartner,listPartners } = this.props;
+    const { partnerId, logoPartner, listPartners } = this.props;
     const fromDateValue = moment(startValue).format("YYYY-MM-DD");
     const toDateValue = moment(endValue).format("YYYY-MM-DD");
     const printOptionDates = listOptionsDates.map((val, index) => (
@@ -181,6 +181,7 @@ class LineChart extends React.Component {
         {val.dates}
       </Option>
     ));
+    // console.log(listPartners)
     return (
       <div id="chart-frame">
         <div className="sum">
@@ -202,13 +203,13 @@ class LineChart extends React.Component {
               style={{ width: 120 }}
               onChange={(e) => this.props.handleChangePartner(e)}
               className={
-                listPartners.length ===0 ? "hideOptionPartner" : "showOptionPartner"
+                listPartners.length === 0 ? "hideOptionPartner" : "showOptionPartner"
               }
             >
               {this.props.printPartners}
             </Select>
             <img
-              src={logoPartner}
+              src={logoPartner === "null" ? 'https://cms.cubegame.vn/static/uploads/partner/c-coin.png' : logoPartner}
               alt="logo_clappigames"
               style={{ width: "2rem", height: "2rem" }}
             ></img>
@@ -290,8 +291,8 @@ function mapStateToProps(state) {
   console.log(state);
   return {
     partnerId: state.partnerId,
-    logoPartner: state.logoPartner
-    // isHistory: state.isHistoryBack,
+    logoPartner: state.logoPartner,
+    listPartners: state.listPartner
     // : state.,
   };
 }

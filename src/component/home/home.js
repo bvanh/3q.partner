@@ -3,6 +3,7 @@ import { Col, Row, Select } from "antd";
 import LineChart from "./lineChart";
 import PieChart from "./pieChart";
 import moment from "moment";
+import { connect } from 'react-redux'
 import imgTitle from "../../static/img/img_title.png";
 import "../../static/style-homepage.css";
 import { getListPartners } from "../services/homeService";
@@ -54,14 +55,15 @@ class Charts extends React.Component {
     dispatchSetPartner(convertValue.partnerId)
     dispatchSetPartnerLogo(convertValue.imageUrl);
   };
-  componentDidMount() {
+  componentWillMount() {
     getListPartners(this);
   }
   render() {
     const { listPartners } = this.state;
-    const printPartners = this.state.listPartners.map((val, index) => (
+    const printPartners = this.props.listPartners.map((val, index) => (
       <Option value={`{"partnerId":"${val.partnerId}","imageUrl":"${val.imageUrl}"}`}>{val.fullName}</Option>
     ));
+    console.log(this.props.listPartners)
     return (
       <>
         <Row
@@ -99,7 +101,6 @@ class Charts extends React.Component {
             <LineChart
               imageLogo={this.props.imageLogo}
               logInOut={this.props.logInOut}
-              listPartners={listPartners}
               printPartners={printPartners}
               handleChangePartner={this.handleChangePartner}
             />
@@ -115,5 +116,11 @@ class Charts extends React.Component {
     );
   }
 }
+function mapStateToProps(state) {
+  // console.log(state);
+  return {
+    listPartners: state.listPartner
+  };
+}
+export default connect(mapStateToProps, null)(Charts);
 
-export default Charts;

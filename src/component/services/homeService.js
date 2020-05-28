@@ -2,7 +2,7 @@ import API from "../../api/apiAll";
 import errorAlert from "../../utils/errorAlert";
 import getToken from "../../utils/refreshToken";
 import checkToken from "../../utils/checkToken";
-import { dispatchSetPartner } from '../../redux/actions/index'
+import { dispatchSetListPartner } from '../../redux/actions/index'
 import moment from "moment";
 
 // lấy dữ liệu cho biểu đồ tròn
@@ -334,10 +334,11 @@ function getListPartnersAfterSetCondition(thisObj, token) {
     .then((result) => {
       if (resStatus === 200) {
         console.log(result)
-        thisObj.setState({
-          listPartners: result,
-          // partnerId: "1BA3F861-D4F2-4D97-9F78-38633155EC27"
-        })
+        dispatchSetListPartner(result)
+        // thisObj.setState({
+        //   listPartners: result,
+        //   // partnerId: "1BA3F861-D4F2-4D97-9F78-38633155EC27"
+        // })
         //dispatchSetPartner("1BA3F861-D4F2-4D97-9F78-38633155EC27")
       }
     })
