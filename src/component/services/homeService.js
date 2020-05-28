@@ -6,7 +6,7 @@ import moment from "moment";
 
 // lấy dữ liệu cho biểu đồ tròn
 // function set condition
-function getDataPieChart(thisObj, fromDateValue, toDateValue,partnerId) {
+function getDataPieChart(thisObj, fromDateValue, toDateValue, partnerId) {
   if (checkToken(thisObj)) {
     let checkToken = getToken(thisObj);
     if (checkToken !== false) {
@@ -152,7 +152,6 @@ function getDataLineChartAfterSetCondition(
   newAccessToken,
   partnerId
 ) {
-  console.log(thisObj, fromDateValue, toDateValue, partnerId)
   let resStatus = 0;
   if (fromDateValue === toDateValue) {
     fetch(API.ROOT_URL + API.CHARTS_PATH_HOUR + `&date=${fromDateValue}&data=${partnerId}`, {
@@ -190,7 +189,8 @@ function getDataLineChartAfterSetCondition(
       thisObj,
       fromDateValue,
       toDateValue,
-      newAccessToken
+      newAccessToken,
+      partnerId
     );
   } else {
     fetch(
@@ -234,13 +234,14 @@ function getDataLineChartAfterSetCondition(
       thisObj,
       fromDateValue,
       toDateValue,
-      newAccessToken
+      newAccessToken,
+      partnerId
     );
   }
 }
 // lấy tổng số lượng giao dịch
 // function check condition
-function getTotalPurchase(thisObj, fromDate, toDate) {
+function getTotalPurchase(thisObj, fromDate, toDate, partnerId) {
   if (checkToken(thisObj)) {
     let checkToken = getToken(thisObj);
     if (checkToken !== false) {
@@ -249,7 +250,8 @@ function getTotalPurchase(thisObj, fromDate, toDate) {
           thisObj,
           fromDate,
           toDate,
-          newAccessToken
+          newAccessToken,
+          partnerId
         );
       });
     }
@@ -259,13 +261,13 @@ function getTotalPurchase(thisObj, fromDate, toDate) {
   }
 }
 // function callback after check condition
-function getTotalPurchaseAfterSetCondition(thisObj, fromDate, toDate, token) {
+function getTotalPurchaseAfterSetCondition(thisObj, fromDate, toDate, token, partnerId) {
   let resStatus = 0;
   fetch(
     API.ROOT_URL +
     API.HISTORY_PATHNAME +
     API.HISTORY_PATHSEARCH_NODATE +
-    `&fromDate=${fromDate}&toDate=${toDate}`,
+    `&fromDate=${fromDate}&toDate=${toDate}&data=${partnerId}`,
     {
       headers: {
         Authorization: `Bearer ${token.accessToken}`,
@@ -327,9 +329,9 @@ function getListPartnersAfterSetCondition(thisObj, token) {
       if (resStatus === 200) {
         thisObj.setState({
           listPartners: result,
-          partnerId:"1BA3F861-D4F2-4D97-9F78-38633155EC27"
+          partnerId: "1BA3F861-D4F2-4D97-9F78-38633155EC27"
         })
-        console.log(result);
+        // console.log(result);
       }
     })
     .catch(function (error) {

@@ -126,26 +126,26 @@ class LineChart extends React.Component {
       switch (this.state.optionDates) {
         case "Today":
           getDataLineChart(this, today, today, partnerId);
-          console.log("today");
+          // console.log("today");
           break;
         case "Last 7 days":
           getDataLineChart(this, sevenDayAgo, today, partnerId);
-          console.log("7day");
+          // console.log("7day");
           break;
         case "Last 30 days":
           getDataLineChart(this, thirtyDayAgo, today, partnerId);
-          console.log("30");
+          // console.log("30");
           break;
         case "customDates":
           getDataLineChart(this, fromDateValue, toDateValue, partnerId);
-          console.log("custom");
+          // console.log("custom");
           break;
         default:
           break;
       }
-      console.log("run change partner id");
+      // console.log("run change partner id");
     } else {
-      console.log("dr");
+      // console.log("dr");
     }
   }
   componentDidMount() {

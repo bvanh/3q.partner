@@ -55,22 +55,22 @@ class PieChart extends React.Component {
       switch (this.state.optionDates) {
         case "Today":
           getDataPieChart(this, today, today, partnerId);
-          console.log("today");
+          // console.log("today");
           break;
         case "Last 7 days":
           getDataPieChart(this, sevenDayAgo, today, partnerId);
-          console.log("7day");
+          // console.log("7day");
           break;
         case "Last 30 days":
           getDataPieChart(this, thirtyDayAgo, today, partnerId);
-          console.log("30");
+          // console.log("30");
           break;
         default:
           break;
       }
-      console.log("run change partner id");
+      // console.log("run change partner id");
     } else {
-      console.log("dr");
+      // console.log("dr");
     }
   }
   componentDidMount() {
