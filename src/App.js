@@ -6,6 +6,7 @@ import History from "./component/history/history";
 import ChangePass from "./component/changepassword/changepassword";
 import LoginForm from "./component/login/login";
 import API from "./api/apiAll";
+import {dispatchResetLogout} from './redux/actions/index'
 import logoclappigames from "./static/img/logoForPages.jpg";
 import icon_changepassword from "./static/img/changepassword_icon.svg";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
@@ -49,7 +50,7 @@ export default class App extends React.Component {
         </Link>
       </Menu.Item>
       <Menu.Item onClick={() => this.logInOut(false)}>
-        <Link to="/">
+        <Link to="/" onClick={()=>dispatchResetLogout()}>
           <Icon
             type="export"
             style={{ paddingRight: ".5rem", color: "#AEAEAE" }}

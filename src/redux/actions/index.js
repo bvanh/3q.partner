@@ -21,6 +21,12 @@ const setListPartner = payload => {
     payload
   };
 };
+const resetLogout = payload => {
+  return {
+    type: actions.RESET_LOGOUT,
+    payload
+  };
+};
 function dispatchSetPartner(data) {
   store.dispatch(setPartner(data));
 }
@@ -30,9 +36,12 @@ function dispatchSetListPartner(data) {
 function dispatchSetPartnerLogo(data) {
   store.dispatch(setPartnerInHistory(data));
 }
-
+function dispatchResetLogout(data) {
+  store.dispatch(resetLogout(data));
+}
 export {
   dispatchSetPartner,
   dispatchSetListPartner,
-  dispatchSetPartnerLogo
+  dispatchSetPartnerLogo,
+  dispatchResetLogout
 };

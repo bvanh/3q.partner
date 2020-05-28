@@ -25,6 +25,13 @@ export default (state = initialState, action) => {
         ...state,
         listPartner: action.payload
       }
+    case actions.RESET_LOGOUT:
+      return {
+        ...state,
+        listPartner: [],
+        partnerId: "1BA3F861-D4F2-4D97-9F78-38633155EC27",
+        logoPartner: "https://cms.cubegame.vn/static/uploads/games/1576737204.png"
+      }
     default:
       return state;
   }
