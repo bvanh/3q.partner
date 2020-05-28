@@ -6,6 +6,7 @@ import moment from "moment";
 import imgTitle from "../../static/img/img_title.png";
 import "../../static/style-homepage.css";
 import { getListPartners } from "../services/homeService";
+import { dispatchSetPartner, dispatchSetPartnerLogo } from '../../redux/actions/index'
 const { Option } = Select;
 class Charts extends React.Component {
   constructor(props) {
@@ -48,17 +49,19 @@ class Charts extends React.Component {
     });
   };
   handleChangePartner = (e) => {
-    this.setState({ partnerId: e });
+    const convertValue = JSON.parse(e)
+    this.setState({ partnerId: convertValue.partnerId });
+    dispatchSetPartner(convertValue.partnerId)
+    dispatchSetPartnerLogo(convertValue.imageUrl);
   };
   componentDidMount() {
     getListPartners(this);
   }
   render() {
-    const { partnerId } = this.state;
+    const { listPartners } = this.state;
     const printPartners = this.state.listPartners.map((val, index) => (
-      <Option value={val.partnerId}>{val.fullName}</Option>
+      <Option value={`{"partnerId":"${val.partnerId}","imageUrl":"${val.imageUrl}"}`}>{val.fullName}</Option>
     ));
-    // console.log(this.state)
     return (
       <>
         <Row
@@ -81,7 +84,7 @@ class Charts extends React.Component {
                 src={imgTitle}
                 alt="img_title"
                 id="img_title"
-                // style={{ width: "2rem", height: "2rem" }}
+              // style={{ width: "2rem", height: "2rem" }}
               ></img>
             </div>
           </Col>
@@ -96,7 +99,7 @@ class Charts extends React.Component {
             <LineChart
               imageLogo={this.props.imageLogo}
               logInOut={this.props.logInOut}
-              partnerId={partnerId}
+              listPartners={listPartners}
               printPartners={printPartners}
               handleChangePartner={this.handleChangePartner}
             />
@@ -104,7 +107,7 @@ class Charts extends React.Component {
           <Col xl={{ span: 8, order: 2 }} xs={{ span: 24, order: 1 }}>
             <PieChart
               logInOut={this.props.logInOut}
-              partnerId={partnerId}
+            // partnerId={partnerId}
             />
           </Col>
         </Row>

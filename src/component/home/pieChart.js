@@ -1,7 +1,7 @@
 import React from "react";
 import { Pie } from "react-chartjs-2";
 import { Select, Icon, Row, Col } from "antd";
-// import "chartjs-plugin-labels";
+import {connect} from 'react-redux';
 import { Link } from "react-router-dom";
 import { getDataPieChart } from "../services/homeService";
 import API from "../../api/apiAll";
@@ -55,15 +55,12 @@ class PieChart extends React.Component {
       switch (this.state.optionDates) {
         case "Today":
           getDataPieChart(this, today, today, partnerId);
-          // console.log("today");
           break;
         case "Last 7 days":
           getDataPieChart(this, sevenDayAgo, today, partnerId);
-          // console.log("7day");
           break;
         case "Last 30 days":
           getDataPieChart(this, thirtyDayAgo, today, partnerId);
-          // console.log("30");
           break;
         default:
           break;
@@ -155,5 +152,13 @@ class PieChart extends React.Component {
     );
   }
 }
+function mapStateToProps(state) {
+  return {
+    partnerId: state.partnerId,
+    // logoPartner: state.logoPartner
+    // isHistory: state.isHistoryBack,
+    // : state.,
+  };
+}
+export default connect(mapStateToProps, null)(PieChart);
 
-export default PieChart;

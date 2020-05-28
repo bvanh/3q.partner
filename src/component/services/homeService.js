@@ -2,6 +2,7 @@ import API from "../../api/apiAll";
 import errorAlert from "../../utils/errorAlert";
 import getToken from "../../utils/refreshToken";
 import checkToken from "../../utils/checkToken";
+import { dispatchSetPartner } from '../../redux/actions/index'
 import moment from "moment";
 
 // lấy dữ liệu cho biểu đồ tròn
@@ -152,6 +153,11 @@ function getDataLineChartAfterSetCondition(
   newAccessToken,
   partnerId
 ) {
+  console.log(thisObj,
+    fromDateValue,
+    toDateValue,
+    newAccessToken,
+    partnerId)
   let resStatus = 0;
   if (fromDateValue === toDateValue) {
     fetch(API.ROOT_URL + API.CHARTS_PATH_HOUR + `&date=${fromDateValue}&data=${partnerId}`, {
@@ -327,11 +333,12 @@ function getListPartnersAfterSetCondition(thisObj, token) {
     })
     .then((result) => {
       if (resStatus === 200) {
+        console.log(result)
         thisObj.setState({
           listPartners: result,
-          partnerId: "1BA3F861-D4F2-4D97-9F78-38633155EC27"
+          // partnerId: "1BA3F861-D4F2-4D97-9F78-38633155EC27"
         })
-        // console.log(result);
+        //dispatchSetPartner("1BA3F861-D4F2-4D97-9F78-38633155EC27")
       }
     })
     .catch(function (error) {

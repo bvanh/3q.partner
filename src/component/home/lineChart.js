@@ -1,8 +1,8 @@
 import React, { useMemo } from "react";
 import moment from "moment";
-// import memoize from "memoize-one";
+import { connect } from "react-redux";
 import { Line } from "react-chartjs-2";
-import { getDataLineChart } from "../services/homeService";
+import { getDataLineChart, getListPartners } from "../services/homeService";
 import { Link } from "react-router-dom";
 import API from "../../api/apiAll";
 import optionLine from "./lineChartOptions";
@@ -72,16 +72,16 @@ class LineChart extends React.Component {
           hoverBorderColor: "rgba(255,99,132,1)",
           data: this.state.vndChartyAxisTotal,
         },
-        {
-          label: "WEB",
-          fill: false,
-          backgroundColor: "#ffd54f",
-          borderColor: "#ffd54f",
-          borderWidth: 2,
-          hoverBackgroundColor: "rgba(255,99,132,0.4)",
-          hoverBorderColor: "rgba(255,99,132,1)",
-          data: this.state.vndChartyAxisWeb,
-        },
+        // {
+        //   label: "WEB",
+        //   fill: false,
+        //   backgroundColor: "#ffd54f",
+        //   borderColor: "#ffd54f",
+        //   borderWidth: 2,
+        //   hoverBackgroundColor: "rgba(255,99,132,0.4)",
+        //   hoverBorderColor: "rgba(255,99,132,1)",
+        //   data: this.state.vndChartyAxisWeb,
+        // },
         {
           label: "APK",
           fill: false,
@@ -122,7 +122,8 @@ class LineChart extends React.Component {
     const { startValue, endValue } = this.state;
     const fromDateValue = moment(startValue).format("YYYY-MM-DD");
     const toDateValue = moment(endValue).format("YYYY-MM-DD");
-    if (nextProps.partnerId !== this.props.partnerId) {
+    if (partnerId !== this.props.partnerId) {
+      console.log('sfsf')
       switch (this.state.optionDates) {
         case "Today":
           getDataLineChart(this, today, today, partnerId);
@@ -149,7 +150,7 @@ class LineChart extends React.Component {
     }
   }
   componentDidMount() {
-    const { partnerId } = this.props;
+    const { partnerId, } = this.props;
     const { today, sevenDayAgo } = dateValue;
     getDataLineChart(this, sevenDayAgo, today, partnerId);
   }
@@ -167,7 +168,7 @@ class LineChart extends React.Component {
       toDate,
       optionDates,
     } = this.state;
-    const { partnerId } = this.props;
+    const { partnerId, logoPartner,listPartners } = this.props;
     const fromDateValue = moment(startValue).format("YYYY-MM-DD");
     const toDateValue = moment(endValue).format("YYYY-MM-DD");
     const printOptionDates = listOptionsDates.map((val, index) => (
@@ -197,17 +198,17 @@ class LineChart extends React.Component {
           </div>
           <div id="logo_title">
             <Select
-              value={partnerId}
+              value={`{"partnerId":"${partnerId}","imageUrl":"${logoPartner}"}`}
               style={{ width: 120 }}
               onChange={(e) => this.props.handleChangePartner(e)}
               className={
-                partnerId === "" ? "hideOptionPartner" : "showOptionPartner"
+                listPartners.length ===0 ? "hideOptionPartner" : "showOptionPartner"
               }
             >
               {this.props.printPartners}
             </Select>
             <img
-              src={this.props.imageLogo}
+              src={logoPartner}
               alt="logo_clappigames"
               style={{ width: "2rem", height: "2rem" }}
             ></img>
@@ -285,4 +286,13 @@ class LineChart extends React.Component {
     );
   }
 }
-export default LineChart;
+function mapStateToProps(state) {
+  console.log(state);
+  return {
+    partnerId: state.partnerId,
+    logoPartner: state.logoPartner
+    // isHistory: state.isHistoryBack,
+    // : state.,
+  };
+}
+export default connect(mapStateToProps, null)(LineChart);
