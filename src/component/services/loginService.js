@@ -1,5 +1,10 @@
-import API from "../../api/apiAll";
-
+import API from "../../api/api";
+import {
+  localStorageService,
+  valService,
+} from "../../utils/localStorageService";
+const { isSave, accessTokenPartner, tokenPartner } = valService;
+const { saveInfo, setToken } = localStorageService;
 // login
 function saveTokenToLocal(thisObj, username, password, isRemember) {
   let resStatus = 0;
@@ -26,12 +31,8 @@ function saveTokenToLocal(thisObj, username, password, isRemember) {
           accessToken: result.accessToken,
           timestamp: new Date().getTime(),
         };
-        localStorage.setItem("tokenPartner", JSON.stringify(userToken));
-        localStorage.setItem(
-          "accessTokenPartner",
-          JSON.stringify(userAccessToken)
-        );
-        localStorage.setItem("saveLogin", isRemember);
+        setToken(userToken, userAccessToken);
+        saveInfo(isSave, isRemember);
         thisObj.props.logInOut(true);
         return result;
       }
@@ -51,42 +52,16 @@ function saveTokenToLocal(thisObj, username, password, isRemember) {
         })
         .then((result) => {
           if (resStatus === 200) {
-            localStorage.setItem("imageLogo", result.imageUrl);
-            localStorage.setItem("fullname", result.fullName);
+            saveInfo("imageLogo", result.imageUrl);
+            saveInfo("fullname", result.fullName);
             thisObj.props.getImgAndName(result);
-            console.log(result);
+            // console.log(result);
           }
         })
         .catch(function (error) {
           console.log("Request failed", error);
         });
-  
     })
-    // .then(token => {
-    //   console.log(token)
-    //   fetch(API.ROOT_URL + API.LIST_PARTNERS, {
-    //     headers: {
-    //       Authorization: `Bearer ${token.accessToken}`,
-    //       "Content-Type": "application/x-www-form-urlencoded"
-    //     },
-    //     method: "GET"
-    //   })
-    //     .then(response => {
-    //       resStatus = response.status;
-    //       return response.json();
-    //     })
-    //     .then(result => {
-    //       if (resStatus === 200) {
-    //         // localStorage.setItem("imageLogo", result.imageUrl);
-    //         // localStorage.setItem("fullname", result.fullName);
-    //         // thisObj.props.getImgAndName(result);
-    //         console.log(result)
-    //       }
-    //     })
-    //     .catch(function (error) {
-    //       console.log("Request failed", error);
-    //     });
-    // })
     .catch((error) => {
       console.log("Request failed", error);
     });

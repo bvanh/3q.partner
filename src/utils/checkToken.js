@@ -1,12 +1,16 @@
+import { localStorageService, valService } from "./localStorageService";
+const { accessTokenPartner, tokenPartner } = valService;
+const { getLocalInfo } = localStorageService;
 function checkToken(thisObj) {
-  const oldAccessToken = JSON.parse(localStorage.getItem("accessTokenPartner"));
+  const token = getLocalInfo(tokenPartner);
+  const accessToken = getLocalInfo(accessTokenPartner);
   const currentTime = new Date().getTime();
-  if (oldAccessToken === null) {
-    thisObj.props.logInOut(false);   
-  } else if (currentTime - oldAccessToken.timestamp > 3300000) {
-    return true;
-  } else {
+  const checkExpriedToken = currentTime - token?.timestamp > 75168000000;
+  if (token === null || accessToken === null || checkExpriedToken) {
+    thisObj.props.logInOut(false);
     return false;
+  } else {
+    return true;
   }
 }
 export default checkToken;

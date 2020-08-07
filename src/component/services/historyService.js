@@ -1,4 +1,4 @@
-import API from "../../api/apiAll";
+import API from "../../api/api";
 import errorAlert from "../../utils/errorAlert";
 import getToken from "../../utils/refreshToken";
 import checkToken from "../../utils/checkToken";

@@ -5,9 +5,9 @@ import { Link } from "react-router-dom";
 import moment from "moment";
 import errorAlert from "../../utils/errorAlert";
 import ReactExport from "react-export-excel";
-import { getDataPieChart } from "../services/homeService";
+import { getDataChart } from "../services/homeService";
 import "../../static/style-history.css";
-import API from "../../api/apiAll";
+import API from "../../api/api";
 import { getData, getDataAll } from "../services/historyService";
 import moreitem from "../../static/img/more_item.png";
 import { connect } from 'react-redux'
@@ -44,7 +44,7 @@ class History extends React.Component {
   componentDidMount() {
     const query = new URLSearchParams(this.props.location.search);
     getData(this, this.props.location.search);
-    const demo = getDataPieChart(
+    const demo = getDataChart(
       this,
       query.get("fromDate"),
       query.get("toDate"),
@@ -121,7 +121,7 @@ class History extends React.Component {
         `${API.HISTORY_PATHNAME}?currentPage=1&pageSize=10&search=${search}&type=${type}&fromDate=${fromDate}&toDate=${toDate}&data=${partnerId}`
       );
       getData(this, this.props.location.search);
-      getDataPieChart(this, fromDate, toDate, partnerId);
+      getDataChart(this, fromDate, toDate, partnerId);
     } else {
       errorAlert("Alert", "Between 2 dates bigger than 31 days!");
     }

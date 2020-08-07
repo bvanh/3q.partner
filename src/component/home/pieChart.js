@@ -1,10 +1,10 @@
 import React from "react";
 import { Pie } from "react-chartjs-2";
 import { Select, Icon, Row, Col } from "antd";
-import {connect} from 'react-redux';
+import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-import { getDataPieChart } from "../services/homeService";
-import API from "../../api/apiAll";
+import { getDataChart, getDataPie } from "../services/homeService";
+import API from "../../api/api";
 import { listOptionsDates, dateValue } from "./datesInfo";
 const { Option } = Select;
 
@@ -54,13 +54,13 @@ class PieChart extends React.Component {
     if (nextProps.partnerId !== this.props.partnerId) {
       switch (this.state.optionDates) {
         case "Today":
-          getDataPieChart(this, today, today, partnerId);
+          getDataChart(this, "PIE", "", today, today, partnerId);
           break;
         case "Last 7 days":
-          getDataPieChart(this, sevenDayAgo, today, partnerId);
+          getDataChart(this, "PIE", "", sevenDayAgo, today, partnerId);
           break;
         case "Last 30 days":
-          getDataPieChart(this, thirtyDayAgo, today, partnerId);
+          getDataChart(this, "PIE", "", thirtyDayAgo, today, partnerId);
           break;
         default:
           break;
@@ -73,7 +73,7 @@ class PieChart extends React.Component {
   componentDidMount() {
     const { partnerId } = this.props;
     const { today, sevenDayAgo } = dateValue;
-    getDataPieChart(this, sevenDayAgo, today, partnerId);
+    getDataChart(this, "PIE", "", sevenDayAgo, today, partnerId);
   }
   render() {
     const { partnerId, userToken } = this.props;
@@ -82,7 +82,14 @@ class PieChart extends React.Component {
       <Option
         value={val.dates}
         onClick={() =>
-          getDataPieChart(this, val.valueDate, val.valueDateToday, partnerId)
+          getDataChart(
+            this,
+            "PIE",
+            "",
+            val.valueDate,
+            val.valueDateToday,
+            partnerId
+          )
         }
       >
         {val.dates}
@@ -161,4 +168,3 @@ function mapStateToProps(state) {
   };
 }
 export default connect(mapStateToProps, null)(PieChart);
-

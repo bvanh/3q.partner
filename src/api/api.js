@@ -10,6 +10,7 @@ const API = {
   CHARTS_PATHSEARCH_TYPE: "?type=0",
   // API chart hour
   CHARTS_PATH_HOUR: "/stats/revenue/hour?type=0",
+  CHARTS_PATH_HOUR2: "/stats/revenue/hour?",
   // url change password page
   CHANGEPASSWORD_PATHNAME: "/partner/password/update",
   //   REFRESH TOKEN & LOGIN

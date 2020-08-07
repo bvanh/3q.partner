@@ -2,9 +2,9 @@ import React, { useMemo } from "react";
 import moment from "moment";
 import { connect } from "react-redux";
 import { Line } from "react-chartjs-2";
-import { getDataLineChart, getListPartners } from "../services/homeService";
+import { getDataChart, getListPartners } from "../services/homeService";
 import { Link } from "react-router-dom";
-import API from "../../api/apiAll";
+import API from "../../api/api";
 import optionLine from "./lineChartOptions";
 import { listOptionsDates, dateValue } from "./datesInfo";
 import { Icon, DatePicker, Input, Select } from "antd";
@@ -123,22 +123,43 @@ class LineChart extends React.Component {
     const fromDateValue = moment(startValue).format("YYYY-MM-DD");
     const toDateValue = moment(endValue).format("YYYY-MM-DD");
     if (partnerId !== this.props.partnerId) {
-      console.log('sfsf')
+      console.log("sfsf");
       switch (this.state.optionDates) {
         case "Today":
-          getDataLineChart(this, today, today, partnerId);
+          getDataChart(this, "LINE_CHART", true, today, today, partnerId);
           // console.log("today");
           break;
         case "Last 7 days":
-          getDataLineChart(this, sevenDayAgo, today, partnerId);
+          getDataChart(
+            this,
+            "LINE_CHART",
+            false,
+            sevenDayAgo,
+            today,
+            partnerId
+          );
           // console.log("7day");
           break;
         case "Last 30 days":
-          getDataLineChart(this, thirtyDayAgo, today, partnerId);
+          getDataChart(
+            this,
+            "LINE_CHART",
+            false,
+            thirtyDayAgo,
+            today,
+            partnerId
+          );
           // console.log("30");
           break;
         case "customDates":
-          getDataLineChart(this, fromDateValue, toDateValue, partnerId);
+          getDataChart(
+            this,
+            "LINE_CHART",
+            false,
+            fromDateValue,
+            toDateValue,
+            partnerId
+          );
           // console.log("custom");
           break;
         default:
@@ -150,9 +171,9 @@ class LineChart extends React.Component {
     }
   }
   componentDidMount() {
-    const { partnerId, } = this.props;
+    const { partnerId } = this.props;
     const { today, sevenDayAgo } = dateValue;
-    getDataLineChart(this, sevenDayAgo, today, partnerId);
+    getDataChart(this, "LINE_CHART", false, sevenDayAgo, today, partnerId);
   }
   render() {
     // console.log(this.state)
@@ -175,7 +196,14 @@ class LineChart extends React.Component {
       <Option
         value={val.dates}
         onClick={() =>
-          getDataLineChart(this, val.valueDate, val.valueDateToday, partnerId)
+          getDataChart(
+            this,
+            "LINE_CHART",
+            false,
+            val.valueDate,
+            val.valueDateToday,
+            partnerId
+          )
         }
       >
         {val.dates}
@@ -203,13 +231,19 @@ class LineChart extends React.Component {
               style={{ width: 120 }}
               onChange={(e) => this.props.handleChangePartner(e)}
               className={
-                listPartners.length === 0 ? "hideOptionPartner" : "showOptionPartner"
+                listPartners.length === 0
+                  ? "hideOptionPartner"
+                  : "showOptionPartner"
               }
             >
               {this.props.printPartners}
             </Select>
             <img
-              src={logoPartner === "null" ? 'https://cms.cubegame.vn/static/uploads/partner/c-coin.png' : logoPartner}
+              src={
+                logoPartner === "null"
+                  ? "https://cms.cubegame.vn/static/uploads/partner/c-coin.png"
+                  : logoPartner
+              }
               alt="logo_clappigames"
               style={{ width: "2rem", height: "2rem" }}
             ></img>
@@ -260,12 +294,7 @@ class LineChart extends React.Component {
                   <span onClick={this.hideModalPicker}>CANCEL</span>
                   <span
                     onClick={() =>
-                      getDataLineChart(
-                        this,
-                        fromDateValue,
-                        toDateValue,
-                        partnerId
-                      )
+                      getDataChart(this, fromDateValue, toDateValue, partnerId)
                     }
                     style={{ color: "#0085ff" }}
                   >
@@ -292,7 +321,7 @@ function mapStateToProps(state) {
   return {
     partnerId: state.partnerId,
     logoPartner: state.logoPartner,
-    listPartners: state.listPartner
+    listPartners: state.listPartner,
     // : state.,
   };
 }

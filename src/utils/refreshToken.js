@@ -1,5 +1,5 @@
 import fetch from "isomorphic-unfetch";
-import API from "../api/apiAll";
+import API from "../api/api";
 
 const getToken = thisObj => {
   const userToken = JSON.parse(localStorage.getItem("tokenPartner"));
