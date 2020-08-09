@@ -1,9 +1,4 @@
 import API from "../api/api";
-// import errorAlert from "../../utils/errorAlert";
-// import getToken from "../../utils/refreshToken";
-// import checkToken from "../../utils/checkToken";
-// import { dispatchSetListPartner } from "../../redux/actions/index";
-// import moment from "moment";
 import axios from "axios";
 import { localStorageService, valService } from "../utils/localStorageService";
 const { getLocalInfo, setToken } = localStorageService;
@@ -50,7 +45,7 @@ baseGetData.interceptors.response.use(
           return Promise.reject(error);
         });
     } else {
-    //   console.log(error.response);
+      console.log(error.response);
       return Promise.reject(error.response);
     }
   }

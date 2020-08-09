@@ -6,11 +6,13 @@ const valService = {
 const { tokenPartner, accessTokenPartner, isSave } = valService;
 const localStorageService = {
   setToken: (token, accessToken) => {
-    if (token) localStorage.setItem(tokenPartner, JSON.stringify(token));
+    if (token) {
+      localStorage.setItem(tokenPartner, JSON.stringify(token));
+    }
     localStorage.setItem(accessTokenPartner, JSON.stringify(accessToken));
   },
   saveInfo: (name, info) => {
-    localStorage.setItem(name, info);
+    localStorage.setItem(name, JSON.stringify(info));
   },
   getLocalInfo: (name) => {
     return JSON.parse(localStorage.getItem(name));

@@ -63,7 +63,6 @@ class Charts extends React.Component {
     const printPartners = this.props.listPartners.map((val, index) => (
       <Option value={`{"partnerId":"${val.partnerId}","imageUrl":"${val.imageUrl}"}`}>{val.fullName}</Option>
     ));
-    console.log(this.props.listPartners)
     return (
       <>
         <Row
@@ -117,7 +116,6 @@ class Charts extends React.Component {
   }
 }
 function mapStateToProps(state) {
-  // console.log(state);
   return {
     listPartners: state.listPartner
   };

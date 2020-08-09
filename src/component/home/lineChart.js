@@ -62,16 +62,6 @@ class LineChart extends React.Component {
     const data = {
       labels: this.state.vndChartxAxis,
       datasets: [
-        // {
-        //   label: "Total",
-        //   fill: false,
-        //   backgroundColor: "rgba(75,192,192,0.4)",
-        //   borderColor: "rgba(75,192,192,0.4)",
-        //   borderWidth: 2,
-        //   hoverBackgroundColor: "rgba(255,99,132,0.4)",
-        //   hoverBorderColor: "rgba(255,99,132,1)",
-        //   data: this.state.vndChartyAxisTotal,
-        // },
         {
           label: "WEB",
           fill: false,
@@ -111,7 +101,6 @@ class LineChart extends React.Component {
     });
   };
   changeOptionDates = (e) => {
-    console.log(e);
     this.setState({
       optionDates: e,
     });
@@ -123,7 +112,6 @@ class LineChart extends React.Component {
     const fromDateValue = moment(startValue).format("YYYY-MM-DD");
     const toDateValue = moment(endValue).format("YYYY-MM-DD");
     if (partnerId !== this.props.partnerId) {
-      console.log("sfsf");
       switch (this.state.optionDates) {
         case "Today":
           getDataChart(this, "LINE_CHART", true, today, today, partnerId);
@@ -160,12 +148,10 @@ class LineChart extends React.Component {
             toDateValue,
             partnerId
           );
-          // console.log("custom");
           break;
         default:
           break;
       }
-      // console.log("run change partner id");
     } else {
       // console.log("dr");
     }
@@ -174,10 +160,9 @@ class LineChart extends React.Component {
     const { partnerId } = this.props;
     const { today, sevenDayAgo } = dateValue;
     getDataChart(this, "LINE_CHART", false, sevenDayAgo, today, partnerId);
+    this.hideModalPicker();
   }
   render() {
-    // console.log(this.state)
-    // const getData=this.getData(this.props.partnerId);
     const {
       startValue,
       startOpen,
@@ -209,7 +194,6 @@ class LineChart extends React.Component {
         {val.dates}
       </Option>
     ));
-    // console.log(listPartners)
     return (
       <div id="chart-frame">
         <div className="sum">
@@ -293,9 +277,17 @@ class LineChart extends React.Component {
                   <span onClick={this.clearInputDate}>CLEAR</span>
                   <span onClick={this.hideModalPicker}>CANCEL</span>
                   <span
-                    onClick={() =>
-                      getDataChart(this, fromDateValue, toDateValue, partnerId)
-                    }
+                    onClick={() => {
+                      getDataChart(
+                        this,
+                        "LINE_CHART",
+                        false,
+                        fromDateValue,
+                        toDateValue,
+                        partnerId
+                      );
+                      this.hideModalPicker();
+                    }}
                     style={{ color: "#0085ff" }}
                   >
                     APPLY
@@ -317,7 +309,6 @@ class LineChart extends React.Component {
   }
 }
 function mapStateToProps(state) {
-  console.log(state);
   return {
     partnerId: state.partnerId,
     logoPartner: state.logoPartner,

@@ -10,8 +10,8 @@ import "../../static/style-history.css";
 import API from "../../api/api";
 import { getData, getDataAll } from "../services/historyService";
 import moreitem from "../../static/img/more_item.png";
-import { connect } from 'react-redux'
-import { dispatchSetPartner } from '../../redux/actions/index'
+import { connect } from "react-redux";
+import { dispatchSetPartner } from "../../redux/actions/index";
 const ExcelFile = ReactExport.ExcelFile;
 const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
 const ExcelColumn = ReactExport.ExcelFile.ExcelColumn;
@@ -46,6 +46,8 @@ class History extends React.Component {
     getData(this, this.props.location.search);
     const demo = getDataChart(
       this,
+      "PIE",
+      false,
       query.get("fromDate"),
       query.get("toDate"),
       this.state.partnerId
@@ -121,7 +123,7 @@ class History extends React.Component {
         `${API.HISTORY_PATHNAME}?currentPage=1&pageSize=10&search=${search}&type=${type}&fromDate=${fromDate}&toDate=${toDate}&data=${partnerId}`
       );
       getData(this, this.props.location.search);
-      getDataChart(this, fromDate, toDate, partnerId);
+      getDataChart(this, "PIE", false, fromDate, toDate, partnerId);
     } else {
       errorAlert("Alert", "Between 2 dates bigger than 31 days!");
     }
@@ -155,9 +157,9 @@ class History extends React.Component {
   };
   setPartner = () => {
     const query = new URLSearchParams(this.props.location.search);
-    dispatchSetPartner(query.get("data"))
+    dispatchSetPartner(query.get("data"));
     // dispatchSetIsHistory(false)
-  }
+  };
   render() {
     const {
       totalItem,
@@ -311,11 +313,19 @@ class History extends React.Component {
         </Menu.Item>
       </Menu>
     );
-    const { logoPartner } = this.props
+    const { logoPartner } = this.props;
     return (
       <div className="history_container">
         <div className="history_header">
-          <img src={logoPartner === "null" ? 'https://cms.cubegame.vn/static/uploads/partner/c-coin.png' : logoPartner} alt="logo_clappigames" width="60px"></img>
+          <img
+            src={
+              logoPartner === "null"
+                ? "https://cms.cubegame.vn/static/uploads/partner/c-coin.png"
+                : logoPartner
+            }
+            alt="logo_clappigames"
+            width="60px"
+          ></img>
           <Link to="/" onClick={this.setPartner}>
             Chart view{" "}
             <Icon
@@ -384,8 +394,8 @@ class History extends React.Component {
             loading={loading}
           />
         ) : (
-            "Loading"
-          )}
+          "Loading"
+        )}
         <Pagination
           current={currentPage}
           // defaultCurrent={1}
@@ -404,7 +414,7 @@ class History extends React.Component {
 function mapStateToProps(state) {
   // console.log(state);
   return {
-    logoPartner: state.logoPartner
+    logoPartner: state.logoPartner,
   };
 }
 export default connect(mapStateToProps, null)(History);

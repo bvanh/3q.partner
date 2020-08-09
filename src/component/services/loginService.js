@@ -3,7 +3,7 @@ import {
   localStorageService,
   valService,
 } from "../../utils/localStorageService";
-const { isSave, accessTokenPartner, tokenPartner } = valService;
+const { isSave } = valService;
 const { saveInfo, setToken } = localStorageService;
 // login
 function saveTokenToLocal(thisObj, username, password, isRemember) {
