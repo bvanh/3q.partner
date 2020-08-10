@@ -6,7 +6,7 @@ function checkToken(thisObj) {
   const accessToken = getLocalInfo(accessTokenPartner);
   const currentTime = new Date().getTime();
   const checkExpriedToken = currentTime - token?.timestamp > 75168000000;
-  if (token === null || accessToken === null || checkExpriedToken) {
+  if (token === undefined || accessToken === undefined || checkExpriedToken) {
     thisObj.props.logInOut(false);
     return false;
   } else {
