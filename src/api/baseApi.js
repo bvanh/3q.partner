@@ -28,6 +28,7 @@ baseGetData.interceptors.response.use(
     return response;
   },
   (error) => {
+    console.log(error)
     const originRequest = error.response.config;
     const token = getLocalInfo(tokenPartner);
     if (error.response.status === 401) {

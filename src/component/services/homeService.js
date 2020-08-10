@@ -62,6 +62,7 @@ const setDataToState = (
           });
           break;
       }
+      getTotalPurchase(thisObj, fromDate, toDate, partnerId);
       break;
     default:
       thisObj.setState({

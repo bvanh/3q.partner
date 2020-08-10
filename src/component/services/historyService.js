@@ -9,7 +9,7 @@ function getData(thisObj, pathSearch) {
     return baseGetData
       .get(API.HISTORY_PATHNAME + pathSearch)
       .then((response) => {
-        console.log(response);
+        // console.log(response);
         const { rows, count } = response.data;
         thisObj.setState({
           // dataExport:[],
