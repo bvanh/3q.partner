@@ -15,7 +15,15 @@ const localStorageService = {
     localStorage.setItem(name, JSON.stringify(info));
   },
   getLocalInfo: (name) => {
-    return JSON.parse(localStorage.getItem(name));
+    let json;
+    try {
+      json = JSON.parse(localStorage.getItem(name));
+    } catch (exception) {
+      json = localStorage.getItem(name);
+    }
+    if (json) {
+      return json;
+    }
   },
   getToken: () => {
     if (localStorage.getItem(tokenPartner)) {
